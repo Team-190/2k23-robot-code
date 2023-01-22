@@ -1,28 +1,21 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPRamseteCommand;
+import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.SensorConstants;
+import frc.robot.commands.DefaultDriveCommand;
 
 public class DrivetrainSubsystem extends PIDSubsystem {
 
@@ -41,7 +34,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
     // Objects for PID tracking
     // private final AHRS navx = new AHRS(SPI.Port.kMXP);
-    public final ADXRS450_Gyro gyro = new ADXRS450_Gyro(SPI.Port.kOnboardCS0);
+    public final Pigeon2 gyro = new Pigeon2(SensorConstants.GYRO_CHANNEL);
     private final DifferentialDriveOdometry odometry =
             new DifferentialDriveOdometry(Rotation2d.fromDegrees(0), 0 , 0);
     private double angleOffset = 0;
@@ -80,10 +73,10 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
         // Set Break Mode
         setBreakMode();
-        // setCoastMode();
+        //setCoastMode();
 
         // Configure the PID feedback and constants
-        leftLeader.configSelectedFeedbackSensor(
+        /*leftLeader.configSelectedFeedbackSensor(
                 FeedbackDevice.IntegratedSensor,
                 DrivetrainConstants.PID_LOOPTYPE,
                 DrivetrainConstants.TIMEOUT_MS);
@@ -103,7 +96,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
                 DrivetrainConstants.P,
                 DrivetrainConstants.I,
                 DrivetrainConstants.D,
-                DrivetrainConstants.F);
+                DrivetrainConstants.F);*/
 
         // Wait for Gyro init before finishing DriveSubsystem init
         try {
@@ -173,13 +166,13 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      * @return yaw in degrees (-180 to 180 degrees)
      */
     public double getYawDegrees() {
-        double angle = ((Math.abs(gyro.getAngle())) + angleOffset) % 360;
+        double angle = ((Math.abs(gyro.getYaw())) + angleOffset) % 360;
         if (angle <= 180.0)
             return -angle;
         return -(angle - 360);
     }
     
-    public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    /*public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(
             new InstantCommand(() -> {
               // Reset odometry for the first path you run during auto
@@ -201,7 +194,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
                 this // Requires this drive subsystem
             )
         );
-    }
+    }*/
 
     /**
      * Sets drive motors to brake
@@ -239,7 +232,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      * @param forwards True if robot is going forwards, false if backwards
      */
     public void resetGyro(boolean forwards) {
-        gyro.reset();
+        gyro.setYaw(0);
         angleOffset = forwards ? 0 : 180; // No offset if true, 180 offset if false
     }
 
@@ -271,12 +264,12 @@ public class DrivetrainSubsystem extends PIDSubsystem {
     * @param D derivative value
     * @param F feed forward value
     */
-    public void configPIDF(WPI_TalonFX motorController, double P, double I, double D, double F) {
+    /*public void configPIDF(WPI_TalonFX motorController, double P, double I, double D, double F) {
         motorController.config_kP(DrivetrainConstants.SLOT_ID, P);
         motorController.config_kI(DrivetrainConstants.SLOT_ID, I);
         motorController.config_kD(DrivetrainConstants.SLOT_ID, D);
         motorController.config_kF(DrivetrainConstants.SLOT_ID, F);
-    }
+    }*/
 
     /**
     * Drive in Arcade mode

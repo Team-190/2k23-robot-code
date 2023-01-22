@@ -22,22 +22,10 @@ public final class Constants {
         public static final int RIGHT_JOYSTICK_CHANNEL = 1;
         public static final int XBOX_CHANNEL = 2;
     }
-
-    public static final class CollectorConstants {
-        // CAN Ids
-        public static final int UPPERBALLPATH_CHANNEL = 6;
-        public static final int COLLECTOR_CHANNEL = 5;
-
-        // DIO Ports
-        public static final int PHOTOELECTRIC_SENSOR_ID = 0;
-
-        // Solenoid Ids
-        public static final int FORWARD_CHANNEL = 4;
-        public static final int REVERSE_CHANNEL = 5;
-
-
-
+    public static final class SensorConstants {
+        public static final int GYRO_CHANNEL = 1;
     }
+
 
     /**
      * Constants for the drivetrainSubsystem
@@ -49,12 +37,16 @@ public final class Constants {
             TANK,
             MCFLY // Curvature
         }
+        public enum DRIVE_INPUT {
+            JOYSTICKS,
+            CONTROLLER
+        }
 
         // CAN Ids
-        public static final int LEFT_LEADER_CHANNEL = 2;
-        public static final int LEFT_FOLLOWER_CHANNEL = 3;
-        public static final int RIGHT_LEADER_CHANNEL = 4;
-        public static final int RIGHT_FOLLOWER_CHANNEL = 5;
+        public static final int LEFT_LEADER_CHANNEL = 20;
+        public static final int LEFT_FOLLOWER_CHANNEL = 21;
+        public static final int RIGHT_LEADER_CHANNEL = 10;
+        public static final int RIGHT_FOLLOWER_CHANNEL = 11;
 
         // PID Constants (Not Auto Constants)
         public static final int SLOT_ID = 0;
@@ -66,9 +58,9 @@ public final class Constants {
         public static final double F = 0;
 
         // Encoder and PID Constants (For Auto)
-        public static final double TRACKWIDTH_METERS = 0.7144; // horizontal distance between wheels
+        public static final double TRACKWIDTH_METERS = 0.6382; // horizontal distance between wheels
         public static final double COUNTS_PER_MOTOR_REVOLUTION = 2048;
-        public static final double WHEEL_DIAMETER_METERS = 0.1016; // 4 inch diameter in meters
+        public static final double WHEEL_DIAMETER_METERS = 0.1021; // 4 inch diameter in meters
         public static final double AUTO_P = 2.1989; // Calculated by SysID
 
         // (14/58) ratio to (20/28) on the drivetrain gearbox
@@ -105,104 +97,5 @@ public final class Constants {
         public final static DifferentialDriveVoltageConstraint AUTO_VOLTAGE_CONSTRAINT = new DifferentialDriveVoltageConstraint(
             DrivetrainConstants.DRIVE_FEED_FORWARD, DrivetrainConstants.DRIVE_KINEMATICS, DrivetrainConstants.MAX_VOLTAGE);
                 
-    }
-
-    public static final class TurretConstants {
-
-        public static final int TURRET_CHANNEL = 7;
-        public static final int TURRET_LIMIT_CHANNEL = 1;
-
-        //PID Constants
-        public static final int SLOT_ID = 0;
-        public static final int PID_LOOPTYPE = 0;
-        public static final int TIMEOUT_MS = 20;
-        public static final double P = 0.5;
-        public static final double I = 0;
-        public static final double D = 0.02;
-        public static final int TOLERANCE = 400;
-        public static final int TICKS_PER_ROTATION = 2048;
-        public static final double TURRET_GEAR_RATIO = 0.012987012987; // 77:1 gear ratio
-        public static final double TICKS_PER_DEGREE = (TICKS_PER_ROTATION * 1/TURRET_GEAR_RATIO) / 360;
-
-        public static final double TURRET_STEP_SIZE = 1;
-        public static final int TURRET_MAX_RPM = 6380;
-        public static final int TURRET_MOTOR_VELOCITY = 5250;
-        public static final int TURRET_MOTOR_ACCELERATION = TURRET_MOTOR_VELOCITY * 4;
-        public static final int TURRET_MOTOR_MOTION_SMOOTHING = 3;
-
-
-
-
-    }
-
-    public static final class LEDConstants {
-        public static final int HOTLINE_BLINK_CHANNEL = 0;
-    }
-
-    public static final class ClimberConstants {
-
-        // Climber Solenoid Id's
-        public static final int LEFT_PIVOT_ID = 2;
-        public static final int RIGHT_PIVOT_ID = 3;
-        public static final int LEFT_BRAKE_ID = 0;
-        public static final int RIGHT_BRAKE_ID = 1;
-
-        // Climber Motor CAN Id's
-        public static final int CLIMBER_MOTOR_CHANNEL = 13;
-
-        // Climber PID Constants
-        public static final double CLIMBER_P = 0.2;
-        public static final double CLIMBER_I = 0.0;
-        public static final double CLIMBER_D = 0.0;
-        public static final int SLOT_ID = 0;
-        public static final int PID_LOOPTYPE = 0;
-        public static final int TIMEOUT_MS = 20;
-        public static final double TICKS_PER_ROTATION = 2048;
-        public static final int CLIMBER_TOLERANCE = 300;
-        public static final double MAX_MOTOR_RPM = 6380;
-        public static final double CLIMBER_MOTOR_VELOCITY = 6380/2;
-        public static final double CLIMBER_MOTOR_ACCELERATION = CLIMBER_MOTOR_VELOCITY * 2;
-        public static final int CLIMBER_MOTOR_MOTION_SMOOTHING = 2;
-
-        public static final double CLIMBER_LEFT_EXTEND_POSITION = 200000;
-        public static final double CLIMBER_RIGHT_EXTEND_POSITION = -200000;
-    }
-
-    /**
-     * Constants for the shooterSubsystem
-     */
-    public static final class ShooterConstants {
-
-        // CAN Ids
-        public static final int FLYWHEEL_CHANNEL = 8;
-        public static final int HOOD_CHANNEL = 9;
-
-        // Shared PID Values
-        public static final int SLOT_ID = 0;
-        public static final int PID_LOOPTYPE = 0;
-        public static final int TIMEOUT_MS = 20;
-        public static final double TICKS_PER_ROTATION = 2048;
-
-        // Flywheel PID Constants
-        public static final double FLYWHEEL_P = 1.0; // 1
-        public static final double FLYWHEEL_I = 0.0;
-        public static final double FLYWHEEL_D = 0.0;
-        public static final double MAX_SPEED_RPM = 6380;
-        public static final int RPM_THRESHOLD = 50;
-
-        // Hood PID Constants
-        public static final double HOOD_P = 0.4;
-        public static final double HOOD_I = 0.0;
-        public static final double HOOD_D = 0.0;
-        public static final int HOOD_TOLERANCE = 600;
-        public static final double HOOD_GEAR_RATIO = 0.00311526479751; // 321:1
-        public static final double TICKS_PER_DEGREE = (TICKS_PER_ROTATION * 1/HOOD_GEAR_RATIO) / 360;
-        public static final double HOOD_MOTOR_VELOCITY = 6380;
-        public static final double HOOD_MOTOR_ACCELERATION = HOOD_MOTOR_VELOCITY * 2;
-        public static final int HOOD_MOTOR_MOTION_SMOOTHING = 2;
-        public static final double HOOD_MINIMUM_LIMIT = 27;
-        public static final double HOOD_MAXIMUM_LIMIT = 53;
-        
-    
     }
 }
