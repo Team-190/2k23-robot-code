@@ -59,6 +59,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // Sets the distance per pulse for the encoders
 
+
+
     resetEncoders();
     zeroHeading();
       m_odometry =
@@ -79,6 +81,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ticksToMeters(leftLeader.getSelectedSensorPosition()));
     SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getAngle());
     SmartDashboard.putNumber("Gyro Rate", m_pigeon.getRate());
+    SmartDashboard.putNumber("Get Pose2D", Rotation2d.fromDegrees(m_pigeon.getYaw()).getDegrees());
+    // System.out.println("Raw Rotation 2D: " + Rotation2d.fromDegrees(m_pigeon.getYaw()));
   }
 
   /**
