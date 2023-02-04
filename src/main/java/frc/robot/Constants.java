@@ -24,7 +24,9 @@ public final class Constants {
     }
     public static final class SensorConstants {
         public static final int GYRO_CHANNEL = 1;
+        public static final int PH_CHANNEL = 2;
     }
+
 
 
     /**
@@ -98,4 +100,12 @@ public final class Constants {
             DrivetrainConstants.DRIVE_FEED_FORWARD, DrivetrainConstants.DRIVE_KINEMATICS, DrivetrainConstants.MAX_VOLTAGE);
                 
     }
+
+    public static final class ClawConstants {
+        public static final int CLAW_MOTOR_CHANNEL = 5;
+        public static final int CLAW_SOLENOID_CHANNEL_1 = 0;
+        public static final int CLAW_SOLENOID_CHANNEL_2 = 1;
+        public static final int CLAW_LIFT_SOLENOID_CHANNEL = 2;
+    }
+
 }
