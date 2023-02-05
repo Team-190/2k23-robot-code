@@ -82,6 +82,10 @@ public class RobotContainer {
     public final JoystickButton middleButton = new JoystickButton(leftStick, 3);
     public final JoystickButton rightButton = new JoystickButton(leftStick, 4);
     public final JoystickButton leftButton = new JoystickButton(leftStick, 5);
+    public final JoystickButton trigger2 = new JoystickButton(rightStick,  1);
+    public final JoystickButton leftbutton2 = new JoystickButton(rightStick, 5);
+    public final JoystickButton faceButton2 = new JoystickButton(rightStick, 2);
+
     //  public final ButtonBoxLeft buttonBoxLeft = new ButtonBoxLeft(2);
     // public final ButtonBoxRight buttonBoxRight = new ButtonBoxRight(3);
 
@@ -100,10 +104,12 @@ public class RobotContainer {
         */
 
         trigger.onTrue(new intakeCube(this));
-        //middleButton.onTrue(new intakeCone(this));
+        trigger2.onTrue(new intakeCone(this));
         faceButton.onTrue(new score(this));
         rightButton.toggleOnTrue(new lift(this));
         leftButton.onTrue(new stop(this));
+        leftbutton2.onTrue(new stop(this));
+        faceButton2.onTrue(new score(this));
 
         driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
         driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
