@@ -31,7 +31,7 @@ public final class Constants {
     public static final double TRACKWIDTH_METERS = 0.6382; // horizontal distance between wheels
     public static final double TICKS_PER_MOTOR_REVOLUTION = 2048;
     //TODO: change to 6 in wheels
-    public static final double WHEEL_DIAMETER_METERS = 0.1016; // 4 inch diameter in meters
+    public static final double WHEEL_DIAMETER_METERS = 0.1524; // 4 inch diameter in meters
     public static final double AUTO_P = 0; // Calculated by SysID
 
     // (14/58) ratio to (20/28) on the drivetrain gearbox

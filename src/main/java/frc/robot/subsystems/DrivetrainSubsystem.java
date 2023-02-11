@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -18,7 +19,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,6 +50,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // The left-side drive encoder
   // The gyro sensor
   private final WPI_Pigeon2 m_pigeon = new WPI_Pigeon2(DrivetrainConstants.PIGEON_CHANNEL);
+  private final Gyro m_gyro = new ADXRS450_Gyro();
+  AHRS gyro = new AHRS(SerialPort.Port.kMXP); 
 
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
@@ -65,7 +71,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     zeroHeading();
       m_odometry =
         new DifferentialDriveOdometry(
-          Rotation2d.fromDegrees(m_pigeon.getYaw()), 
+          m_pigeon.getRotation2d(), 
           ticksToMeters(leftLeader.getSelectedSensorPosition()), 
           ticksToMeters(leftLeader.getSelectedSensorPosition()));
   }
@@ -76,13 +82,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-      Rotation2d.fromDegrees(m_pigeon.getYaw()), 
+      m_pigeon.getRotation2d(), 
     ticksToMeters(leftLeader.getSelectedSensorPosition()), 
     ticksToMeters(leftLeader.getSelectedSensorPosition()));
     SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getAngle());
     SmartDashboard.putNumber("Gyro Rate", m_pigeon.getRate());
     SmartDashboard.putNumber("Get Pose2D", Rotation2d.fromDegrees(m_pigeon.getYaw()).getDegrees());
     // System.out.println("Raw Rotation 2D: " + Rotation2d.fromDegrees(m_pigeon.getYaw()));
+    // m_gyro.getRotation2d();
+    // m_pigeon.getRotation2d();
+    // gyro.getRotation2d();
   }
 
   /**
@@ -103,7 +112,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return The current wheel speeds.
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(ticksToMeters(leftLeader.getSelectedSensorVelocity()) / 10, ticksToMeters(rightLeader.getSelectedSensorVelocity()) / 10);
+    return new DifferentialDriveWheelSpeeds(ticksToMeters(leftLeader.getSelectedSensorVelocity()) / 10.0, ticksToMeters(rightLeader.getSelectedSensorVelocity()) / 10.0);
   }
 
   /**
@@ -196,7 +205,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     //TODO: verify pigeon getYaw is compatible (check documentation)
-    return m_pigeon.getYaw();
+    // return m_pigeon.getYaw();
+    return m_pigeon.getRotation2d().getDegrees();
   }
 
   /**
