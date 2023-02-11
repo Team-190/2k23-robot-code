@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClawConstants;
 
@@ -20,11 +21,20 @@ public class Claw extends SubsystemBase {
   public final DoubleSolenoid coneCylinder = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClawConstants.CLAW_SOLENOID_CHANNEL_1, ClawConstants.CLAW_SOLENOID_CHANNEL_2);
   public final Solenoid liftCylinder = new Solenoid(PneumaticsModuleType.REVPH, ClawConstants.CLAW_LIFT_SOLENOID_CHANNEL);
   /** Creates a new Claw. */
-  public Claw() {}
+  public Claw() {
+    //clawMotor.configPeakCurrentLimit(35);
+    //clawMotor.configContinuousCurrentLimit(35);
+    clawMotor.enableCurrentLimit(false);
+    SmartDashboard.putNumber("Current", clawMotor.getStatorCurrent());
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
+    SmartDashboard.putNumber("Current", clawMotor.getStatorCurrent());
+
+    
   }
 
   public void intake(){
@@ -39,7 +49,6 @@ public class Claw extends SubsystemBase {
     clawMotor.set(ControlMode.PercentOutput, 0.9);
   }
 
-
   public void collectMode(Value state){
     coneCylinder.set(state);
   }
@@ -47,4 +56,5 @@ public class Claw extends SubsystemBase {
   public void lift(boolean state){
     liftCylinder.set(state);
   }
+
 }

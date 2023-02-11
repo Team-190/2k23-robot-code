@@ -12,6 +12,8 @@ import frc.robot.subsystems.Claw;
 public class intakeCube extends CommandBase {
 
   Claw clawsubsystem;
+  boolean aboveLimit;
+  boolean belowLimit;
   /** Creates a new intakeCube. */
   public intakeCube(RobotContainer robotcontainer) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -21,21 +23,37 @@ public class intakeCube extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    aboveLimit = false;
+    belowLimit = false;
+    clawsubsystem.intake();
+    clawsubsystem.collectMode(Value.kReverse);
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    clawsubsystem.intake();
+    if (Math.abs(clawsubsystem.clawMotor.getStatorCurrent())>40) {
+      aboveLimit = true;
+    }
+    if (aboveLimit && Math.abs(clawsubsystem.clawMotor.getStatorCurrent())<35) {
+      belowLimit = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    clawsubsystem.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (Math.abs(clawsubsystem.clawMotor.getStatorCurrent()) > 35 && belowLimit) {
+      return true;
+  }
     return false;
   }
 }
