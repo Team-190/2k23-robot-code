@@ -102,10 +102,26 @@ public final class Constants {
     }
 
     public static final class ClawConstants {
-        public static final int CLAW_MOTOR_CHANNEL = 5;
+        public static final int CLAW_MOTOR_CHANNEL = 5; // update when motor is finalized
         public static final int CLAW_SOLENOID_CHANNEL_1 = 0;
         public static final int CLAW_SOLENOID_CHANNEL_2 = 1;
         public static final int CLAW_LIFT_SOLENOID_CHANNEL = 2;
+        public static final double CLAW_SPEED = 0.9;
+    }
+
+    public static final class ArmConstants {
+        public static final int ARM_MOTOR_CHANNEL = 6; // update when motor is finalized
+        public static final double ARM_SPEED = 0.5;
+        public static final double ARM_SCORING_POSITION = 57; // in inches -- should be checked
+        public static final double ARM_COLLECTING_POSITION = 50; // in inches -- should be checked
+        public static final int PIVOT_MOTOR_CHANNEL = 7; // update when motor is finalized
+        public static final double PIVOT_SPEED = 0.5;
+        public static final double PIVOT_SCORING_POSITION = 24; // in inches -- should be checked
+        public static final double PIVOT_COLLECTING_POSITION = 10; // in inches -- should be checked
+        public static final int WRIST_MOTOR_CHANNEL = 6; // update when motor is finalized
+        public static final double WRIST_SPEED = 0.5;
+        public static final double WRIST_SCORING_POSITION = 4; // in inches -- should be checked
+        public static final double WRIST_COLLECTING_POSITION = 57; // in inches -- should be checked
     }
 
 }

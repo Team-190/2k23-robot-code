@@ -34,7 +34,7 @@ public class intakeCone extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(clawsubsystem.clawMotor.getStatorCurrent())>37) {
+    if (Math.abs(clawsubsystem.clawMotor.getStatorCurrent())>40) {
       aboveLimit = true;
     }
     if (aboveLimit && Math.abs(clawsubsystem.clawMotor.getStatorCurrent())<30) {
@@ -51,7 +51,7 @@ public class intakeCone extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(clawsubsystem.clawMotor.getStatorCurrent()) > 35 && belowLimit) {
+    if (Math.abs(clawsubsystem.clawMotor.getStatorCurrent()) > 50 && belowLimit) {
       return true;
   }
     return false;

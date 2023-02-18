@@ -38,7 +38,7 @@ public class Claw extends SubsystemBase {
   }
 
   public void intake(){
-    clawMotor.set(ControlMode.PercentOutput, -0.9);
+    clawMotor.set(ControlMode.PercentOutput, -1*ClawConstants.CLAW_SPEED);
   }
 
   public void stop(){
@@ -46,7 +46,7 @@ public class Claw extends SubsystemBase {
   }
 
   public void score(){
-    clawMotor.set(ControlMode.PercentOutput, 0.9);
+    clawMotor.set(ControlMode.PercentOutput, ClawConstants.CLAW_SPEED);
   }
 
   public void collectMode(Value state){
