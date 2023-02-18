@@ -85,9 +85,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
       m_pigeon.getRotation2d(), 
     ticksToMeters(leftLeader.getSelectedSensorPosition()), 
     ticksToMeters(leftLeader.getSelectedSensorPosition()));
-    SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getAngle());
-    SmartDashboard.putNumber("Gyro Rate", m_pigeon.getRate());
-    SmartDashboard.putNumber("Get Pose2D", Rotation2d.fromDegrees(m_pigeon.getYaw()).getDegrees());
+    // SmartDashboard.putNumber("Pigeon Yaw", m_pigeon.getAngle());
+    // SmartDashboard.putNumber("Gyro Rate", m_pigeon.getRate());
+    // SmartDashboard.putNumber("Get Pose2D", Rotation2d.fromDegrees(m_pigeon.getYaw()).getDegrees());
     // System.out.println("Raw Rotation 2D: " + Rotation2d.fromDegrees(m_pigeon.getYaw()));
     // m_gyro.getRotation2d();
     // m_pigeon.getRotation2d();

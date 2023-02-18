@@ -4,62 +4,82 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.LimelightHelpers;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class LimelightSubsystem extends SubsystemBase {
-  public enum ledMode{
-    ON,
-    OFF,
-    BLINK
-  };
+public class LimeLightSubsystem extends SubsystemBase {
+  NetworkTable limeLightTable; 
+    NetworkTableEntry targetX; 
+    NetworkTableEntry targetY; 
+    NetworkTableEntry targetArea; 
+    NetworkTableEntry targetFound;
+    NetworkTableEntry ledMode;
 
-  double[] limelightPosition = {1,1,1};
-
-  /** Creates a new LimelightSubsystem. */
-  public LimelightSubsystem() {
-    
+  /** Creates a new ExampleSubsystem. */
+  public LimeLightSubsystem() {
+    limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    targetX = limeLightTable.getEntry("tx");
+    targetY = limeLightTable.getEntry("ty");
+    targetArea = limeLightTable.getEntry("ta");
+    targetFound = limeLightTable.getEntry("tv");
+    ledMode = limeLightTable.getEntry("ledMode");
+    ledMode.setNumber(3);
   }
 
-  public void setLedMode(ledMode mode){
-    switch(mode) {
-      case OFF:
-        LimelightHelpers.setLEDMode_ForceOff("");
-        break;
-      case ON:
-        LimelightHelpers.setLEDMode_ForceOff("");
-        break;
-      case BLINK:
-        LimelightHelpers.setLEDMode_ForceOff("");
-        break;
-    }
+  /**
+   * Example command factory method.
+   *
+   * @return a command
+   */
+  public CommandBase exampleMethodCommand() {
+    // Inline construction of command goes here.
+    // Subsystem::RunOnce implicitly requires `this` subsystem.
+    return runOnce(
+        () -> {
+          /* one-time action goes here */
+        });
   }
 
-  // public void setLimelightPipeline(ledPipeline pipeline){
-  //   switch(pipeline){
-  //     case RETRO:
-  //       LimelightHelpers.
-  //   }
-  // }
-
-  public Pose2d getRobotPosition(){
-    LimelightHelpers.LimelightTarget_Fiducial test = new LimelightHelpers.LimelightTarget_Fiducial();
-    return test.getRobotPose_FieldSpace2D();
+  /**
+   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
+   *
+   * @return value of some boolean subsystem state, such as a digital sensor.
+   */
+  public boolean foundTarget() {
+    // Query some boolean state, such as a digital sensor.
+    return limeLightTable.getEntry("tv").getBoolean(false);
   }
 
-  // LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
-  public LimelightHelpers.LimelightResults getLimelightResults(){
-    return LimelightHelpers.getLatestResults("");
-  }
+  public void setPipeline(int pipeLine) {
 
-  // public LimelightHelpers.LimelightTarget_Fiducial getAprilTags(){
-  //   return LimelightHelpers.getLatestResults("").targetingResults.targets_Fiducials;
-  // }
-  // llresults.results.targets_Fiducials;
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //read values periodically
+    double x = targetX.getDouble(0.0);
+    double y = targetY.getDouble(0.0);
+    double area = targetArea.getDouble(0.0);
+
+    //post to smart dashboard periodically
+    SmartDashboard.putNumber("LimelightX", x);
+    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightArea", area);
+    SmartDashboard.putNumberArray("LimelightTID", getTID().getDoubleArray(new double[6]));
+    SmartDashboard.putBoolean("targetExists", foundTarget());
+  }
+
+  public NetworkTableEntry getTID() {
+    return limeLightTable.getEntry("tid");
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // This method will be called once per scheduler run during simulation
   }
 }

@@ -9,6 +9,8 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LimeLightSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,10 +26,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public final DrivetrainSubsystem m_drivetrain = new DrivetrainSubsystem();
+  public final LimeLightSubsystem m_limeLight = new LimeLightSubsystem();
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
+  
+private final Joystick leftJoystick = new Joystick(0);
+private final Joystick rightJoystick = new Joystick(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -54,7 +59,7 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    m_drivetrain.setDefaultCommand(new RunCommand(()-> m_drivetrain.arcadeDrive(0, 0, false), m_drivetrain));
+    m_drivetrain.setDefaultCommand(new RunCommand(()-> m_drivetrain.arcadeDrive(leftJoystick.getY(), rightJoystick.getX(), false), m_drivetrain));
   }
 
   /**
