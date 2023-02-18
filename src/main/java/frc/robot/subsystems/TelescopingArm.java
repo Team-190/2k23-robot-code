@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -22,6 +23,7 @@ public class TelescopingArm extends SubsystemBase {
   public final WPI_TalonFX armMotor = new WPI_TalonFX(ArmConstants.ARM_MOTOR_CHANNEL);
   public final WPI_TalonFX pivotMotor = new WPI_TalonFX(ArmConstants.PIVOT_MOTOR_CHANNEL);
   public final WPI_TalonFX wristMotor = new WPI_TalonFX(ArmConstants.WRIST_MOTOR_CHANNEL);
+  public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
   
   /** Creates a new TelescopingArm. */
   public TelescopingArm() {
@@ -31,6 +33,10 @@ public class TelescopingArm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public boolean getLimitSwitch() {
+    return limitSwitch.get();
   }
 
   public void resetEncoders() {
