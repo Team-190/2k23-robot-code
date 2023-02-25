@@ -18,6 +18,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     NetworkTableEntry targetArea; 
     NetworkTableEntry targetFound;
     NetworkTableEntry ledMode;
+    NetworkTableEntry botpose;
 
   /** Creates a new ExampleSubsystem. */
   public LimeLightSubsystem() {
@@ -28,6 +29,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     targetFound = limeLightTable.getEntry("tv");
     ledMode = limeLightTable.getEntry("ledMode");
     ledMode.setNumber(3);
+    botpose = limeLightTable.getEntry("botpose");
   }
 
   /**
@@ -65,6 +67,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     double x = targetX.getDouble(0.0);
     double y = targetY.getDouble(0.0);
     double area = targetArea.getDouble(0.0);
+    double[] pose = botpose.getDoubleArray(new double[6]);
 
     //post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);
@@ -72,6 +75,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumberArray("LimelightTID", getTID().getDoubleArray(new double[6]));
     SmartDashboard.putBoolean("targetExists", foundTarget());
+    SmartDashboard.putNumberArray("botpose", pose);
   }
 
   public NetworkTableEntry getTID() {
