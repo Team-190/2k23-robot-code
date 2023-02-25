@@ -32,6 +32,21 @@ public class LimeLightSubsystem extends SubsystemBase {
     botpose = limeLightTable.getEntry("botpose");
   }
 
+  public double getTX(){
+    return limeLightTable.getEntry("tx").getDouble(0.0);
+  }
+  
+  public double getTY(){
+    return limeLightTable.getEntry("ty").getDouble(0.0);
+  }
+
+  public double getTA(){
+    return limeLightTable.getEntry("ta").getDouble(0.0);
+  }
+
+  public void setLimeOn(boolean turnOn){
+    limeLightTable.getEntry("ledMode").setNumber(turnOn ? 3 : 1);
+  }
   /**
    * Example command factory method.
    *
