@@ -116,21 +116,47 @@ public final class Constants {
         public static final double ARM_SPEED = 0.5;
         public static final double ARM_SCORING_POSITION = 57; // in inches -- should be checked
         public static final double ARM_COLLECTING_POSITION = 50; // in inches -- should be checked
+       
+        public static final double ARM_MAX_RPM = 100; // update
+        public static final double P = 0;
+        public static final double I = 0;
+        public static final double D = 0;
+        public static final int ARM_TICKS_PER_ROTATION = 4096;
+        public static final int SLOT_ID = 0;
+        public static final double ARM_MOTOR_VELOCITY = 5250; // update
+        public static final double ARM_MOTOR_ACCELERATION = ARM_MOTOR_VELOCITY*4; // update
+        public static final int ARM_MOTOR_MOTION_SMOOTHING = 3; // update
+        public static final double TOLERANCE = 500;
+        public static final int PID_LOOPTYPE = 0;
+        public static final int TIMEOUT_MS = 20;
+        public static final int TICKS_PER_INCH = 100; // update
+        public static final int MAX_EXTENSION_INCHES = 48; // update?
+         
+      }
 
+    public static final class PivotConstants {
+        public static final int LIMIT_SWITCH_CHANNEL = 11;
+        
         public static final int PIVOT_MOTOR_CHANNEL = 7; // update when motor is finalized
         public static final double PIVOT_SPEED = 0.5;
         public static final double PIVOT_SCORING_POSITION = 24; // in inches -- should be checked
         public static final double PIVOT_COLLECTING_POSITION = 10; // in inches -- should be checked
         
+    }
+
+    public static final class WristConstants {
         public static final int WRIST_MOTOR_CHANNEL = 8; // update when motor is finalized
         public static final double WRIST_SPEED = 0.5;
         public static final double WRIST_SCORING_POSITION = 4; // in inches -- should be checked
         public static final double WRIST_COLLECTING_POSITION = 57; // in inches -- should be checked
+    
     }
 
     public static final class LEDConstants {
         public static final int LED_PORT = 5; // change
         public static final int LED_LENGTH = 60;
+        public static final int LED_COUNT = 300;
+        public static final int CANdleID = 10;
     }
 
 }

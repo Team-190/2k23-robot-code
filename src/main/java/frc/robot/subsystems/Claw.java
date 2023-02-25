@@ -7,12 +7,14 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ClawConstants;
 
 public class Claw extends SubsystemBase {
@@ -20,6 +22,8 @@ public class Claw extends SubsystemBase {
   public final TalonSRX clawMotor = new TalonSRX(ClawConstants.CLAW_MOTOR_CHANNEL);
   public final DoubleSolenoid coneCylinder = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClawConstants.CLAW_SOLENOID_CHANNEL_1, ClawConstants.CLAW_SOLENOID_CHANNEL_2);
   public final Solenoid liftCylinder = new Solenoid(PneumaticsModuleType.REVPH, ClawConstants.CLAW_LIFT_SOLENOID_CHANNEL);
+  public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
+
   /** Creates a new Claw. */
   public Claw() {
     //clawMotor.configPeakCurrentLimit(35);
@@ -55,6 +59,10 @@ public class Claw extends SubsystemBase {
 
   public void lift(boolean state){
     liftCylinder.set(state);
+  }
+
+  public boolean getLimitSwitch() {
+    return limitSwitch.get();
   }
 
 }
