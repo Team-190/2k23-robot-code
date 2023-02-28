@@ -10,30 +10,29 @@ package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoException;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.intakeCone;
-import frc.robot.commands.lift;
+import frc.robot.commands.intakeCube;
 import frc.robot.commands.score;
 import frc.robot.commands.stop;
-import frc.robot.commands.intakeCube;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.commands.AutoBalance;
 
 /**
 * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -156,7 +155,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // return null;
         //return autoModeChooser.getSelected();
-        return null;
+        return new AutoBalance(drivetrainSubsystem);
     }
 
     public void setDefaultCommands() {
@@ -166,6 +165,7 @@ public class RobotContainer {
 
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
          drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(this));
+         //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
         //drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));

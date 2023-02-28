@@ -12,10 +12,14 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.SensorConstants;
+import frc.robot.commands.AutoBalance;
+import frc.robot.commands.AutoTurn;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.SimpleAuto;
 
 public class DrivetrainSubsystem extends PIDSubsystem {
 
@@ -108,6 +112,12 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         // Reset Drive Odometry, Encoders, and Gyro
         resetAll();
         setSetpoint(0);
+
+        SmartDashboard.putData("AutoBalance", new AutoBalance(this));
+        SmartDashboard.putData("SimpleAuto", new SimpleAuto(this));
+        SmartDashboard.putData("AutoTurn", new AutoTurn(this));
+
+
     }
 
     @Override
@@ -124,6 +134,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         // SmartDashboard.putNumber("gyro yaw", getYawDegrees());
         // SmartDashboard.putNumber("Meters Left Side Traveled", getDistanceMeters(leftLeader));
         // SmartDashboard.putNumber("Meters Right Side Traveled", getDistanceMeters(rightLeader));
+        SmartDashboard.putNumber("Pitch", getPitchDegrees());
         
         
 
@@ -171,6 +182,12 @@ public class DrivetrainSubsystem extends PIDSubsystem {
             return -angle;
         return -(angle - 360);
     }
+
+    public double getPitchDegrees() {
+        return gyro.getPitch();
+    }
+
+    
     
     /*public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
         return new SequentialCommandGroup(
@@ -356,5 +373,15 @@ public class DrivetrainSubsystem extends PIDSubsystem {
     */
     public Pose2d getPose() {
         return odometry.getPoseMeters();
+    }
+
+    /**
+     * For charge station balancing -- drives until the gyro output is within the tolerance
+     * @param leftVelocity between 0 and 1
+     * @param rightVelocity between 0 and 1
+     * @param tolerance in degrees
+     */
+    public void driveUntil(double leftVelocity, double rightVelocity, double tolerance) {
+
     }
 }

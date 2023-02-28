@@ -5,11 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class FindCube extends CommandBase {
-  /** Creates a new FindCube. */
-  public FindCube() {
+public class AutoTurn extends CommandBase {
+  DrivetrainSubsystem drivetrain;
+  /** Creates a new AutoTurn. */
+  public AutoTurn(DrivetrainSubsystem drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.drivetrain = drivetrain;
   }
 
   // Called when the command is initially scheduled.
@@ -19,7 +22,7 @@ public class FindCube extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    drivetrain.arcadeDrive(0, 0.2, false);
   }
 
   // Called once the command ends or is interrupted.

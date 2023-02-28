@@ -17,6 +17,9 @@ public class LimeLightSubsystem extends SubsystemBase {
     NetworkTableEntry targetY; 
     NetworkTableEntry targetArea; 
     NetworkTableEntry targetFound;
+    NetworkTableEntry ledMode;
+    NetworkTableEntry botpose;
+
   /** Creates a new ExampleSubsystem. */
   public LimeLightSubsystem() {
     limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -24,8 +27,26 @@ public class LimeLightSubsystem extends SubsystemBase {
     targetY = limeLightTable.getEntry("ty");
     targetArea = limeLightTable.getEntry("ta");
     targetFound = limeLightTable.getEntry("tv");
+    ledMode = limeLightTable.getEntry("ledMode");
+    ledMode.setNumber(3);
+    botpose = limeLightTable.getEntry("botpose");
   }
 
+  public double getTX(){
+    return limeLightTable.getEntry("tx").getDouble(0.0);
+  }
+  
+  public double getTY(){
+    return limeLightTable.getEntry("ty").getDouble(0.0);
+  }
+
+  public double getTA(){
+    return limeLightTable.getEntry("ta").getDouble(0.0);
+  }
+
+  public void setLimeOn(boolean turnOn){
+    limeLightTable.getEntry("ledMode").setNumber(turnOn ? 3 : 1);
+  }
   /**
    * Example command factory method.
    *
@@ -47,8 +68,7 @@ public class LimeLightSubsystem extends SubsystemBase {
    */
   public boolean foundTarget() {
     // Query some boolean state, such as a digital sensor.
-    boolean validTarget = targetFound.getBoolean(false);
-    return validTarget;
+    return limeLightTable.getEntry("tv").getBoolean(false);
   }
 
   public void setPipeline(int pipeLine) {
@@ -62,12 +82,19 @@ public class LimeLightSubsystem extends SubsystemBase {
     double x = targetX.getDouble(0.0);
     double y = targetY.getDouble(0.0);
     double area = targetArea.getDouble(0.0);
+    double[] pose = botpose.getDoubleArray(new double[6]);
 
     //post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
+    SmartDashboard.putNumberArray("LimelightTID", getTID().getDoubleArray(new double[6]));
     SmartDashboard.putBoolean("targetExists", foundTarget());
+    SmartDashboard.putNumberArray("botpose", pose);
+  }
+
+  public NetworkTableEntry getTID() {
+    return limeLightTable.getEntry("tid");
   }
 
   @Override
