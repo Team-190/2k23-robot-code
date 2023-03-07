@@ -26,8 +26,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.ejectObject;
 import frc.robot.commands.intakeCone;
 import frc.robot.commands.intakeCube;
+import frc.robot.commands.intakeObject;
 import frc.robot.commands.score;
 import frc.robot.commands.stop;
 import frc.robot.subsystems.Claw;
@@ -86,6 +88,7 @@ public class RobotContainer {
     public final JoystickButton trigger2 = new JoystickButton(rightStick,  1);
     public final JoystickButton leftbutton2 = new JoystickButton(rightStick, 5);
     public final JoystickButton faceButton2 = new JoystickButton(rightStick, 2);
+    public final JoystickButton middleButton2 = new JoystickButton(rightStick, 3);
 
     //  public final ButtonBoxLeft buttonBoxLeft = new ButtonBoxLeft(2);
     // public final ButtonBoxRight buttonBoxRight = new ButtonBoxRight(3);
@@ -115,8 +118,8 @@ public class RobotContainer {
         rightButton.onTrue(new score(this));
         //leftbutton2.onTrue(new stop(this));
         //faceButton2.onTrue(new score(this));
-
-
+        middleButton.toggleOnTrue(new intakeObject(this));
+        middleButton2.toggleOnTrue(new ejectObject(this));
         driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
         driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
         driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
