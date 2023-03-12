@@ -25,33 +25,12 @@ import frc.robot.Constants.DrivetrainConstants;
 public class TelescopingArm extends PIDSubsystem {
   public final WPI_TalonFX armMotor = new WPI_TalonFX(ArmConstants.ARM_MOTOR_CHANNEL);
   public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
+  public final TalonPIDConfig talonPIDConfig = ArmConstants.ARM_PID_CONFIG;
   
   /** Creates a new TelescopingArm. */
   public TelescopingArm(double P, double I, double D) {
     super(new PIDController(P, I, D));
-
-    configPIDF(
-      armMotor,
-      ArmConstants.P,
-      ArmConstants.I,
-      ArmConstants.D,
-      1023 / rpmToTicksPer100ms(ArmConstants.ARM_MAX_RPM));
-
-
-      armMotor.configAllowableClosedloopError(0, ArmConstants.TOLERANCE);
-      armMotor.configClosedLoopPeakOutput(0, 1);
-      armMotor.configClosedLoopPeriod(0, 1);
-      armMotor.configClosedloopRamp(0.00);
-      armMotor.configSelectedFeedbackSensor(
-        FeedbackDevice.IntegratedSensor, ArmConstants.PID_LOOPTYPE, ArmConstants.TIMEOUT_MS);
-        armMotor.setInverted(false);
-
-        armMotor.setNeutralMode(NeutralMode.Brake);
-
-        armMotor.configForwardSoftLimitEnable(true);
-        armMotor.configReverseSoftLimitEnable(true);
-        armMotor.configForwardSoftLimitThreshold(inchesToTicks(ArmConstants.MAX_EXTENSION_INCHES));
-        armMotor.configReverseSoftLimitThreshold(inchesToTicks(0));
+    talonPIDconfig.initializePID(armMotor, FeedbackDevice.IntegratedSensor)
   }
 
   @Override
@@ -146,6 +125,14 @@ public double getMeasurement() {
 
   public void stopArmMotion () {
     armMotor.set(ControlMode.PercentOutput, 0);
+  }
+
+   public void armPID(double setpoint) {
+    // Normalise setpoint
+    setpoint = MathUtil.clamp(setpoint, talonPIDconfig.getLowerLimit(), talonPIDconfig.getUpperLimit());
+
+    // Move arm toward setpoint
+    armMotor.set(ControlMode.MotionMagic, setpoint);
   }
 
 }

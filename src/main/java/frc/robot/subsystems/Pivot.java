@@ -15,9 +15,12 @@ import frc.robot.Constants.PivotConstants;
 public class Pivot extends SubsystemBase {
   public final WPI_TalonFX pivotMotor = new WPI_TalonFX(PivotConstants.PIVOT_MOTOR_CHANNEL);
   public final DigitalInput limitSwitch = new DigitalInput(PivotConstants.LIMIT_SWITCH_CHANNEL);
+  public final TalonPIDConfig talonPIDConfig = PivotConstants.PIVOT_PID_CONFIG;
 
   /** Creates a new Pivot. */
-  public Pivot() {}
+  public Pivot() {
+    talonPIDconfig.initializePID(pivotMotor, FeedbackDevice.IntegratedSensor)
+  }
 
   @Override
   public void periodic() {
@@ -39,5 +42,14 @@ public class Pivot extends SubsystemBase {
   public void stopPivotMotion() {
     pivotMotor.set(ControlMode.PercentOutput, 0);
   }
+
+    public void pivotPID(double setpoint) {
+    // Normalise setpoint
+    setpoint = MathUtil.clamp(setpoint, talonPIDconfig.getLowerLimit(), talonPIDconfig.getUpperLimit());
+
+    // Move arm toward setpoint
+    pivotMotor.set(ControlMode.MotionMagic, setpoint);
+  }
+
 
 }
