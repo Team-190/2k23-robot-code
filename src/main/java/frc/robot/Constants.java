@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import frc.robot.commands.TalonPIDConfig;
+import frc.robot.utils.TalonPIDConfig;
 
 public final class Constants {
 

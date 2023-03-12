@@ -12,7 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PivotConstants;
-import frc.robot.commands.TalonPIDConfig;
+import frc.robot.utils.TalonPIDConfig;
 
 public class Pivot extends SubsystemBase {
   public final WPI_TalonFX pivotMotor = new WPI_TalonFX(PivotConstants.PIVOT_MOTOR_CHANNEL);

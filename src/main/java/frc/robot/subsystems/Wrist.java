@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WristConstants;
-import frc.robot.commands.TalonPIDConfig;
+import frc.robot.utils.TalonPIDConfig;
 
 public class Wrist extends SubsystemBase {
   public final WPI_TalonFX wristMotor = new WPI_TalonFX(WristConstants.WRIST_MOTOR_CHANNEL);

@@ -13,7 +13,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.commands.TalonPIDConfig;
+import frc.robot.utils.TalonPIDConfig;
 
 /**
  * This class containes the telescoping arm, pivot, and wrist
