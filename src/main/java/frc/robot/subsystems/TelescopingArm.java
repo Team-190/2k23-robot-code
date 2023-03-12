@@ -6,16 +6,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.commands.TalonPIDConfig;
 
 /**
  * This class containes the telescoping arm, pivot, and wrist
@@ -30,7 +28,7 @@ public class TelescopingArm extends PIDSubsystem {
   /** Creates a new TelescopingArm. */
   public TelescopingArm(double P, double I, double D) {
     super(new PIDController(P, I, D));
-    talonPIDconfig.initializePID(armMotor, FeedbackDevice.IntegratedSensor)
+    talonPIDConfig.initializeTalonPID(armMotor, FeedbackDevice.IntegratedSensor);
   }
 
   @Override
@@ -85,11 +83,10 @@ public double getMeasurement() {
    * @param setpoint encoder tick value for turret to move to
    */
   public void armPID(double setpoint) {
+    // Normalise setpoint
+    setpoint = MathUtil.clamp(setpoint, talonPIDConfig.getLowerLimit(), talonPIDConfig.getUpperLimit());
 
-    armMotor.configMotionCruiseVelocity(rpmToTicksPer100ms(ArmConstants.ARM_MOTOR_VELOCITY));
-    armMotor.configMotionAcceleration(rpmToTicksPer100ms(ArmConstants.ARM_MOTOR_ACCELERATION));
-    armMotor.configMotionSCurveStrength(ArmConstants.ARM_MOTOR_MOTION_SMOOTHING);
-
+    // Move arm toward setpoint
     armMotor.set(ControlMode.MotionMagic, setpoint);
   }
 
@@ -127,12 +124,5 @@ public double getMeasurement() {
     armMotor.set(ControlMode.PercentOutput, 0);
   }
 
-   public void armPID(double setpoint) {
-    // Normalise setpoint
-    setpoint = MathUtil.clamp(setpoint, talonPIDconfig.getLowerLimit(), talonPIDconfig.getUpperLimit());
-
-    // Move arm toward setpoint
-    armMotor.set(ControlMode.MotionMagic, setpoint);
-  }
 
 }

@@ -2,8 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import frc.robot.commands.TalonPIDConfig;
 
 public final class Constants {
 
@@ -132,17 +132,17 @@ public final class Constants {
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
         public static final int MAX_EXTENSION_TICKS = 1000; // update?
-         public static final int MIN_EXTENSION_TICKS = 0;
-         public static final boolean INVERT_MOTOR = false;
-         public static final boolean SENSOR_PHASE = false;
-         public static final boolean ENABLE_SOFT_LIMITS = true;
+        public static final int MIN_EXTENSION_TICKS = 0;
+        public static final boolean INVERT_MOTOR = false;
+        public static final boolean SENSOR_PHASE = false;
+        public static final boolean ENABLE_SOFT_LIMITS = true;
 
-
-         
-      public static final TalongPIDConfig ARM_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, ARM_TICKS_PER_ROTATION,
+        public TalonPIDConfig ah;
+        
+        public static TalonPIDConfig ARM_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, ARM_TICKS_PER_ROTATION,
                         P, I, D, F, TOLERANCE, 
                         MIN_EXTENSION_TICKS, MAX_EXTENSION_TICKS, ENABLE_SOFT_LIMITS,
-                        ARM_MOTOR_VELOCITY, ARM_MOTOR_ACCELERATION, ARM_MOTOR_MOTION_SMOOTHING) 
+                        ARM_MOTOR_VELOCITY, ARM_MOTOR_ACCELERATION, ARM_MOTOR_MOTION_SMOOTHING);
                
 
          
@@ -156,29 +156,30 @@ public final class Constants {
         public static final double PIVOT_SCORING_POSITION = 24; // in inches -- should be checked
         public static final double PIVOT_COLLECTING_POSITION = 10; // in inches -- should be checked
         
-         public static final double PIVOT_MAX_RPM = 6380; // update
+        public static final double PIVOT_MAX_RPM = 6380; // update
         public static final double P = 0;
         public static final double I = 0;
         public static final double D = 0;
+        public static final double F = 0;
         public static final int PIVOT_TICKS_PER_ROTATION = 2048;
         public static final int SLOT_ID = 0;
         public static final double PIVOT_MOTOR_VELOCITY = 5250; // update
-        public static final double PIVOT_MOTOR_ACCELERATION = ARM_MOTOR_VELOCITY*2; // update
+        public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MOTOR_VELOCITY*2; // update
         public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 0; // update
         public static final double TOLERANCE = 10;
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
-        public static final int MAX_ANGLE_DEGREES = 90; // update?
-        public static final int MIN_ANGLE_DEGREES = -90;
-         public static final boolean INVERT_MOTOR = false;
-         public static final boolean SENSOR_PHASE = false;
-         public static final boolean ENABLE_SOFT_LIMITS = true;
+        public static final int MAX_ANGLE_TICKS = 90; // update?
+        public static final int MIN_ANGLE_TICKS = -90;
+        public static final boolean INVERT_MOTOR = false;
+        public static final boolean SENSOR_PHASE = false;
+        public static final boolean ENABLE_SOFT_LIMITS = true;
 
-        public static final TalongPIDConfig PIVOT_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, PIVOT_TICKS_PER_ROTATION,
+        public static final TalonPIDConfig PIVOT_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, PIVOT_TICKS_PER_ROTATION,
                         P, I, D, F, TOLERANCE, 
-                        MIN_EXTENSION_TICKS, MAX_EXTENSION_TICKS, ENABLE_SOFT_LIMITS,
-                        PIVOT_MOTOR_VELOCITY, PIVOT_MOTOR_ACCELERATION, PIVOT_MOTOR_MOTION_SMOOTHING) 
+                        MIN_ANGLE_TICKS, MAX_ANGLE_TICKS, ENABLE_SOFT_LIMITS,
+                        PIVOT_MOTOR_VELOCITY, PIVOT_MOTOR_ACCELERATION, PIVOT_MOTOR_MOTION_SMOOTHING);
                
 
     }
@@ -193,25 +194,26 @@ public final class Constants {
         public static final double P = 0;
         public static final double I = 0;
         public static final double D = 0;
+        public static final double F = 0;
         public static final int WRIST_TICKS_PER_ROTATION = 2048;
         public static final int SLOT_ID = 0;
         public static final double WRIST_MOTOR_VELOCITY = 5250; // update
-        public static final double WRIST_MOTOR_ACCELERATION = ARM_MOTOR_VELOCITY*2; // update
+        public static final double WRIST_MOTOR_ACCELERATION = WRIST_MOTOR_VELOCITY*2; // update
         public static final int WRIST_MOTOR_MOTION_SMOOTHING = 0; // update
         public static final double TOLERANCE = 10;
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
-        public static final int MAX_ANGLE_DEGREES = 90; // update?
-        public static final int MIN_ANGLE_DEGREES = -90;
-         public static final boolean INVERT_MOTOR = false;
-         public static final boolean SENSOR_PHASE = false;
-         public static final boolean ENABLE_SOFT_LIMITS = true;
+        public static final int MAX_ANGLE_TICKS = 90; // update?
+        public static final int MIN_ANGLE_TICKS = -90;
+        public static final boolean INVERT_MOTOR = false;
+        public static final boolean SENSOR_PHASE = false;
+        public static final boolean ENABLE_SOFT_LIMITS = true;
 
-        public static final TalongPIDConfig WRIST_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, WRIST_TICKS_PER_ROTATION,
+        public static final TalonPIDConfig WRIST_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, WRIST_TICKS_PER_ROTATION,
                         P, I, D, F, TOLERANCE, 
-                        MIN_EXTENSION_TICKS, MAX_EXTENSION_TICKS, ENABLE_SOFT_LIMITS,
-                        WRIST_MOTOR_VELOCITY, WRIST_MOTOR_ACCELERATION, WRIST_MOTOR_MOTION_SMOOTHING) 
+                        MIN_ANGLE_TICKS, MAX_ANGLE_TICKS, ENABLE_SOFT_LIMITS,
+                        WRIST_MOTOR_VELOCITY, WRIST_MOTOR_ACCELERATION, WRIST_MOTOR_MOTION_SMOOTHING);
                
 
     }
