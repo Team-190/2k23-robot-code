@@ -7,11 +7,11 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class intakeCone extends CommandBase {
 
-  Claw clawsubsystem;
+  IntakeSubsystem clawsubsystem;
   boolean aboveLimit;
   boolean belowLimit;
   /** Creates a new intakeCube. */
@@ -28,7 +28,7 @@ public class intakeCone extends CommandBase {
     aboveLimit = false;
     belowLimit = false;
     clawsubsystem.intake();
-    clawsubsystem.collectMode(Value.kForward);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

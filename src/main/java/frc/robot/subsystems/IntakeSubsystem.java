@@ -8,24 +8,18 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ClawConstants;
+import frc.robot.Constants.IntakeConstants;
 
-public class Claw extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
 
-  public final TalonSRX clawMotor = new TalonSRX(ClawConstants.CLAW_MOTOR_CHANNEL);
-  public final DoubleSolenoid coneCylinder = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClawConstants.CLAW_SOLENOID_CHANNEL_1, ClawConstants.CLAW_SOLENOID_CHANNEL_2);
-  public final Solenoid liftCylinder = new Solenoid(PneumaticsModuleType.REVPH, ClawConstants.CLAW_LIFT_SOLENOID_CHANNEL);
+  public final TalonSRX clawMotor = new TalonSRX(IntakeConstants.INTAKE_MOTOR_CHANNEL);
   public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
 
   /** Creates a new Claw. */
-  public Claw() {
+  public IntakeSubsystem() {
     //clawMotor.configPeakCurrentLimit(35);
     //clawMotor.configContinuousCurrentLimit(35);
     clawMotor.enableCurrentLimit(false);
@@ -42,7 +36,7 @@ public class Claw extends SubsystemBase {
   }
 
   public void intake(){
-    clawMotor.set(ControlMode.PercentOutput, -1*ClawConstants.CLAW_SPEED);
+    clawMotor.set(ControlMode.PercentOutput, -1*IntakeConstants.INTAKE_SPEED);
   }
 
   public void stop(){
@@ -50,15 +44,7 @@ public class Claw extends SubsystemBase {
   }
 
   public void score(){
-    clawMotor.set(ControlMode.PercentOutput, ClawConstants.CLAW_SPEED);
-  }
-
-  public void collectMode(Value state){
-    coneCylinder.set(state);
-  }
-
-  public void lift(boolean state){
-    liftCylinder.set(state);
+    clawMotor.set(ControlMode.PercentOutput, IntakeConstants.INTAKE_SPEED);
   }
 
   public boolean getLimitSwitch() {

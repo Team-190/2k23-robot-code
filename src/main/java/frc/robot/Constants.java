@@ -101,12 +101,9 @@ public final class Constants {
                 
     }
 
-    public static final class ClawConstants {
-        public static final int CLAW_MOTOR_CHANNEL = 7; // update when motor is finalized
-        public static final int CLAW_SOLENOID_CHANNEL_1 = 0;
-        public static final int CLAW_SOLENOID_CHANNEL_2 = 1;
-        public static final int CLAW_LIFT_SOLENOID_CHANNEL = 2;
-        public static final double CLAW_SPEED = 1;
+    public static final class IntakeConstants {
+        public static final int INTAKE_MOTOR_CHANNEL = 7; // update when motor is finalized
+        public static final double INTAKE_SPEED = 1;
     }
 
     public static final class ArmConstants {

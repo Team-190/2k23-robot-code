@@ -13,12 +13,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WristConstants;
 import frc.robot.utils.TalonPIDConfig;
 
-public class Wrist extends SubsystemBase {
+public class WristSubsystem extends SubsystemBase {
   public final WPI_TalonFX wristMotor = new WPI_TalonFX(WristConstants.WRIST_MOTOR_CHANNEL);
   public final TalonPIDConfig talonPIDConfig = WristConstants.WRIST_PID_CONFIG;
 
   /** Creates a new Wrist. */
-  public Wrist() {
+  public WristSubsystem() {
     talonPIDConfig.initializeTalonPID(wristMotor, FeedbackDevice.IntegratedSensor);
   }
 

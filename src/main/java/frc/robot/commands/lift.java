@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class lift extends CommandBase {
 
-  Claw clawsubsystem;
+  IntakeSubsystem clawsubsystem;
   /** Creates a new intakeCube. */
   public lift(RobotContainer robotcontainer) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,13 +26,13 @@ public class lift extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    clawsubsystem.collectMode(Value.kForward);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    clawsubsystem.collectMode(Value.kReverse);
+    
   }
 
   // Returns true when the command should end.

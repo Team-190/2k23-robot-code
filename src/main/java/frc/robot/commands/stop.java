@@ -7,11 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class stop extends CommandBase {
 
-  Claw clawsubsystem;
+  IntakeSubsystem clawsubsystem;
   /** Creates a new intakeCube. */
   public stop(RobotContainer robotcontainer) {
     // Use addRequirements() here to declare subsystem dependencies.

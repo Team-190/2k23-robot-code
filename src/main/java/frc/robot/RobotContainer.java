@@ -32,7 +32,7 @@ import frc.robot.commands.intake.intakeObject;
 import frc.robot.commands.score;
 import frc.robot.commands.stop;
 import frc.robot.commands.auto.AutoBalance;
-import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.utils.input.AttackThree;
 import frc.robot.utils.input.XboxOneController;
@@ -66,7 +66,7 @@ public class RobotContainer {
                     Constants.DrivetrainConstants.D,
                     this);
 
-    public final Claw claw = new Claw();
+    public final IntakeSubsystem claw = new IntakeSubsystem();
 
     public final Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     public boolean compressorEnabled = compressor.isEnabled();
@@ -103,8 +103,6 @@ public class RobotContainer {
         //trigger2.onTrue(new intakeCone(this));
         //faceButton.onTrue(new score(this));
         rightStick.triggerButton.onTrue(new intakeCube(this));
-        leftStick.bottomFaceButton.onTrue(new InstantCommand(()->claw.collectMode(Value.kForward)));
-        rightStick.bottomFaceButton.onTrue(new InstantCommand(()->claw.collectMode(Value.kReverse)));
         //rightButton.toggleOnTrue(new lift(this));
         leftStick.rightFaceButton.onTrue(new stop(this));
         leftStick.leftFaceButton.onTrue(new score(this));
@@ -128,6 +126,9 @@ public class RobotContainer {
 
         // Left Stick Bindings
 
+         // Left Stick Bindings
+
+         
         // leftStick.triggerButton.whenPressed(new ToggleCollectorCommandGroup(this, 0.75));
         
         // Until interupt / timeout may fix stuff

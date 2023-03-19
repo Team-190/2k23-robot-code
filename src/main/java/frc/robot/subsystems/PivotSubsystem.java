@@ -14,13 +14,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.utils.TalonPIDConfig;
 
-public class Pivot extends SubsystemBase {
+public class PivotSubsystem extends SubsystemBase {
   public final WPI_TalonFX pivotMotor = new WPI_TalonFX(PivotConstants.PIVOT_MOTOR_CHANNEL);
   public final DigitalInput limitSwitch = new DigitalInput(PivotConstants.LIMIT_SWITCH_CHANNEL);
   public final TalonPIDConfig talonPIDConfig = PivotConstants.PIVOT_PID_CONFIG;
 
   /** Creates a new Pivot. */
-  public Pivot() {
+  public PivotSubsystem() {
     talonPIDConfig.initializeTalonPID(pivotMotor, FeedbackDevice.IntegratedSensor);
   }
 
