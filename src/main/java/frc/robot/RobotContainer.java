@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
-import frc.robot.commands.AutoBalance;
+import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.intake.ejectObject;
 import frc.robot.commands.intake.intakeCone;
