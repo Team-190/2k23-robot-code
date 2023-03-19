@@ -12,6 +12,7 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.utils.input.XboxOneController;
 
 public class DefaultDriveCommand extends CommandBase {
 
@@ -20,7 +21,7 @@ public class DefaultDriveCommand extends CommandBase {
 
   private final Joystick leftStick;
   private final Joystick rightStick;
-  private final XboxController xboxController;
+  private final XboxOneController xboxController;
   private static DRIVE_STYLE drivestyle;
   private static DRIVE_INPUT driveInput;
 

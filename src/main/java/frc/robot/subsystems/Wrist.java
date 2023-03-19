@@ -5,17 +5,22 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.WristConstants;
+import frc.robot.utils.TalonPIDConfig;
 
 public class Wrist extends SubsystemBase {
   public final WPI_TalonFX wristMotor = new WPI_TalonFX(WristConstants.WRIST_MOTOR_CHANNEL);
+  public final TalonPIDConfig talonPIDConfig = WristConstants.WRIST_PID_CONFIG;
 
   /** Creates a new Wrist. */
-  public Wrist() {}
+  public Wrist() {
+    talonPIDConfig.initializeTalonPID(wristMotor, FeedbackDevice.IntegratedSensor);
+  }
 
   @Override
   public void periodic() {
@@ -33,4 +38,13 @@ public class Wrist extends SubsystemBase {
   public void stopWristMotion() {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
+
+  public void wristPID(double setpoint) {
+    // Normalise setpoint
+    setpoint = MathUtil.clamp(setpoint, talonPIDConfig.getLowerLimit(), talonPIDConfig.getUpperLimit());
+
+    // Move arm toward setpoint
+    wristMotor.set(ControlMode.MotionMagic, setpoint);
+  }
+
 }

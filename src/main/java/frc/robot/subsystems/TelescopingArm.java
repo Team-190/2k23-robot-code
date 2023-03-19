@@ -6,16 +6,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.utils.TalonPIDConfig;
 
 /**
  * This class containes the telescoping arm, pivot, and wrist
@@ -25,33 +23,12 @@ import frc.robot.Constants.DrivetrainConstants;
 public class TelescopingArm extends PIDSubsystem {
   public final WPI_TalonFX armMotor = new WPI_TalonFX(ArmConstants.ARM_MOTOR_CHANNEL);
   public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
+  public final TalonPIDConfig talonPIDConfig = ArmConstants.ARM_PID_CONFIG;
   
   /** Creates a new TelescopingArm. */
   public TelescopingArm(double P, double I, double D) {
     super(new PIDController(P, I, D));
-
-    configPIDF(
-      armMotor,
-      ArmConstants.P,
-      ArmConstants.I,
-      ArmConstants.D,
-      1023 / rpmToTicksPer100ms(ArmConstants.ARM_MAX_RPM));
-
-
-      armMotor.configAllowableClosedloopError(0, ArmConstants.TOLERANCE);
-      armMotor.configClosedLoopPeakOutput(0, 1);
-      armMotor.configClosedLoopPeriod(0, 1);
-      armMotor.configClosedloopRamp(0.00);
-      armMotor.configSelectedFeedbackSensor(
-        FeedbackDevice.IntegratedSensor, ArmConstants.PID_LOOPTYPE, ArmConstants.TIMEOUT_MS);
-        armMotor.setInverted(false);
-
-        armMotor.setNeutralMode(NeutralMode.Brake);
-
-        armMotor.configForwardSoftLimitEnable(true);
-        armMotor.configReverseSoftLimitEnable(true);
-        armMotor.configForwardSoftLimitThreshold(inchesToTicks(ArmConstants.MAX_EXTENSION_INCHES));
-        armMotor.configReverseSoftLimitThreshold(inchesToTicks(0));
+    talonPIDConfig.initializeTalonPID(armMotor, FeedbackDevice.IntegratedSensor);
   }
 
   @Override
@@ -106,11 +83,10 @@ public double getMeasurement() {
    * @param setpoint encoder tick value for turret to move to
    */
   public void armPID(double setpoint) {
+    // Normalise setpoint
+    setpoint = MathUtil.clamp(setpoint, talonPIDConfig.getLowerLimit(), talonPIDConfig.getUpperLimit());
 
-    armMotor.configMotionCruiseVelocity(rpmToTicksPer100ms(ArmConstants.ARM_MOTOR_VELOCITY));
-    armMotor.configMotionAcceleration(rpmToTicksPer100ms(ArmConstants.ARM_MOTOR_ACCELERATION));
-    armMotor.configMotionSCurveStrength(ArmConstants.ARM_MOTOR_MOTION_SMOOTHING);
-
+    // Move arm toward setpoint
     armMotor.set(ControlMode.MotionMagic, setpoint);
   }
 
@@ -147,5 +123,6 @@ public double getMeasurement() {
   public void stopArmMotion () {
     armMotor.set(ControlMode.PercentOutput, 0);
   }
+
 
 }

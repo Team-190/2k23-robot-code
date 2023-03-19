@@ -15,9 +15,7 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoException;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.intake.ejectObject;
 import frc.robot.commands.intake.intakeCone;
@@ -35,6 +34,8 @@ import frc.robot.commands.stop;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.utils.input.AttackThree;
+import frc.robot.utils.input.XboxOneController;
 import frc.robot.subsystems.LimeLightSubsystem;
 
 /**
@@ -75,32 +76,21 @@ public class RobotContainer {
     /*
     * Input
     */
-   public final Joystick leftStick =
-           new Joystick(Constants.InputConstants.LEFT_JOYSTICK_CHANNEL);
-    public final Joystick rightStick =
-            new Joystick(Constants.InputConstants.RIGHT_JOYSTICK_CHANNEL);
-    public final XboxController driverXboxController =
-            new XboxController(Constants.InputConstants.XBOX_CHANNEL);
+   public final AttackThree leftStick =
+           new AttackThree(Constants.InputConstants.LEFT_JOYSTICK_CHANNEL);
+    public final AttackThree rightStick =
+            new AttackThree(Constants.InputConstants.RIGHT_JOYSTICK_CHANNEL);
+    public final XboxOneController driverXboxController =
+            new XboxOneController(Constants.InputConstants.XBOX_CHANNEL);
 
-    public final JoystickButton trigger = new JoystickButton(leftStick, 1);
-    public final JoystickButton faceButton = new JoystickButton(leftStick, 2);
-    public final JoystickButton middleButton = new JoystickButton(leftStick, 3);
-    public final JoystickButton rightButton = new JoystickButton(leftStick, 4);
-    public final JoystickButton leftButton = new JoystickButton(leftStick, 5);
-    public final JoystickButton trigger2 = new JoystickButton(rightStick,  1);
-    public final JoystickButton leftbutton2 = new JoystickButton(rightStick, 5);
-    public final JoystickButton faceButton2 = new JoystickButton(rightStick, 2);
-    public final JoystickButton middleButton2 = new JoystickButton(rightStick, 3);
 
-    //  public final ButtonBoxLeft buttonBoxLeft = new ButtonBoxLeft(2);
-    // public final ButtonBoxRight buttonBoxRight = new ButtonBoxRight(3);
+    PathPlannerTrajectory autoPath = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
 
 
     /**
     * Constructor for the robot container Called when the Rio is powered on, and is only called once.
     * We use this to configure commands from buttons and default commands
     */
-    PathPlannerTrajectory autoPath = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
     public RobotContainer() {
 
         /*
@@ -109,19 +99,19 @@ public class RobotContainer {
         }
         */
 
-        trigger.onTrue(new intakeCone(this));
+        leftStick.triggerButton.onTrue(new intakeCone(this));
         //trigger2.onTrue(new intakeCone(this));
         //faceButton.onTrue(new score(this));
-        trigger2.onTrue(new intakeCube(this));
-        faceButton.onTrue(new InstantCommand(()->claw.collectMode(Value.kForward)));
-        faceButton2.onTrue(new InstantCommand(()->claw.collectMode(Value.kReverse)));
+        rightStick.triggerButton.onTrue(new intakeCube(this));
+        leftStick.bottomFaceButton.onTrue(new InstantCommand(()->claw.collectMode(Value.kForward)));
+        rightStick.bottomFaceButton.onTrue(new InstantCommand(()->claw.collectMode(Value.kReverse)));
         //rightButton.toggleOnTrue(new lift(this));
-        leftButton.onTrue(new stop(this));
-        rightButton.onTrue(new score(this));
+        leftStick.rightFaceButton.onTrue(new stop(this));
+        leftStick.leftFaceButton.onTrue(new score(this));
         //leftbutton2.onTrue(new stop(this));
         //faceButton2.onTrue(new score(this));
-        middleButton.toggleOnTrue(new intakeObject(this));
-        middleButton2.toggleOnTrue(new ejectObject(this));
+        leftStick.middleFaceButton.toggleOnTrue(new intakeObject(this));
+        rightStick.middleFaceButton.toggleOnTrue(new ejectObject(this));
         driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
         driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
         driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
