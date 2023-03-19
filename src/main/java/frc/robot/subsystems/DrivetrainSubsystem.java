@@ -4,22 +4,25 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.SensorConstants;
-import frc.robot.commands.AutoBalance;
-import frc.robot.commands.AutoTurn;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.SimpleAuto;
+import frc.robot.RobotContainer;
+import frc.robot.commands.auto.AutoBalance;
+import frc.robot.commands.auto.AutoTurn;
+import frc.robot.commands.auto.SimpleAuto;
 
 public class DrivetrainSubsystem extends PIDSubsystem {
 
@@ -39,9 +42,15 @@ public class DrivetrainSubsystem extends PIDSubsystem {
     // Objects for PID tracking
     // private final AHRS navx = new AHRS(SPI.Port.kMXP);
     public final Pigeon2 gyro = new Pigeon2(SensorConstants.GYRO_CHANNEL);
-    private final DifferentialDriveOdometry odometry =
+    private DifferentialDriveOdometry odometry =
             new DifferentialDriveOdometry(Rotation2d.fromDegrees(0), 0 , 0);
     private double angleOffset = 0;
+
+    private LimeLightSubsystem limeLight;
+    private RobotContainer robotContainer;
+    public final AHRS navx = new AHRS(SPI.Port.kMXP);
+
+
 
     /**
     * Construct an instance of the Drivetrain
@@ -50,7 +59,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
     * @param ki The I value for the PIDF
     * @param kD The D value for the PIDF
     */
-    public DrivetrainSubsystem(double kP, double ki, double kD) {
+    public DrivetrainSubsystem(double kP, double ki, double kD, RobotContainer container) {
 
         super(new PIDController(kP, ki, kD));
 
@@ -79,30 +88,6 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         setBreakMode();
         //setCoastMode();
 
-        // Configure the PID feedback and constants
-        /*leftLeader.configSelectedFeedbackSensor(
-                FeedbackDevice.IntegratedSensor,
-                DrivetrainConstants.PID_LOOPTYPE,
-                DrivetrainConstants.TIMEOUT_MS);
-        rightLeader.configSelectedFeedbackSensor(
-                FeedbackDevice.IntegratedSensor,
-                DrivetrainConstants.PID_LOOPTYPE,
-                DrivetrainConstants.TIMEOUT_MS);
-
-        configPIDF(
-                leftLeader,
-                DrivetrainConstants.P,
-                DrivetrainConstants.I,
-                DrivetrainConstants.D,
-                DrivetrainConstants.F);
-        configPIDF(
-                rightLeader,
-                DrivetrainConstants.P,
-                DrivetrainConstants.I,
-                DrivetrainConstants.D,
-                DrivetrainConstants.F);*/
-
-        // Wait for Gyro init before finishing DriveSubsystem init
         try {
             Thread.sleep(2000);
         } catch (Exception e) {
@@ -116,6 +101,15 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         SmartDashboard.putData("AutoBalance", new AutoBalance(this));
         SmartDashboard.putData("SimpleAuto", new SimpleAuto(this));
         SmartDashboard.putData("AutoTurn", new AutoTurn(this));
+
+        robotContainer = container;
+        limeLight = robotContainer.limeLightSubsystem;
+
+        odometry =
+         new DifferentialDriveOdometry(
+             Rotation2d.fromDegrees(navx.getAngle()), getDistanceMeters(leftLeader),
+             getDistanceMeters(rightLeader));
+         setSetpoint(0);
 
 
     }
@@ -187,32 +181,6 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         return gyro.getPitch();
     }
 
-    
-    
-    /*public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-        return new SequentialCommandGroup(
-            new InstantCommand(() -> {
-              // Reset odometry for the first path you run during auto
-              if(isFirstPath){
-                  this.resetOdometry(traj.getInitialPose());
-              }
-            }),
-            new PPRamseteCommand(
-                traj, 
-                this::getPose, // Pose supplier
-                new RamseteController(),
-                DrivetrainConstants.DRIVE_FEED_FORWARD,
-                DrivetrainConstants.DRIVE_KINEMATICS, // DifferentialDriveKinematics
-                this::getWheelSpeeds, // DifferentialDriveWheelSpeeds supplier
-                new PIDController(0, 0, 0), // Left controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                new PIDController(0, 0, 0), // Right controller (usually the same values as left controller)
-                this::tankDriveVolts, // Voltage biconsumer
-                true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-                this // Requires this drive subsystem
-            )
-        );
-    }*/
-
     /**
      * Sets drive motors to brake
      */
@@ -259,9 +227,19 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      *
      * @param pose pose to reset to
      */
-    private void resetOdometry(Pose2d pose) {
+    public void resetOdometry(Pose2d pose) {
         resetEncoders();
         odometry.resetPosition(Rotation2d.fromDegrees(getYawDegrees()), 0 , 0, pose);
+    }
+
+    public void setOdometryAprilTag() {
+        double[] xyYaw = limeLight.getAprilTagPose();
+        if (xyYaw == null) return;
+        xyYaw = limeLight.translateBlue(xyYaw);
+        odometry.resetPosition(Rotation2d.fromDegrees(navx.getAngle()), 
+        getDistanceMeters(leftLeader), getDistanceMeters(rightLeader), 
+        new Pose2d(new Translation2d(xyYaw[0], xyYaw[1]), Rotation2d.fromDegrees(navx.getAngle())));
+        
     }
 
     /**

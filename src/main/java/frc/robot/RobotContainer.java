@@ -26,15 +26,16 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.ejectObject;
-import frc.robot.commands.intakeCone;
-import frc.robot.commands.intakeCube;
-import frc.robot.commands.intakeObject;
+import frc.robot.commands.intake.ejectObject;
+import frc.robot.commands.intake.intakeCone;
+import frc.robot.commands.intake.intakeCube;
+import frc.robot.commands.intake.intakeObject;
 import frc.robot.commands.score;
 import frc.robot.commands.stop;
+import frc.robot.commands.auto.AutoBalance;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.commands.AutoBalance;
+import frc.robot.subsystems.LimeLightSubsystem;
 
 /**
 * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,7 +54,7 @@ public class RobotContainer {
 
     // Cameras
     UsbCamera camera1;
-
+    public LimeLightSubsystem limeLightSubsystem;
     /*
     * Subsystems
     */
@@ -61,7 +62,8 @@ public class RobotContainer {
             new DrivetrainSubsystem(
                     Constants.DrivetrainConstants.P,
                     Constants.DrivetrainConstants.I,
-                    Constants.DrivetrainConstants.D);
+                    Constants.DrivetrainConstants.D,
+                    this);
 
     public final Claw claw = new Claw();
 
