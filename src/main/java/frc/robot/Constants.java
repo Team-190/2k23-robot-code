@@ -23,8 +23,7 @@ public final class Constants {
         public static final int XBOX_CHANNEL = 2;
     }
     public static final class SensorConstants {
-        public static final int GYRO_CHANNEL = 1;
-        public static final int PH_CHANNEL = 2;
+        public static final int GYRO_CHANNEL = 7;
     }
 
 
@@ -62,7 +61,7 @@ public final class Constants {
         // Encoder and PID Constants (For Auto)
         public static final double TRACKWIDTH_METERS = 0.6382; // horizontal distance between wheels
         public static final double COUNTS_PER_MOTOR_REVOLUTION = 2048;
-        public static final double WHEEL_DIAMETER_METERS = 0.1021; // 4 inch diameter in meters
+        public static final double WHEEL_DIAMETER_METERS = 0.1021; // 4 inch diameter in meters // TODO: Change this
         public static final double AUTO_P = 2.1989; // Calculated by SysID
 
         // (14/58) ratio to (20/28) on the drivetrain gearbox
@@ -107,34 +106,33 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final int LIMIT_SWITCH_CHANNEL = 9;
+        public static final int LIMIT_SWITCH_CHANNEL = 0;
 
-        public static final int ARM_MOTOR_CHANNEL = 6; // update when motor is finalized
+        public static final int ARM_MOTOR_CHANNEL = 4; // update when motor is finalized
         public static final double ARM_SPEED = 0.5;
         public static final double ARM_SCORING_POSITION = 57; // in inches -- should be checked
         public static final double ARM_COLLECTING_POSITION = 50; // in inches -- should be checked
        
-        public static final double ARM_MAX_RPM = 100; // update
-        public static final double P = 0;
+        public static final double ARM_MAX_RPM = 6380; // update
+        public static final int ARM_TICKS_PER_ROTATION = 2048;
+        public static final double P = 0.055;
         public static final double I = 0;
         public static final double D = 0;
-        public static final double F = 0;
-        public static final int ARM_TICKS_PER_ROTATION = 4096;
+        public static final double F = 1023 / ((ARM_MAX_RPM * ARM_TICKS_PER_ROTATION) / 600);
         public static final int SLOT_ID = 0;
-        public static final double ARM_MOTOR_VELOCITY = 5250; // update
-        public static final double ARM_MOTOR_ACCELERATION = ARM_MOTOR_VELOCITY*2; // update
-        public static final int ARM_MOTOR_MOTION_SMOOTHING = 3; // update
+        public static final double ARM_MOTOR_VELOCITY = ARM_MAX_RPM/1.5; 
+        public static final double ARM_MOTOR_ACCELERATION = ARM_MAX_RPM*2.5; 
+        public static final int ARM_MOTOR_MOTION_SMOOTHING = 4; // update
         public static final double TOLERANCE = 500;
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
-        public static final int MAX_EXTENSION_TICKS = 1000; // update?
+        public static final int MAX_EXTENSION_TICKS = 149000; 
         public static final int MIN_EXTENSION_TICKS = 0;
         public static final boolean INVERT_MOTOR = false;
         public static final boolean SENSOR_PHASE = false;
         public static final boolean ENABLE_SOFT_LIMITS = true;
-
-        public TalonPIDConfig ah;
+        public static final int MIDDLE_POSITION = 85000; 
         
         public static TalonPIDConfig ARM_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, ARM_TICKS_PER_ROTATION,
                         P, I, D, F, TOLERANCE, 
@@ -148,36 +146,37 @@ public final class Constants {
     public static final class PivotConstants {
         public static final int LIMIT_SWITCH_CHANNEL = 11;
         
-        public static final int PIVOT_MOTOR_CHANNEL = 7; // update when motor is finalized
+        public static final int PIVOT_MOTOR_CHANNEL = 3; // update when motor is finalized
         public static final double PIVOT_SPEED = 0.5;
         public static final double PIVOT_SCORING_POSITION = 24; // in inches -- should be checked
         public static final double PIVOT_COLLECTING_POSITION = 10; // in inches -- should be checked
         
         public static final double PIVOT_MAX_RPM = 6380; // update
+        public static final int PIVOT_TICKS_PER_ROTATION = 2048;
         public static final double P = 0;
         public static final double I = 0;
         public static final double D = 0;
-        public static final double F = 0;
-        public static final int PIVOT_TICKS_PER_ROTATION = 2048;
+        public static final double F = 1023 / ((PIVOT_MAX_RPM * PIVOT_TICKS_PER_ROTATION) / 600);
+        //1023 / rpmToTicksPer100ms(m_maxRPM);
         public static final int SLOT_ID = 0;
-        public static final double PIVOT_MOTOR_VELOCITY = 5250; // update
+        public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/4; // update
         public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MOTOR_VELOCITY*2; // update
         public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 0; // update
         public static final double TOLERANCE = 10;
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
-        public static final int TICKS_PER_INCH = 100; // update
+        public static final int TICKS_PER_DEGREE = 100; // update
         public static final int MAX_ANGLE_TICKS = 90; // update?
         public static final int MIN_ANGLE_TICKS = -90;
         public static final boolean INVERT_MOTOR = false;
         public static final boolean SENSOR_PHASE = false;
-        public static final boolean ENABLE_SOFT_LIMITS = true;
+        public static final boolean ENABLE_SOFT_LIMITS = false;
 
         public static final TalonPIDConfig PIVOT_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, PIVOT_TICKS_PER_ROTATION,
                         P, I, D, F, TOLERANCE, 
                         MIN_ANGLE_TICKS, MAX_ANGLE_TICKS, ENABLE_SOFT_LIMITS,
                         PIVOT_MOTOR_VELOCITY, PIVOT_MOTOR_ACCELERATION, PIVOT_MOTOR_MOTION_SMOOTHING);
-               
+    
 
     }
 
@@ -219,7 +218,7 @@ public final class Constants {
         public static final int LED_PORT = 5; // change
         public static final int LED_LENGTH = 60;
         public static final int LED_COUNT = 300;
-        public static final int CANdleID = 10;
+        public static final int CANdleID = 8;
     }
 
     

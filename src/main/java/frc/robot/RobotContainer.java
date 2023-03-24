@@ -37,6 +37,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.utils.input.AttackThree;
 import frc.robot.utils.input.XboxOneController;
 import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.TelescopingArm;
 
 /**
 * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -67,6 +68,8 @@ public class RobotContainer {
                     this);
 
     public final IntakeSubsystem claw = new IntakeSubsystem();
+
+    public final TelescopingArm telescopingArm = new TelescopingArm(0, 0, 0);
 
     public final Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     public boolean compressorEnabled = compressor.isEnabled();

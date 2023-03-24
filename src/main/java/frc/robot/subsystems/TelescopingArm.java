@@ -6,11 +6,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.utils.TalonPIDConfig;
@@ -22,22 +24,25 @@ import frc.robot.utils.TalonPIDConfig;
  */
 public class TelescopingArm extends PIDSubsystem {
   public final WPI_TalonFX armMotor = new WPI_TalonFX(ArmConstants.ARM_MOTOR_CHANNEL);
-  public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
+  // public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
   public final TalonPIDConfig talonPIDConfig = ArmConstants.ARM_PID_CONFIG;
   
   /** Creates a new TelescopingArm. */
   public TelescopingArm(double P, double I, double D) {
     super(new PIDController(P, I, D));
-    talonPIDConfig.initializeTalonPID(armMotor, FeedbackDevice.IntegratedSensor);
+    talonPIDConfig.initializeTalonPID(armMotor, FeedbackDevice.IntegratedSensor, false, false);
+    armMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("ArmPosition", armMotor.getSelectedSensorPosition());
   }
 
   public boolean getLimitSwitch() {
-    return limitSwitch.get();
+    // return limitSwitch.get();
+    return false;
   }
 
    /**
