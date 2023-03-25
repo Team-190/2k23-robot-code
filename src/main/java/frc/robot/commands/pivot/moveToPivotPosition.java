@@ -11,9 +11,11 @@ import frc.robot.subsystems.PivotSubsystem;
 public class moveToPivotPosition extends CommandBase {
   PivotSubsystem pivot;
   int setpoint;
+  RobotContainer robotcontainer;
   /** Creates a new moveToPivotPosition. */
   public moveToPivotPosition(RobotContainer robotcontainer, int setpoint) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.robotcontainer = robotcontainer;
     pivot = robotcontainer.pivot;
     this.setpoint = setpoint;
     addRequirements(pivot);
@@ -22,6 +24,9 @@ public class moveToPivotPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (!robotcontainer.pivotDirection) {
+      setpoint*= -1; // will be removed eventually
+    }
     pivot.pivotPID(setpoint);
   }
 

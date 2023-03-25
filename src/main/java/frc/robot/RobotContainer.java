@@ -29,6 +29,7 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
+import frc.robot.commands.auto.autoBalanceSequence;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.moveOut;
 import frc.robot.commands.intake.ejectObject;
@@ -95,7 +96,7 @@ public class RobotContainer {
 
     public GoalHeights goalHeights; */
     public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup; 4 = Double Player Pickup; 5 = Floor intake
-    
+    public boolean pivotDirection = true; // true is forward
     
 
     public final TelescopingArm telescopingArm = new TelescopingArm(0, 0, 0);
@@ -133,7 +134,7 @@ public class RobotContainer {
         */
 
 
-        operatorXboxController.yButton.onTrue(new SequentialCommandGroup(
+    /**  operatorXboxController.yButton.onTrue(new SequentialCommandGroup(
             new InstantCommand(()-> setGoalHeight(2)),
             new moveOut(this))
         );
@@ -144,9 +145,11 @@ public class RobotContainer {
         operatorXboxController.aButton.onTrue(new SequentialCommandGroup(
             new InstantCommand(()-> setGoalHeight(0)),
             new moveOut(this))
-        );
+        );*/
         operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(1))); // cone
         operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(0))); // cube
+       operatorXboxController.startButton.onTrue(new InstantCommand(()-> setPivotDirection(false))); // cone
+       operatorXboxController.selectButton.onTrue(new InstantCommand(()-> setPivotDirection(true))); // cube
        // operatorXboxController.yButton.onTrue(new RunCommand(()-> pivot.pivotPID(-126500)));
        operatorXboxController.yButton.onTrue(new moveToPivotPosition(this, -126500));
        operatorXboxController.xButton.onTrue(new moveToPivotPosition(this, 0));
@@ -154,7 +157,7 @@ public class RobotContainer {
        // operatorXboxController.xButton.onTrue(new RunCommand(()-> pivot.pivotPID(0)));
        // operatorXboxController.aButton.onTrue(new RunCommand(()-> pivot.pivotPID(-225000)));
         
-
+        driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
         new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.score()){}).onFalse(new InstantCommand(()-> claw.stop()));
         new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.intake()){}).onFalse(new InstantCommand(()-> claw.stop()));
       //  leftStick.triggerButton.onTrue(new intakeCone(this));
@@ -209,7 +212,8 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // return null;
         //return autoModeChooser.getSelected();
-        return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(1);
+        return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2);
+        //return new autoBalanceSequence(this);
     }
    // SlewRateLimiter leftLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
    // SlewRateLimiter rightLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
@@ -235,6 +239,10 @@ public class RobotContainer {
 
     public void setGoalHeight(int value) {
         goalHeight = value;
+    }
+
+    public void setPivotDirection(boolean value) {
+        pivotDirection = value;
     }
 
     public void periodic() {}
