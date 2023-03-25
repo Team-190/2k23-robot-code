@@ -59,6 +59,9 @@ public final class Constants {
         public static final double D = 0;
         public static final double F = 0;
 
+        //Acceleration Smoothing
+        public static final double ACCEL_LIMIT = 0.35;
+
         // Encoder and PID Constants (For Auto)
         public static final double TRACKWIDTH_METERS = 0.6382; // horizontal distance between wheels
         public static final double COUNTS_PER_MOTOR_REVOLUTION = 2048;
@@ -167,14 +170,14 @@ public final class Constants {
         
         public static final double PIVOT_MAX_RPM = 6380; // update
         public static final int PIVOT_TICKS_PER_ROTATION = 2048;
-        public static final double P = 0;
+        public static final double P = 0.02;
         public static final double I = 0;
         public static final double D = 0;
         public static final double F = 1023 / ((PIVOT_MAX_RPM * PIVOT_TICKS_PER_ROTATION) / 600);
         //1023 / rpmToTicksPer100ms(m_maxRPM);
         public static final int SLOT_ID = 0;
-        public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/4; // update
-        public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MOTOR_VELOCITY*2; // update
+        public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/1.5; // update
+        public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MAX_RPM*2; // update
         public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 0; // update
         public static final double TOLERANCE = 10; // ticks
         public static final int PID_LOOPTYPE = 0;
@@ -192,7 +195,8 @@ public final class Constants {
         public static final int CUBE_LOW_GOAL_PIVOT_TICKS = 90;
         public static final int CUBE_MID_GOAL_PIVOT_TICKS = 90;
         public static final int CUBE_HIGH_GOAL_PIVOT_TICKS = 90;
-        public static final int SINGLE_PICKUP_PIVOT_TICKS = 90;
+        public static final int SINGLE_PICKUP_PIVOT_TICKS = -126500; // cube
+        public static final int CONE_SINGLE_PICKUP_PIVOT_TICKS = -172500;
         public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CUBE_FLOOR_PICKUP_PIVOT_TICKS = 90;

@@ -13,6 +13,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoException;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
@@ -33,6 +35,7 @@ import frc.robot.commands.intake.ejectObject;
 import frc.robot.commands.intake.intakeCone;
 import frc.robot.commands.intake.intakeCube;
 import frc.robot.commands.intake.intakeObject;
+import frc.robot.commands.pivot.moveToPivotPosition;
 import frc.robot.commands.score;
 import frc.robot.commands.stop;
 import frc.robot.commands.auto.AutoBalance;
@@ -144,8 +147,16 @@ public class RobotContainer {
         );
         operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(1))); // cone
         operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(0))); // cube
-        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.score()){});
-        new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.intake()){});
+       // operatorXboxController.yButton.onTrue(new RunCommand(()-> pivot.pivotPID(-126500)));
+       operatorXboxController.yButton.onTrue(new moveToPivotPosition(this, -126500));
+       operatorXboxController.xButton.onTrue(new moveToPivotPosition(this, 0));
+       operatorXboxController.aButton.onTrue(new moveToPivotPosition(this, -225000));
+       // operatorXboxController.xButton.onTrue(new RunCommand(()-> pivot.pivotPID(0)));
+       // operatorXboxController.aButton.onTrue(new RunCommand(()-> pivot.pivotPID(-225000)));
+        
+
+        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.score()){}).onFalse(new InstantCommand(()-> claw.stop()));
+        new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.intake()){}).onFalse(new InstantCommand(()-> claw.stop()));
       //  leftStick.triggerButton.onTrue(new intakeCone(this));
         //trigger2.onTrue(new intakeCone(this));
         //faceButton.onTrue(new score(this));
@@ -200,6 +211,8 @@ public class RobotContainer {
         //return autoModeChooser.getSelected();
         return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.5, .5, false), drivetrainSubsystem).withTimeout(1);
     }
+   // SlewRateLimiter leftLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
+   // SlewRateLimiter rightLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
 
     public void setDefaultCommands() {
         // Default drive command
@@ -208,7 +221,7 @@ public class RobotContainer {
 
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
          drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(driverXboxController.getLeftStickY(), 
-         -1*driverXboxController.getRightStickX(), false), drivetrainSubsystem));
+         -1*driverXboxController.getRightStickX(), true), drivetrainSubsystem));
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
         //drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
