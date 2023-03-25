@@ -209,7 +209,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // return null;
         //return autoModeChooser.getSelected();
-        return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.5, .5, false), drivetrainSubsystem).withTimeout(1);
+        return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(1);
     }
    // SlewRateLimiter leftLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
    // SlewRateLimiter rightLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
@@ -220,8 +220,8 @@ public class RobotContainer {
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
 
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
-         drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(driverXboxController.getLeftStickY(), 
-         -1*driverXboxController.getRightStickX(), true), drivetrainSubsystem));
+         drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(driverXboxController.getLeftStickY()/Math.pow(2,0.5), 
+         -1*driverXboxController.getRightStickX()/Math.pow(2,0.5), true), drivetrainSubsystem));
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
         //drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));

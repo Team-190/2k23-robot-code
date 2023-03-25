@@ -16,16 +16,19 @@ public class moveToPivotPosition extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     pivot = robotcontainer.pivot;
     this.setpoint = setpoint;
+    addRequirements(pivot);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    pivot.pivotPID(setpoint);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    pivot.pivotPID(setpoint);
+    // pivot.pivotPID(setpoint);
   }
 
   // Called once the command ends or is interrupted.

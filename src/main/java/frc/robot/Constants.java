@@ -179,7 +179,7 @@ public final class Constants {
         public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/1.5; // update
         public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MAX_RPM*2; // update
         public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 0; // update
-        public static final double TOLERANCE = 10; // ticks
+        public static final double TOLERANCE = 1000; // ticks
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_DEGREE = 100; // update

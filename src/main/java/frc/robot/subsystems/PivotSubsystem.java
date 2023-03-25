@@ -47,7 +47,8 @@ public class PivotSubsystem extends SubsystemBase {
   }
 
   public boolean isMotionCompleted() {
-    return Math.abs(pivotMotor.getClosedLoopError()) < Constants.PivotConstants.TOLERANCE;
+    double error = pivotMotor.getClosedLoopTarget() - pivotMotor.getSelectedSensorPosition();
+    return Math.abs(error) < Constants.PivotConstants.TOLERANCE;
   }
 
     public void pivotPID(double setpoint) {

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -15,22 +16,22 @@ import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-  public final TalonSRX clawMotor = new TalonSRX(IntakeConstants.INTAKE_MOTOR_CHANNEL);
+  public final TalonFX clawMotor = new TalonFX(IntakeConstants.INTAKE_MOTOR_CHANNEL);
   public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
 
   /** Creates a new Claw. */
   public IntakeSubsystem() {
     //clawMotor.configPeakCurrentLimit(35);
     //clawMotor.configContinuousCurrentLimit(35);
-    clawMotor.enableCurrentLimit(false);
-    SmartDashboard.putNumber("Current", clawMotor.getStatorCurrent());
+    // clawMotor.enableCurrentLimit(false);
+    // SmartDashboard.putNumber("Current", clawMotor.getStatorCurrent());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     
-    SmartDashboard.putNumber("Current", clawMotor.getStatorCurrent());
+    // SmartDashboard.putNumber("Current", clawMotor.getStatorCurrent());
 
     
   }
