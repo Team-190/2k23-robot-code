@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.utils.TalonPIDConfig;
 
@@ -38,6 +39,11 @@ public class WristSubsystem extends SubsystemBase {
   public void stopWristMotion() {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
+
+  public boolean isMotionCompleted() {
+    return Math.abs(wristMotor.getClosedLoopError()) < Constants.WristConstants.TOLERANCE;
+  }
+
 
   public void wristPID(double setpoint) {
     // Normalise setpoint

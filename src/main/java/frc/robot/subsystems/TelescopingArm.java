@@ -14,6 +14,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.utils.TalonPIDConfig;
 
@@ -76,6 +77,11 @@ public class TelescopingArm extends PIDSubsystem {
 public void useOutput(double output, double setpoint) {
   // Use the output here
 }
+
+public boolean isMotionCompleted() {
+  return Math.abs(armMotor.getClosedLoopError()) < Constants.WristConstants.TOLERANCE;
+}
+
 
 @Override
 public double getMeasurement() {

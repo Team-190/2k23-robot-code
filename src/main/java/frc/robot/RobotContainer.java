@@ -20,11 +20,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.moveOut;
 import frc.robot.commands.intake.ejectObject;
 import frc.robot.commands.intake.intakeCone;
 import frc.robot.commands.intake.intakeCube;
@@ -37,7 +40,9 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.utils.input.AttackThree;
 import frc.robot.utils.input.XboxOneController;
 import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.TelescopingArm;
+import frc.robot.subsystems.WristSubsystem;
 
 /**
 * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -68,6 +73,26 @@ public class RobotContainer {
                     this);
 
     public final IntakeSubsystem claw = new IntakeSubsystem();
+    public final PivotSubsystem pivot = new PivotSubsystem();
+    public final WristSubsystem wrist = new WristSubsystem();
+
+    //public boolean gamePiece = true; // true = cone & false = cube
+    public int gamePiece = 0; // 0 = cube; 1 = cone; 2 = stow
+   /** public enum GoalHeights {
+        LOW(0),
+        MID(1),
+        HIGH(2);
+
+        public final int targetGoal;
+        private GoalHeights(int targetGoal) {
+            this.targetGoal = targetGoal;
+        }
+    }
+
+    public GoalHeights goalHeights; */
+    public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup
+    
+    
 
     public final TelescopingArm telescopingArm = new TelescopingArm(0, 0, 0);
 
@@ -79,13 +104,14 @@ public class RobotContainer {
     /*
     * Input
     */
-   public final AttackThree leftStick =
+ public final AttackThree leftStick =
            new AttackThree(Constants.InputConstants.LEFT_JOYSTICK_CHANNEL);
     public final AttackThree rightStick =
             new AttackThree(Constants.InputConstants.RIGHT_JOYSTICK_CHANNEL);
     public final XboxOneController driverXboxController =
-            new XboxOneController(Constants.InputConstants.XBOX_CHANNEL);
-
+            new XboxOneController(Constants.InputConstants.XBOX_DR_CHANNEL);
+    public final XboxOneController operatorXboxController = 
+            new XboxOneController(Constants.InputConstants.XBOX_OP_CHANNEL);
 
     PathPlannerTrajectory autoPath = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
 
@@ -102,17 +128,33 @@ public class RobotContainer {
         }
         */
 
-        leftStick.triggerButton.onTrue(new intakeCone(this));
+
+        operatorXboxController.yButton.onTrue(new SequentialCommandGroup(
+            new InstantCommand(()-> setGoalHeight(2)),
+            new moveOut(this))
+        );
+        operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
+            new InstantCommand(()-> setGoalHeight(1)),
+            new moveOut(this))
+        );
+        operatorXboxController.aButton.onTrue(new SequentialCommandGroup(
+            new InstantCommand(()-> setGoalHeight(0)),
+            new moveOut(this))
+        );
+        operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(1))); // cone
+        operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(0))); // cube
+        
+      //  leftStick.triggerButton.onTrue(new intakeCone(this));
         //trigger2.onTrue(new intakeCone(this));
         //faceButton.onTrue(new score(this));
-        rightStick.triggerButton.onTrue(new intakeCube(this));
+      ///  rightStick.triggerButton.onTrue(new intakeCube(this));
         //rightButton.toggleOnTrue(new lift(this));
-        leftStick.rightFaceButton.onTrue(new stop(this));
-        leftStick.leftFaceButton.onTrue(new score(this));
+       // leftStick.rightFaceButton.onTrue(new stop(this));
+       // leftStick.leftFaceButton.onTrue(new score(this));
         //leftbutton2.onTrue(new stop(this));
         //faceButton2.onTrue(new score(this));
-        leftStick.middleFaceButton.toggleOnTrue(new intakeObject(this));
-        rightStick.middleFaceButton.toggleOnTrue(new ejectObject(this));
+       // leftStick.middleFaceButton.toggleOnTrue(new intakeObject(this));
+       // rightStick.middleFaceButton.toggleOnTrue(new ejectObject(this));
         driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
         driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
         driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
@@ -154,7 +196,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // return null;
         //return autoModeChooser.getSelected();
-        return new AutoBalance(drivetrainSubsystem);
+        return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.5, .5, false), drivetrainSubsystem).withTimeout(1);
     }
 
     public void setDefaultCommands() {
@@ -163,12 +205,21 @@ public class RobotContainer {
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
 
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
-         drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(this));
+         drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(driverXboxController.getLeftStickY(), 
+         driverXboxController.getRightStickX(), false)));
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
         //drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));
 
+    }
+
+    public void setGamePiece(int value) {
+        gamePiece = value;
+    }
+
+    public void setGoalHeight(int value) {
+        goalHeight = value;
     }
 
     public void periodic() {}

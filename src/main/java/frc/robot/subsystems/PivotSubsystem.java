@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.utils.TalonPIDConfig;
 
@@ -43,6 +44,10 @@ public class PivotSubsystem extends SubsystemBase {
 
   public void stopPivotMotion() {
     pivotMotor.set(ControlMode.PercentOutput, 0);
+  }
+
+  public boolean isMotionCompleted() {
+    return Math.abs(pivotMotor.getClosedLoopError()) < Constants.PivotConstants.TOLERANCE;
   }
 
     public void pivotPID(double setpoint) {

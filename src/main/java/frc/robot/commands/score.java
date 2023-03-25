@@ -6,36 +6,50 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.TelescopingArm;
+import frc.robot.subsystems.WristSubsystem;
 
-public class score extends CommandBase {
+public class score extends SequentialCommandGroup {
 
-  IntakeSubsystem clawsubsystem;
+  IntakeSubsystem claw;
+  WristSubsystem wrist;
+  PivotSubsystem pivot;
+  TelescopingArm elevator;
+
   /** Creates a new intakeCube. */
   public score(RobotContainer robotcontainer) {
     // Use addRequirements() here to declare subsystem dependencies.
-    clawsubsystem = robotcontainer.claw;
-    addRequirements(clawsubsystem);
-  }
+    claw = robotcontainer.claw;
+    wrist = robotcontainer.wrist;
+    pivot = robotcontainer.pivot;
+    elevator = robotcontainer.telescopingArm;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+    addRequirements(claw);
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    clawsubsystem.score();
-  }
+    if (robotcontainer.gamePiece == 1){ // if it is a cone
+      if (robotcontainer.goalHeight == 0) {
+        pivot.pivotPID(Constants.PivotConstants.CONE_LOW_GOAL_PIVOT_TICKS);
+        elevator.armPID(Constants.ArmConstants.CONE_LOW_GOAL_EXT_TICKS);
+        wrist.wristPID(Constants.WristConstants.CONE_LOW_GOAL_WRIST_TICKS);
+      }
+      if (robotcontainer.goalHeight == 1) {
+        pivot.pivotPID(Constants.PivotConstants.CONE_MID_GOAL_PIVOT_TICKS);
+        elevator.armPID(Constants.ArmConstants.CONE_MID_GOAL_EXT_TICKS);
+        wrist.wristPID(Constants.WristConstants.CONE_MID_GOAL_WRIST_TICKS);
+      }
+      if (robotcontainer.goalHeight == 2) {
+        pivot.pivotPID(Constants.PivotConstants.CONE_HIGH_GOAL_PIVOT_TICKS);
+        elevator.armPID(Constants.ArmConstants.CONE_HIGH_GOAL_EXT_TICKS);
+        wrist.wristPID(Constants.WristConstants.CONE_HIGH_GOAL_WRIST_TICKS);
+      }
+      
+    }
+    
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
   }
 }
