@@ -198,4 +198,21 @@ public class LimeLightSubsystem extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  public double getAprilTagDistance(){
+    // how many degrees back is your limelight rotated from perfectly vertical?
+    double limelightMountAngleDegrees = 0;//UPDATE
+
+    // distance from the center of the Limelight lens to the floor
+    double limelightLensHeightInches = 21.5;//UPDATE
+
+    // distance from the target to the floor
+    double goalHeightInches = 32.5;//UPDATE
+
+    double angleToGoalDegrees = limelightMountAngleDegrees + targetY.getDouble(0.0);
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+
+    //calculate distance
+    return (goalHeightInches - limelightLensHeightInches)/Math.tan(angleToGoalRadians);
+  }
 }
