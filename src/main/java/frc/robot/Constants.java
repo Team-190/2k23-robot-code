@@ -102,7 +102,7 @@ public final class Constants {
     }
 
     public static final class IntakeConstants {
-        public static final int INTAKE_MOTOR_CHANNEL = 7; // update when motor is finalized
+        public static final int INTAKE_MOTOR_CHANNEL = 6; // update when motor is finalized
         public static final double INTAKE_SPEED = 1;
     }
 
@@ -128,22 +128,25 @@ public final class Constants {
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
-        public static final int MAX_EXTENSION_TICKS = 149000; 
+        public static final int MAX_EXTENSION_TICKS = 100000; 
         public static final int MIN_EXTENSION_TICKS = 0;
         public static final boolean INVERT_MOTOR = false;
         public static final boolean SENSOR_PHASE = false;
         public static final boolean ENABLE_SOFT_LIMITS = true;
         public static final int MIDDLE_POSITION = 85000; 
 
-        public static final int CONE_LOW_GOAL_EXT_TICKS = 90; // extension
+        public static final int CONE_LOW_GOAL_EXT_TICKS = 0; // extension
         public static final int CONE_MID_GOAL_EXT_TICKS = 90;
         public static final int CONE_HIGH_GOAL_EXT_TICKS = 90;
-        public static final int CUBE_LOW_GOAL_EXT_TICKS = 90;
+        public static final int CUBE_LOW_GOAL_EXT_TICKS = 0;
         public static final int CUBE_MID_GOAL_EXT_TICKS = 90;
         public static final int CUBE_HIGH_GOAL_EXT_TICKS = 90;
-        public static final int SINGLE_PICKUP_PIVOT_TICKS = 90;
+        public static final int SINGLE_PICKUP_PIVOT_TICKS = 0;
         public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
+        public static final int CUBE_FLOOR_PICKUP_PIVOT_TICKS = 90;
+        public static final int CONE_FLOOR_PICKUP_PIVOT_TICKS = 90;
+
         
         public static TalonPIDConfig ARM_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, ARM_TICKS_PER_ROTATION,
                         P, I, D, F, TOLERANCE, 
@@ -177,11 +180,11 @@ public final class Constants {
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_DEGREE = 100; // update
-        public static final int MAX_ANGLE_TICKS = 90; // update?
-        public static final int MIN_ANGLE_TICKS = -90;
+        public static final int MAX_ANGLE_TICKS = 230000; // update?
+        public static final int MIN_ANGLE_TICKS = -240000;
         public static final boolean INVERT_MOTOR = false;
         public static final boolean SENSOR_PHASE = false;
-        public static final boolean ENABLE_SOFT_LIMITS = false;
+        public static final boolean ENABLE_SOFT_LIMITS = true;
 
         public static final int CONE_LOW_GOAL_PIVOT_TICKS = 90;
         public static final int CONE_MID_GOAL_PIVOT_TICKS = 90;
@@ -192,8 +195,8 @@ public final class Constants {
         public static final int SINGLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
-
-
+        public static final int CUBE_FLOOR_PICKUP_PIVOT_TICKS = 90;
+        public static final int CONE_FLOOR_PICKUP_PIVOT_TICKS = 90;
 
 
         public static final TalonPIDConfig PIVOT_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, PIVOT_TICKS_PER_ROTATION,
@@ -205,7 +208,7 @@ public final class Constants {
     }
 
     public static final class WristConstants {
-        public static final int WRIST_MOTOR_CHANNEL = 8; // update when motor is finalized
+        public static final int WRIST_MOTOR_CHANNEL = 5; // update when motor is finalized
         public static final double WRIST_SPEED = 0.5;
         public static final double WRIST_SCORING_POSITION = 4; // in inches -- should be checked
         public static final double WRIST_COLLECTING_POSITION = 57; // in inches -- should be checked
@@ -239,6 +242,8 @@ public final class Constants {
         public static final int SINGLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
+        public static final int CUBE_FLOOR_PICKUP_PIVOT_TICKS = 90;
+        public static final int CONE_FLOOR_PICKUP_PIVOT_TICKS = 90;
 
 
         public static final TalonPIDConfig WRIST_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, WRIST_TICKS_PER_ROTATION,

@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
@@ -90,7 +91,7 @@ public class RobotContainer {
     }
 
     public GoalHeights goalHeights; */
-    public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup
+    public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup; 4 = Double Player Pickup; 5 = Floor intake
     
     
 
@@ -143,7 +144,8 @@ public class RobotContainer {
         );
         operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(1))); // cone
         operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(0))); // cube
-        
+        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.score()){});
+        new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.intake()){});
       //  leftStick.triggerButton.onTrue(new intakeCone(this));
         //trigger2.onTrue(new intakeCone(this));
         //faceButton.onTrue(new score(this));
@@ -206,7 +208,7 @@ public class RobotContainer {
 
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
          drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(driverXboxController.getLeftStickY(), 
-         driverXboxController.getRightStickX(), false)));
+         -1*driverXboxController.getRightStickX(), false), drivetrainSubsystem));
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
         //drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
