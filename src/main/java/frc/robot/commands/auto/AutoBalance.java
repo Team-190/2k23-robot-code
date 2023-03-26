@@ -15,7 +15,7 @@ public class AutoBalance extends CommandBase {
   private boolean onChargeStation = false;
   private boolean somewhatBalanced = false;
   private boolean balanced = false;
-  private static final double TOLERANCE = 2.5;
+  private static final double TOLERANCE = 5;
   private static final double MEDIUM_SPEED = 0.4;
   private static final double SLOW_SPEED = 0.2;
 
@@ -23,7 +23,7 @@ public class AutoBalance extends CommandBase {
   public AutoBalance(DrivetrainSubsystem drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
-    drivetrain.setBreakMode();
+ 
     onChargeStation = false;
     addRequirements(drivetrain);
     Timer timer = new Timer();
@@ -32,15 +32,15 @@ public class AutoBalance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   
+    drivetrain.setBreakMode();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (somewhatBalanced && Math.abs(drivetrain.getPitchDegrees()) < 10) {
-      drivetrain.leftLeader.set(ControlMode.PercentOutput, -0.2);
-      drivetrain.rightLeader.set(ControlMode.PercentOutput, -0.2);
+      drivetrain.leftLeader.set(ControlMode.PercentOutput, -0.3);
+      drivetrain.rightLeader.set(ControlMode.PercentOutput, -0.3);
       Timer.delay(1);
       drivetrain.leftLeader.set(ControlMode.PercentOutput, 0);
       drivetrain.rightLeader.set(ControlMode.PercentOutput, 0);
@@ -51,13 +51,13 @@ public class AutoBalance extends CommandBase {
     drivetrain.rightLeader.set(ControlMode.PercentOutput, 0.5);
 
     if (drivetrain.getPitchDegrees() < -15) {
-      drivetrain.leftLeader.set(ControlMode.PercentOutput, 0.5);
-      drivetrain.rightLeader.set(ControlMode.PercentOutput, 0.5);
+      drivetrain.leftLeader.set(ControlMode.PercentOutput, 0.3);
+      drivetrain.rightLeader.set(ControlMode.PercentOutput, 0.3);
       onChargeStation = true;
     }
     if (onChargeStation && drivetrain.getPitchDegrees() > -8) {
-      drivetrain.leftLeader.set(ControlMode.PercentOutput, 0.5);
-      drivetrain.rightLeader.set(ControlMode.PercentOutput, 0.5);
+      drivetrain.leftLeader.set(ControlMode.PercentOutput, 0.3);
+      drivetrain.rightLeader.set(ControlMode.PercentOutput, 0.3);
       somewhatBalanced = true;
     }
     if (somewhatBalanced) {
