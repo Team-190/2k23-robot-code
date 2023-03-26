@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.PivotSubsystem;
 
-public class moveToPivotPosition extends CommandBase {
+public class MoveToPivotPosition extends CommandBase {
   PivotSubsystem pivot;
   int setpoint;
   RobotContainer robotcontainer;
   /** Creates a new moveToPivotPosition. */
-  public moveToPivotPosition(RobotContainer robotcontainer, int setpoint) {
+  public MoveToPivotPosition(RobotContainer robotcontainer, int setpoint) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.robotcontainer = robotcontainer;
     pivot = robotcontainer.pivot;

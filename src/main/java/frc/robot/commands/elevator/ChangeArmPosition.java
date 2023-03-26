@@ -2,20 +2,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.TelescopingArm;
+import frc.robot.subsystems.ElevatorSubsystem;
 
-public class changeArmPosition extends CommandBase {
-  TelescopingArm arm;
+public class ChangeArmPosition extends CommandBase {
+  ElevatorSubsystem arm;
   int setpoint;
   RobotContainer robotContainer;
   
   /** Creates a new changeArmPosition. */
-  public changeArmPosition(RobotContainer robotContainer) {
+  public ChangeArmPosition(RobotContainer robotContainer) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.robotContainer = robotContainer;
    
@@ -25,27 +25,27 @@ public class changeArmPosition extends CommandBase {
   @Override
   public void initialize() {
     arm = robotContainer.telescopingArm;
-    if (robotContainer.gamePiece == 1) { // cone
-      if(robotContainer.goalHeight == 0)
+    if (robotContainer.gamePiece == RobotContainer.GamePieces.CONE) { // cone
+      if(robotContainer.goalHeights == RobotContainer.GoalHeights.LOW)
         setpoint = Constants.ArmConstants.CONE_LOW_GOAL_EXT_TICKS;
-      if(robotContainer.goalHeight == 1)
+      if(robotContainer.goalHeights == RobotContainer.GoalHeights.MID)
         setpoint = Constants.ArmConstants.CONE_MID_GOAL_EXT_TICKS;
-      if(robotContainer.goalHeight == 2)
+      if(robotContainer.goalHeights == RobotContainer.GoalHeights.HIGH)
         setpoint = Constants.ArmConstants.CONE_HIGH_GOAL_EXT_TICKS;
-      if(robotContainer.goalHeight == 3)
+      if(robotContainer.goalHeights == RobotContainer.GoalHeights.SINGLE)
         setpoint = Constants.ArmConstants.SINGLE_PICKUP_PIVOT_TICKS;
     }
-    else if(robotContainer.gamePiece == 0) {
-      if(robotContainer.goalHeight == 0)
+    else if(robotContainer.gamePiece == RobotContainer.GamePieces.CUBE) {
+      if(robotContainer.goalHeights == RobotContainer.GoalHeights.LOW)
         setpoint = Constants.ArmConstants.CUBE_LOW_GOAL_EXT_TICKS;
-      if(robotContainer.goalHeight == 1)
+      if(robotContainer.goalHeights == RobotContainer.GoalHeights.MID)
         setpoint = Constants.ArmConstants.CUBE_MID_GOAL_EXT_TICKS;
-      if(robotContainer.goalHeight == 2)
+      if(robotContainer.goalHeights == RobotContainer.GoalHeights.HIGH)
         setpoint = Constants.ArmConstants.CUBE_HIGH_GOAL_EXT_TICKS;
-      if(robotContainer.goalHeight == 3)
+      if(robotContainer.goalHeights == RobotContainer.GoalHeights.SINGLE)
         setpoint = Constants.ArmConstants.SINGLE_PICKUP_PIVOT_TICKS;
     }
-    else if (robotContainer.gamePiece == 2) { // stow
+    else if (robotContainer.gamePiece == RobotContainer.GamePieces.STOW) { // stow
       setpoint = 0;
     }
   }

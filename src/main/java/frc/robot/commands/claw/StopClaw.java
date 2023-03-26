@@ -2,38 +2,31 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.claw;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class FindObject extends CommandBase {
-  public boolean objOnRight;
-  public boolean objOnLeft;
-  public boolean objAbove;
-  public boolean objBelow;
-  public final static double H_TOLERANCE = 2;
-  public final static double V_TOLERANCE = 2;
-  public LimeLightSubsystem limeLight;
+public class StopClaw extends CommandBase {
 
-  /** Creates a new FindCube. */
-  public FindObject(LimeLightSubsystem limeLight) {
+  IntakeSubsystem clawsubsystem;
+  /** Creates a new intakeCube. */
+  public StopClaw(RobotContainer robotcontainer) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.limeLight = limeLight;
+    clawsubsystem = robotcontainer.intake;
+    addRequirements(clawsubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    if (limeLight.getTX() > H_TOLERANCE) {
-      
-    }
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    clawsubsystem.stop();
   }
 
   // Called once the command ends or is interrupted.
@@ -43,9 +36,6 @@ public class FindObject extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(limeLight.getTX()) <= H_TOLERANCE) {
-      return true;
-    }
     return false;
   }
 }

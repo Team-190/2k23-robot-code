@@ -29,16 +29,16 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
-import frc.robot.commands.auto.autoBalanceSequence;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.moveOut;
-import frc.robot.commands.intake.ejectObject;
-import frc.robot.commands.intake.intakeCone;
-import frc.robot.commands.intake.intakeCube;
-import frc.robot.commands.intake.intakeObject;
-import frc.robot.commands.pivot.moveToPivotPosition;
-import frc.robot.commands.score;
-import frc.robot.commands.stop;
+import frc.robot.commands.auto.AutoBalanceSequence;
+import frc.robot.commands.claw.EjectObject;
+import frc.robot.commands.claw.IntakeCone;
+import frc.robot.commands.claw.IntakeCube;
+import frc.robot.commands.claw.IntakeObject;
+import frc.robot.commands.claw.StopClaw;
+import frc.robot.commands.misc.DefaultDriveCommand;
+import frc.robot.commands.multisubsystem.MoveOut;
+import frc.robot.commands.multisubsystem.Score;
+import frc.robot.commands.pivot.MoveToPivotPosition;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -46,7 +46,7 @@ import frc.robot.utils.input.AttackThree;
 import frc.robot.utils.input.XboxOneController;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.TelescopingArm;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 /**
@@ -77,29 +77,34 @@ public class RobotContainer {
                     Constants.DrivetrainConstants.D,
                     this);
 
-    public final IntakeSubsystem claw = new IntakeSubsystem();
+    public final IntakeSubsystem intake = new IntakeSubsystem();
     public final PivotSubsystem pivot = new PivotSubsystem();
     public final WristSubsystem wrist = new WristSubsystem();
 
     //public boolean gamePiece = true; // true = cone & false = cube
-    public int gamePiece = 0; // 0 = cube; 1 = cone; 2 = stow
-   /** public enum GoalHeights {
-        LOW(0),
-        MID(1),
-        HIGH(2);
-
-        public final int targetGoal;
-        private GoalHeights(int targetGoal) {
-            this.targetGoal = targetGoal;
-        }
+    public GamePieces gamePiece; // 0 = cube; 1 = cone; 2 = stow
+   public enum GoalHeights {
+        LOW,
+        MID,
+        HIGH,
+        SINGLE, // for single pickup human player station
+        DOUBLE, // for double pickup human player station
+        FLOOR; // for picking up off of the floor
     }
 
-    public GoalHeights goalHeights; */
-    public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup; 4 = Double Player Pickup; 5 = Floor intake
+    public enum GamePieces {
+        CONE,
+        CUBE,
+        STOW,
+        EMPTY;
+    }
+
+    public GoalHeights goalHeights; 
+//public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup; 4 = Double Player Pickup; 5 = Floor intake
     public boolean pivotDirection = true; // true is forward
     
 
-    public final TelescopingArm telescopingArm = new TelescopingArm(0, 0, 0);
+    public final ElevatorSubsystem telescopingArm = new ElevatorSubsystem(0, 0, 0);
 
     public final Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     public boolean compressorEnabled = compressor.isEnabled();
@@ -146,20 +151,20 @@ public class RobotContainer {
             new InstantCommand(()-> setGoalHeight(0)),
             new moveOut(this))
         );*/
-        operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(1))); // cone
-        operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(0))); // cube
+        operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(GamePieces.CONE))); // cone
+        operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(GamePieces.CUBE))); // cube
        operatorXboxController.startButton.onTrue(new InstantCommand(()-> setPivotDirection(false))); // cone
        operatorXboxController.selectButton.onTrue(new InstantCommand(()-> setPivotDirection(true))); // cube
        // operatorXboxController.yButton.onTrue(new RunCommand(()-> pivot.pivotPID(-126500)));
-       operatorXboxController.yButton.onTrue(new moveToPivotPosition(this, -126500));
-       operatorXboxController.xButton.onTrue(new moveToPivotPosition(this, 0));
-       operatorXboxController.aButton.onTrue(new moveToPivotPosition(this, -225000));
+       operatorXboxController.yButton.onTrue(new MoveToPivotPosition(this, -126500));
+       operatorXboxController.xButton.onTrue(new MoveToPivotPosition(this, 0));
+       operatorXboxController.aButton.onTrue(new MoveToPivotPosition(this, -225000));
        // operatorXboxController.xButton.onTrue(new RunCommand(()-> pivot.pivotPID(0)));
        // operatorXboxController.aButton.onTrue(new RunCommand(()-> pivot.pivotPID(-225000)));
         
         driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
-        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.score()){}).onFalse(new InstantCommand(()-> claw.stop()));
-        new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> claw.intake()){}).onFalse(new InstantCommand(()-> claw.stop()));
+        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.stop()));
+        new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.stop()));
       //  leftStick.triggerButton.onTrue(new intakeCone(this));
         //trigger2.onTrue(new intakeCone(this));
         //faceButton.onTrue(new score(this));
@@ -233,12 +238,12 @@ public class RobotContainer {
 
     }
 
-    public void setGamePiece(int value) {
-        gamePiece = value;
+    public void setGamePiece(GamePieces state) {
+        gamePiece = state;
     }
 
-    public void setGoalHeight(int value) {
-        goalHeight = value;
+    public void setGoalHeight(GoalHeights state) {
+        goalHeights = state;
     }
 
     public void setPivotDirection(boolean value) {

@@ -2,22 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.claw;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class ejectObject extends CommandBase {
+public class EjectObject extends CommandBase {
 
   IntakeSubsystem clawsubsystem;
   boolean aboveLimit;
   boolean belowLimit;
   /** Creates a new intakeCube. */
-  public ejectObject(RobotContainer robotcontainer) {
+  public EjectObject(RobotContainer robotcontainer) {
     // Use addRequirements() here to declare subsystem dependencies.
-    clawsubsystem = robotcontainer.claw;
+    clawsubsystem = robotcontainer.intake;
     addRequirements(clawsubsystem);
     
   }

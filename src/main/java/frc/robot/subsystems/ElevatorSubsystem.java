@@ -23,13 +23,13 @@ import frc.robot.utils.TalonPIDConfig;
  * 
  * If someone changes speeds or anything like that -- DO IT IN CONSTANTS, NOT HARDCODED INTO THIS FILE
  */
-public class TelescopingArm extends PIDSubsystem {
+public class ElevatorSubsystem extends PIDSubsystem {
   public final WPI_TalonFX armMotor = new WPI_TalonFX(ArmConstants.ARM_MOTOR_CHANNEL);
   // public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
   public final TalonPIDConfig talonPIDConfig = ArmConstants.ARM_PID_CONFIG;
   
   /** Creates a new TelescopingArm. */
-  public TelescopingArm(double P, double I, double D) {
+  public ElevatorSubsystem(double P, double I, double D) {
     super(new PIDController(P, I, D));
     talonPIDConfig.initializeTalonPID(armMotor, FeedbackDevice.IntegratedSensor, false, false);
     armMotor.setNeutralMode(NeutralMode.Brake);
