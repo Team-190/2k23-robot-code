@@ -23,10 +23,12 @@ public class ScoreMidDriveBack extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     
     addCommands(
+      new RunCommand(()-> robotContainer.intake.intake()).withTimeout(.25),
+      new InstantCommand(()-> robotContainer.intake.clawMotor.set(ControlMode.PercentOutput, 0.1)),
       new MoveToPivotPosition(robotContainer, Constants.PivotConstants.SINGLE_PICKUP_PIVOT_TICKS),
       new RunCommand(()-> robotContainer.intake.score()).withTimeout(.5),
       new InstantCommand(()-> robotContainer.intake.clawMotor.set(ControlMode.PercentOutput, 0)),
       new MoveToPivotPosition(robotContainer, 0),
-      new RunCommand(()-> robotContainer.drivetrainSubsystem.westCoastDrive(-.25, -.25, false), robotContainer.drivetrainSubsystem).withTimeout(3.5));
+      new RunCommand(()-> robotContainer.drivetrainSubsystem.westCoastDrive(-.25, -.25, false), robotContainer.drivetrainSubsystem).withTimeout(3));
   }
 }

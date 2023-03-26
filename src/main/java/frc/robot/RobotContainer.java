@@ -165,8 +165,8 @@ public class RobotContainer {
        // operatorXboxController.aButton.onTrue(new RunCommand(()-> pivot.pivotPID(-225000)));
         
         driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
-        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
-        new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.stop()));
+        new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
+        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.stop()));
       //  leftStick.triggerButton.onTrue(new intakeCone(this));
         //trigger2.onTrue(new intakeCone(this));
         //faceButton.onTrue(new score(this));
@@ -185,9 +185,13 @@ public class RobotContainer {
         driveInputChooser.addOption("Joysticks", DRIVE_INPUT.JOYSTICKS);
         driveInputChooser.addOption("Controller", DRIVE_INPUT.CONTROLLER);
         SmartDashboard.putData("DriveInputChooser", driveInputChooser);
-        SmartDashboard.putData("AutoModeChooser", autoModeChooser);
         SmartDashboard.putBoolean("Square Inputs?", true);
 
+        autoModeChooser.addOption("ScoreMidDriveBack", new ScoreMidDriveBack(this));
+        autoModeChooser.addOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
+        autoModeChooser.addOption("DoNothing", new InstantCommand());
+        autoModeChooser.setDefaultOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
+        SmartDashboard.putData("AutoModeChooser", autoModeChooser);
         // SmartDashboard.putData("Set Flywheel RPM", shooterRPMChooser);
 
         // initializeCamera();
@@ -218,10 +222,10 @@ public class RobotContainer {
     */
     public Command getAutonomousCommand() {
         // return null;
-        //return autoModeChooser.getSelected();
-        return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2);
+        return autoModeChooser.getSelected();
+        //return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2);
         //return new autoBalanceSequence(this);
-        // return new ScoreMidDriveBack(this);
+        //return new ScoreMidDriveBack(this);
     }
    // SlewRateLimiter leftLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
    // SlewRateLimiter rightLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);

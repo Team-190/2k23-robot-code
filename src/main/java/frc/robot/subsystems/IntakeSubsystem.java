@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void intake(){
-    clawMotor.set(ControlMode.PercentOutput, -1*IntakeConstants.INTAKE_SPEED);
+    clawMotor.set(ControlMode.PercentOutput, IntakeConstants.INTAKE_SPEED);
   }
 
   public void stop(){
@@ -45,7 +45,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void score(){
-    clawMotor.set(ControlMode.PercentOutput, IntakeConstants.INTAKE_SPEED);
+    clawMotor.set(ControlMode.PercentOutput, -1*IntakeConstants.INTAKE_SPEED);
   }
 
   public boolean getLimitSwitch() {
