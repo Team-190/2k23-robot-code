@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -30,6 +31,7 @@ import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoBalanceSequence;
+import frc.robot.commands.auto.ScoreMidDriveBack;
 import frc.robot.commands.claw.EjectObject;
 import frc.robot.commands.claw.IntakeCone;
 import frc.robot.commands.claw.IntakeCube;
@@ -163,7 +165,7 @@ public class RobotContainer {
        // operatorXboxController.aButton.onTrue(new RunCommand(()-> pivot.pivotPID(-225000)));
         
         driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
-        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.stop()));
+        new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
         new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.stop()));
       //  leftStick.triggerButton.onTrue(new intakeCone(this));
         //trigger2.onTrue(new intakeCone(this));
@@ -219,6 +221,7 @@ public class RobotContainer {
         //return autoModeChooser.getSelected();
         return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2);
         //return new autoBalanceSequence(this);
+        // return new ScoreMidDriveBack(this);
     }
    // SlewRateLimiter leftLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
    // SlewRateLimiter rightLimiter = new SlewRateLimiter(DrivetrainConstants.ACCEL_LIMIT);
