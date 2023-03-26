@@ -176,7 +176,7 @@ public final class Constants {
         public static final double F = 1023 / ((PIVOT_MAX_RPM * PIVOT_TICKS_PER_ROTATION) / 600);
         //1023 / rpmToTicksPer100ms(m_maxRPM);
         public static final int SLOT_ID = 0;
-        public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/1.5; // update
+        public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/1.25; // update
         public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MAX_RPM*2; // update
         public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 0; // update
         public static final double TOLERANCE = 1000; // ticks
@@ -218,25 +218,28 @@ public final class Constants {
         public static final double WRIST_COLLECTING_POSITION = 57; // in inches -- should be checked
     
     public static final double WRIST_MAX_RPM = 6380; // update
-        public static final double P = 0;
+    public static final int WRIST_TICKS_PER_ROTATION = 2048;
+        public static final double P = 0.02;
         public static final double I = 0;
         public static final double D = 0;
-        public static final double F = 0;
-        public static final int WRIST_TICKS_PER_ROTATION = 2048;
+        public static final double F = 1023 / ((WRIST_MAX_RPM * WRIST_TICKS_PER_ROTATION) / 600);
         public static final int SLOT_ID = 0;
-        public static final double WRIST_MOTOR_VELOCITY = 5250; // update
-        public static final double WRIST_MOTOR_ACCELERATION = WRIST_MOTOR_VELOCITY*2; // update
-        public static final int WRIST_MOTOR_MOTION_SMOOTHING = 0; // update
+        public static final double WRIST_MOTOR_VELOCITY = WRIST_MAX_RPM/1.25; // update
+        public static final double WRIST_MOTOR_ACCELERATION = WRIST_MAX_RPM; // update
+        public static final int WRIST_MOTOR_MOTION_SMOOTHING = 2; // update
         public static final double TOLERANCE = 10;
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
-        public static final int MAX_ANGLE_TICKS = 90; // update?
-        public static final int MIN_ANGLE_TICKS = -90;
+        public static final int MAX_ANGLE_TICKS = 150000; // update?
+        public static final int MIN_ANGLE_TICKS = -145000;
         public static final boolean INVERT_MOTOR = false;
         public static final boolean SENSOR_PHASE = false;
         public static final boolean ENABLE_SOFT_LIMITS = true;
         
+        public static final int FORWARD_RIGHT_ANGLE = -140000;
+        public static final int BACKWARD_RIGHT_ANGLE = 145000;
+
         public static final int CONE_LOW_GOAL_WRIST_TICKS = 90; // extension
         public static final int CONE_MID_GOAL_WRIST_TICKS = 90;
         public static final int CONE_HIGH_GOAL_WRIST_TICKS = 90;
