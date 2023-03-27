@@ -37,10 +37,12 @@ import frc.robot.commands.claw.IntakeCone;
 import frc.robot.commands.claw.IntakeCube;
 import frc.robot.commands.claw.IntakeObject;
 import frc.robot.commands.claw.StopClaw;
+import frc.robot.commands.elevator.MoveToArmPosition;
 import frc.robot.commands.misc.DefaultDriveCommand;
 import frc.robot.commands.multisubsystem.MoveOut;
 import frc.robot.commands.multisubsystem.Score;
 import frc.robot.commands.pivot.MoveToPivotPosition;
+import frc.robot.commands.wrist.MoveToWristPosition;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -159,14 +161,41 @@ public class RobotContainer {
        operatorXboxController.selectButton.onTrue(new InstantCommand(()-> setPivotDirection(true))); // cube
        // operatorXboxController.yButton.onTrue(new RunCommand(()-> pivot.pivotPID(-126500)));
        operatorXboxController.yButton.onTrue(new MoveToPivotPosition(this, -126500));
-       operatorXboxController.xButton.onTrue(new MoveToPivotPosition(this, 0));
+       //operatorXboxController.xButton.onTrue(new MoveToPivotPosition(this, 0));
+       operatorXboxController.xButton.onTrue(new SequentialCommandGroup(
+        new MoveToPivotPosition(this, 0),
+        new MoveToArmPosition(this, 0),
+        new MoveToWristPosition(this, 0)
+        ));
        operatorXboxController.aButton.onTrue(new MoveToPivotPosition(this, -225000));
+     /**  operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
+        new MoveToPivotPosition(this, Constants.PivotConstants.CUBE_HIGH_GOAL_PIVOT_TICKS),
+        new MoveToArmPosition(this, Constants.ArmConstants.CUBE_HIGH_GOAL_EXT_TICKS)
+        )
+    );
+    operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
+        new MoveToPivotPosition(this, Constants.PivotConstants.CONE_MID_GOAL_PIVOT_TICKS),
+        new MoveToArmPosition(this, Constants.ArmConstants.CONE_MID_GOAL_EXT_TICKS),
+        new MoveToWristPosition(this, Constants.WristConstants.FORWARD_RIGHT_ANGLE)
+        )
+    );*/
+    operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
+        new MoveToPivotPosition(this, Constants.PivotConstants.CONE_HIGH_GOAL_PIVOT_TICKS),
+        new MoveToArmPosition(this, Constants.ArmConstants.CONE_HIGH_GOAL_EXT_TICKS),
+        new MoveToWristPosition(this, Constants.WristConstants.FORWARD_RIGHT_ANGLE)
+        )
+    );
        // operatorXboxController.xButton.onTrue(new RunCommand(()-> pivot.pivotPID(0)));
        // operatorXboxController.aButton.onTrue(new RunCommand(()-> pivot.pivotPID(-225000)));
         
-        driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
+      /**  driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
         new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
         new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.stop()));
+*/
+        rightStick.triggerButton.whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
+        leftStick.triggerButton.whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, 0)));
+
+        
       //  leftStick.triggerButton.onTrue(new intakeCone(this));
         //trigger2.onTrue(new intakeCone(this));
         //faceButton.onTrue(new score(this));
@@ -236,11 +265,12 @@ public class RobotContainer {
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
 
         // turretSubsystem.setDefaultCommand(new VisionCommand(this));
-         drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(driverXboxController.getLeftStickY()/Math.pow(2,0.5), 
-         -1*driverXboxController.getRightStickX()/Math.pow(2,0.5), true), drivetrainSubsystem));
+     //    drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(driverXboxController.getLeftStickY()/Math.pow(2,0.5), 
+      //   -1*driverXboxController.getRightStickX()/Math.pow(2,0.5), true), drivetrainSubsystem));
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
-        //drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
+       // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
+        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), true), drivetrainSubsystem));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));
 
     }

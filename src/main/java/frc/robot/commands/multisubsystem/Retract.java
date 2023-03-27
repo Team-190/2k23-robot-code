@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.commands.elevator.ChangeArmPosition;
 import frc.robot.commands.pivot.ChangePivotPosition;
-import frc.robot.commands.wrist.MoveWristPosition;
+import frc.robot.commands.wrist.ChangeWristPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,7 +20,7 @@ public class Retract extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveWristPosition(robotContainer),
+      new ChangeWristPosition(robotContainer),
       new ChangeArmPosition(robotContainer),
       new ChangePivotPosition(robotContainer)
     );

@@ -9,12 +9,12 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.WristSubsystem;
 
-public class MoveWristPosition extends CommandBase {
+public class ChangeWristPosition extends CommandBase {
   WristSubsystem wrist;
   int setpoint;
   RobotContainer robotContainer;
   /** Creates a new moveWristPosition. */
-  public MoveWristPosition(RobotContainer robotcontainer) {
+  public ChangeWristPosition(RobotContainer robotcontainer) {
     // Use addRequirements() here to declare subsystem dependencies.
     wrist = robotcontainer.wrist;
     this.robotContainer = robotcontainer;
