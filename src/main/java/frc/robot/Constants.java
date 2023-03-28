@@ -127,7 +127,7 @@ public final class Constants {
         public static final double ARM_MOTOR_VELOCITY = ARM_MAX_RPM/1.5; 
         public static final double ARM_MOTOR_ACCELERATION = ARM_MAX_RPM*2.5; 
         public static final int ARM_MOTOR_MOTION_SMOOTHING = 4; // update
-        public static final double TOLERANCE = 500;
+        public static final double TOLERANCE = 1000;
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
@@ -138,19 +138,17 @@ public final class Constants {
         public static final boolean ENABLE_SOFT_LIMITS = true;
         public static final int MIDDLE_POSITION = 85000; 
 
-        public static final int CONE_LOW_GOAL_EXT_TICKS = 0; // extension
+        // extension
+        public static final int LOW_EXT_TICKS = 0; // likely the same for scoring, pickup, and cone/cube
+        public static final int SINGLE_PICKUP_EXT_TICKS = 0;
+
+        public static final int CONE_DOUBLE_PICKUP_EXT_TICKS = 90;
         public static final int CONE_MID_GOAL_EXT_TICKS = 90000;
         public static final int CONE_HIGH_GOAL_EXT_TICKS = 134900;
 
-        public static final int CUBE_LOW_GOAL_EXT_TICKS = 0;
+        public static final int CUBE_DOUBLE_PICKUP_EXT_TICKS = 90;
         public static final int CUBE_MID_GOAL_EXT_TICKS = 0;
         public static final int CUBE_HIGH_GOAL_EXT_TICKS = 90000;
-
-        public static final int SINGLE_PICKUP_PIVOT_TICKS = 0;
-        public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
-        public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
-        public static final int CUBE_FLOOR_PICKUP_PIVOT_TICKS = 90;
-        public static final int CONE_FLOOR_PICKUP_PIVOT_TICKS = 90;
 
         
         public static TalonPIDConfig ARM_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, ARM_TICKS_PER_ROTATION,
@@ -181,7 +179,7 @@ public final class Constants {
         public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/1.25; // update
         public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MAX_RPM*2; // update
         public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 0; // update
-        public static final double TOLERANCE = 1000; // ticks
+        public static final double TOLERANCE = 2000; // ticks
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_DEGREE = 100; // update
@@ -191,20 +189,21 @@ public final class Constants {
         public static final boolean SENSOR_PHASE = false;
         public static final boolean ENABLE_SOFT_LIMITS = true;
 
-        public static final int CONE_LOW_GOAL_PIVOT_TICKS = 90;
+        //pivot
+        public static final int LOW_PIVOT_TICKS = -240000; // likely the same for scoring, pickup, and cone/cube
+        public static final int SINGLE_PICKUP_PIVOT_TICKS = -172500; //can and should be the same for cone/cube
+
+        public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CONE_MID_GOAL_PIVOT_TICKS = -80000;
         public static final int CONE_HIGH_GOAL_PIVOT_TICKS = -80000;
 
-        public static final int CUBE_LOW_GOAL_PIVOT_TICKS = 90;
+        public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CUBE_MID_GOAL_PIVOT_TICKS = -126500;
         public static final int CUBE_HIGH_GOAL_PIVOT_TICKS = -120000;
 
-        public static final int SINGLE_PICKUP_PIVOT_TICKS = -126500; // cube
-        public static final int CONE_SINGLE_PICKUP_PIVOT_TICKS = -172500;
-        public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
-        public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
-        public static final int CUBE_FLOOR_PICKUP_PIVOT_TICKS = 90;
-        public static final int CONE_FLOOR_PICKUP_PIVOT_TICKS = 90;
+
+  
+  
 
 
         public static final TalonPIDConfig PIVOT_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, PIVOT_TICKS_PER_ROTATION,
@@ -231,7 +230,7 @@ public final class Constants {
         public static final double WRIST_MOTOR_VELOCITY = WRIST_MAX_RPM/1.25; // update
         public static final double WRIST_MOTOR_ACCELERATION = WRIST_MAX_RPM; // update
         public static final int WRIST_MOTOR_MOTION_SMOOTHING = 2; // update
-        public static final double TOLERANCE = 10;
+        public static final double TOLERANCE = 1000;
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
@@ -241,20 +240,24 @@ public final class Constants {
         public static final boolean SENSOR_PHASE = false;
         public static final boolean ENABLE_SOFT_LIMITS = true;
         
+       //wrist
         public static final int FORWARD_RIGHT_ANGLE = -140000;
         public static final int BACKWARD_RIGHT_ANGLE = 145000;
 
-        public static final int CONE_LOW_GOAL_WRIST_TICKS = 90; // extension
+        public static final int LOW_WRIST_TICKS = 0; // likely the same for scoring, pickup, and cone/cube
+        public static final int SINGLE_PICKUP_WRIST_TICKS = 0; //can and should be the same for cone, cube
+
+        public static final int CONE_DOUBLE_PICKUP_WRIST_TICKS = 90;
         public static final int CONE_MID_GOAL_WRIST_TICKS = 90;
         public static final int CONE_HIGH_GOAL_WRIST_TICKS = 90;
-        public static final int CUBE_LOW_GOAL_WRIST_TICKS = 90;
+
+        public static final int CUBE_DOUBLE_PICKUP_WRIST_TICKS = 90;
         public static final int CUBE_MID_GOAL_WRIST_TICKS = -30000;
-        public static final int CUBE_HIGH_GOAL_WRIST_TICKS = 90;
-        public static final int SINGLE_PICKUP_PIVOT_TICKS = 90;
-        public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
-        public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
-        public static final int CUBE_FLOOR_PICKUP_PIVOT_TICKS = 90;
-        public static final int CONE_FLOOR_PICKUP_PIVOT_TICKS = 90;
+        public static final int CUBE_HIGH_GOAL_WRIST_TICKS = 0;
+
+  
+
+        
 
 
         public static final TalonPIDConfig WRIST_PID_CONFIG = new TalonPIDConfig(SENSOR_PHASE, INVERT_MOTOR, WRIST_TICKS_PER_ROTATION,

@@ -42,7 +42,7 @@ public class WristSubsystem extends SubsystemBase {
 
   public boolean isMotionCompleted() {
     double error = wristMotor.getClosedLoopTarget() - wristMotor.getSelectedSensorPosition();
-    return Math.abs(error) < Constants.PivotConstants.TOLERANCE;
+    return Math.abs(error) < Constants.WristConstants.TOLERANCE;
   }
 
 

@@ -80,7 +80,7 @@ public void useOutput(double output, double setpoint) {
 
 public boolean isMotionCompleted() {
   double error = armMotor.getClosedLoopTarget() - armMotor.getSelectedSensorPosition();
-    return Math.abs(error) < Constants.PivotConstants.TOLERANCE;
+    return Math.abs(error) < Constants.ArmConstants.TOLERANCE;
 }
 
 

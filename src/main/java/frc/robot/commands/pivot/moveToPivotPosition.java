@@ -7,6 +7,7 @@ package frc.robot.commands.pivot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
 
 public class MoveToPivotPosition extends CommandBase {
   PivotSubsystem pivot;
@@ -24,7 +25,7 @@ public class MoveToPivotPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (!robotcontainer.pivotDirection) {
+    if (robotcontainer.armUtils.getPivotDirection() == PIVOT_DIRECTION.REVERSE) {
       setpoint*= -1; // will be removed eventually
     }
     pivot.pivotPID(setpoint);

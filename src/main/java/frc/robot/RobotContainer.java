@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.sensors.PigeonIMU_ControlFrame;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -32,20 +33,13 @@ import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoBalanceSequence;
 import frc.robot.commands.auto.ScoreMidDriveBack;
-import frc.robot.commands.claw.EjectObject;
-import frc.robot.commands.claw.IntakeCone;
-import frc.robot.commands.claw.IntakeCube;
-import frc.robot.commands.claw.IntakeObject;
-import frc.robot.commands.claw.StopClaw;
-import frc.robot.commands.elevator.MoveToArmPosition;
-import frc.robot.commands.misc.DefaultDriveCommand;
-import frc.robot.commands.multisubsystem.MoveOut;
-import frc.robot.commands.multisubsystem.Score;
 import frc.robot.commands.pivot.MoveToPivotPosition;
-import frc.robot.commands.wrist.MoveToWristPosition;
-import frc.robot.commands.auto.AutoBalance;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.utils.ArmUtils;
+import frc.robot.utils.ArmUtils.ARM_STATE;
+import frc.robot.utils.ArmUtils.GAME_PIECE;
+import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
 import frc.robot.utils.input.AttackThree;
 import frc.robot.utils.input.XboxOneController;
 import frc.robot.subsystems.LimeLightSubsystem;
@@ -81,34 +75,19 @@ public class RobotContainer {
                     Constants.DrivetrainConstants.D,
                     this);
 
+    public final ElevatorSubsystem telescopingArm = new ElevatorSubsystem(0, 0, 0);
     public final IntakeSubsystem intake = new IntakeSubsystem();
     public final PivotSubsystem pivot = new PivotSubsystem();
     public final WristSubsystem wrist = new WristSubsystem();
 
+    public final ArmUtils armUtils = new ArmUtils(this, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD, ARM_STATE.STOW);
+
     //public boolean gamePiece = true; // true = cone & false = cube
-    public GamePieces gamePiece; // 0 = cube; 1 = cone; 2 = stow
-   public enum GoalHeights {
-        LOW,
-        MID,
-        HIGH,
-        SINGLE, // for single pickup human player station
-        DOUBLE, // for double pickup human player station
-        FLOOR; // for picking up off of the floor
-    }
 
-    public enum GamePieces {
-        CONE,
-        CUBE,
-        STOW,
-        EMPTY;
-    }
 
-    public GoalHeights goalHeights; 
+; 
 //public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup; 4 = Double Player Pickup; 5 = Floor intake
-    public boolean pivotDirection = true; // true is forward
     
-
-    public final ElevatorSubsystem telescopingArm = new ElevatorSubsystem(0, 0, 0);
 
     public final Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
     public boolean compressorEnabled = compressor.isEnabled();
@@ -143,50 +122,16 @@ public class RobotContainer {
         */
 
 
-    /**  operatorXboxController.yButton.onTrue(new SequentialCommandGroup(
-            new InstantCommand(()-> setGoalHeight(2)),
-            new moveOut(this))
-        );
-        operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
-            new InstantCommand(()-> setGoalHeight(1)),
-            new moveOut(this))
-        );
-        operatorXboxController.aButton.onTrue(new SequentialCommandGroup(
-            new InstantCommand(()-> setGoalHeight(0)),
-            new moveOut(this))
-        );*/
-        operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(GamePieces.CONE))); // cone
-        operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> setGamePiece(GamePieces.CUBE))); // cube
-       operatorXboxController.startButton.onTrue(new InstantCommand(()-> setPivotDirection(false))); // cone
-       operatorXboxController.selectButton.onTrue(new InstantCommand(()-> setPivotDirection(true))); // cube
+       operatorXboxController.leftBumper.onTrue(new InstantCommand(()-> armUtils.setGamePiece(GAME_PIECE.CONE))); // cone
+       operatorXboxController.rightBumper.onTrue(new InstantCommand(()-> armUtils.setGamePiece(GAME_PIECE.CUBE))); // cube
+       operatorXboxController.startButton.onTrue(new InstantCommand(()-> armUtils.setPivotDirection(PIVOT_DIRECTION.REVERSE))); // cone
+       operatorXboxController.selectButton.onTrue(new InstantCommand(()-> armUtils.setPivotDirection(PIVOT_DIRECTION.FORWARD))); // cube
        // operatorXboxController.yButton.onTrue(new RunCommand(()-> pivot.pivotPID(-126500)));
-       operatorXboxController.yButton.onTrue(new MoveToPivotPosition(this, -126500));
-       //operatorXboxController.xButton.onTrue(new MoveToPivotPosition(this, 0));
-       operatorXboxController.xButton.onTrue(new SequentialCommandGroup(
-        new MoveToPivotPosition(this, 0),
-        new MoveToArmPosition(this, 0),
-        new MoveToWristPosition(this, 0)
-        ));
-       operatorXboxController.aButton.onTrue(new MoveToPivotPosition(this, -225000));
-     /**  operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
-        new MoveToPivotPosition(this, Constants.PivotConstants.CUBE_HIGH_GOAL_PIVOT_TICKS),
-        new MoveToArmPosition(this, Constants.ArmConstants.CUBE_HIGH_GOAL_EXT_TICKS)
-        )
-    );
-    operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
-        new MoveToPivotPosition(this, Constants.PivotConstants.CONE_MID_GOAL_PIVOT_TICKS),
-        new MoveToArmPosition(this, Constants.ArmConstants.CONE_MID_GOAL_EXT_TICKS),
-        new MoveToWristPosition(this, Constants.WristConstants.FORWARD_RIGHT_ANGLE)
-        )
-    );*/
-    operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
-        new MoveToPivotPosition(this, Constants.PivotConstants.CONE_HIGH_GOAL_PIVOT_TICKS),
-        new MoveToArmPosition(this, Constants.ArmConstants.CONE_HIGH_GOAL_EXT_TICKS),
-        new MoveToWristPosition(this, Constants.WristConstants.FORWARD_RIGHT_ANGLE)
-        )
-    );
-       // operatorXboxController.xButton.onTrue(new RunCommand(()-> pivot.pivotPID(0)));
-       // operatorXboxController.aButton.onTrue(new RunCommand(()-> pivot.pivotPID(-225000)));
+       operatorXboxController.bButton.onTrue(armUtils.getMotionCommand(ARM_STATE.MID));
+       operatorXboxController.yButton.onTrue(armUtils.getMotionCommand(ARM_STATE.HIGH));
+       operatorXboxController.aButton.onTrue(armUtils.getMotionCommand(ARM_STATE.LOW));
+       operatorXboxController.xButton.onTrue(armUtils.getMotionCommand(ARM_STATE.STOW));
+
         
       /**  driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
         new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
@@ -196,17 +141,6 @@ public class RobotContainer {
         leftStick.triggerButton.whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, 0)));
 
         
-      //  leftStick.triggerButton.onTrue(new intakeCone(this));
-        //trigger2.onTrue(new intakeCone(this));
-        //faceButton.onTrue(new score(this));
-      ///  rightStick.triggerButton.onTrue(new intakeCube(this));
-        //rightButton.toggleOnTrue(new lift(this));
-       // leftStick.rightFaceButton.onTrue(new stop(this));
-       // leftStick.leftFaceButton.onTrue(new score(this));
-        //leftbutton2.onTrue(new stop(this));
-        //faceButton2.onTrue(new score(this));
-       // leftStick.middleFaceButton.toggleOnTrue(new intakeObject(this));
-       // rightStick.middleFaceButton.toggleOnTrue(new ejectObject(this));
         driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
         driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
         driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
@@ -251,6 +185,7 @@ public class RobotContainer {
     */
     public Command getAutonomousCommand() {
         // return null;
+        //return armUtils.getMotionCommand(ARM_STATE.MID, GAME_PIECE.CUBE, ROBOT_SIDE.FORWARD);
         return autoModeChooser.getSelected();
         //return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2);
         //return new autoBalanceSequence(this);
@@ -270,24 +205,16 @@ public class RobotContainer {
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
        // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), true), drivetrainSubsystem));
+        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), false), drivetrainSubsystem));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));
 
     }
 
-    public void setGamePiece(GamePieces state) {
-        gamePiece = state;
+    public void periodic() {
+        SmartDashboard.putNumber("Wrist Setpoint", armUtils.wristSetpoint());
+        SmartDashboard.putNumber("Arm Setpoint", armUtils.armSetpoint());
+        SmartDashboard.putNumber("Pivot Setpoint", armUtils.pivotSetpoint());
     }
-
-    public void setGoalHeight(GoalHeights state) {
-        goalHeights = state;
-    }
-
-    public void setPivotDirection(boolean value) {
-        pivotDirection = value;
-    }
-
-    public void periodic() {}
 
     /**
     * Initializes the camera(s)

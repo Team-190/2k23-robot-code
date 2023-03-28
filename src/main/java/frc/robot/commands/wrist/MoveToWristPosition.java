@@ -6,8 +6,8 @@ package frc.robot.commands.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.PivotSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
 
 public class MoveToWristPosition extends CommandBase {
   WristSubsystem wrist;
@@ -25,7 +25,10 @@ public class MoveToWristPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    wrist.wristPID(setpoint);;
+    if (robotcontainer.armUtils.getPivotDirection() == PIVOT_DIRECTION.REVERSE) {
+      setpoint*= -1; // will be removed eventually
+    }
+    wrist.wristPID(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -8,50 +8,33 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.utils.ArmUtils;
 
 public class ChangeWristPosition extends CommandBase {
   WristSubsystem wrist;
   int setpoint;
   RobotContainer robotContainer;
+  ArmUtils utils;
   /** Creates a new moveWristPosition. */
-  public ChangeWristPosition(RobotContainer robotcontainer) {
+  public ChangeWristPosition(RobotContainer robotcontainer, ArmUtils utils) {
     // Use addRequirements() here to declare subsystem dependencies.
     wrist = robotcontainer.wrist;
+    this.utils = utils;
     this.robotContainer = robotcontainer;
+    addRequirements(wrist);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(robotContainer.gamePiece == RobotContainer.GamePieces.CONE) {
-      if(robotContainer.goalHeights == RobotContainer.GoalHeights.LOW)
-        setpoint = Constants.WristConstants.CONE_LOW_GOAL_WRIST_TICKS;
-      if(robotContainer.goalHeights == RobotContainer.GoalHeights.MID)
-        setpoint = Constants.WristConstants.CONE_MID_GOAL_WRIST_TICKS;
-      if(robotContainer.goalHeights == RobotContainer.GoalHeights.HIGH)
-        setpoint = Constants.WristConstants.CONE_HIGH_GOAL_WRIST_TICKS;
-      if(robotContainer.goalHeights == RobotContainer.GoalHeights.SINGLE)
-        setpoint = Constants.WristConstants.SINGLE_PICKUP_PIVOT_TICKS;
-    }
-    else if (robotContainer.gamePiece == RobotContainer.GamePieces.CUBE) {
-      if(robotContainer.goalHeights == RobotContainer.GoalHeights.LOW)
-        setpoint = Constants.WristConstants.CUBE_LOW_GOAL_WRIST_TICKS;
-      if(robotContainer.goalHeights == RobotContainer.GoalHeights.MID)
-        setpoint = Constants.WristConstants.CUBE_MID_GOAL_WRIST_TICKS;
-      if(robotContainer.goalHeights == RobotContainer.GoalHeights.HIGH)
-        setpoint = Constants.WristConstants.CUBE_HIGH_GOAL_WRIST_TICKS;
-      if(robotContainer.goalHeights == RobotContainer.GoalHeights.SINGLE)
-        setpoint = Constants.WristConstants.SINGLE_PICKUP_PIVOT_TICKS;
-    }
-    else if (robotContainer.gamePiece == RobotContainer.GamePieces.STOW) { // stow
-      setpoint = 0;
-    }
+    setpoint = utils.wristSetpoint();
+    wrist.wristPID(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    wrist.wristPID(setpoint);
+    
   }
 
   // Called once the command ends or is interrupted.
