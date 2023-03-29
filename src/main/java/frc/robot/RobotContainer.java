@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
@@ -127,11 +128,33 @@ public class RobotContainer {
        operatorXboxController.startButton.onTrue(new InstantCommand(()-> armUtils.setPivotDirection(PIVOT_DIRECTION.REVERSE))); // cone
        operatorXboxController.selectButton.onTrue(new InstantCommand(()-> armUtils.setPivotDirection(PIVOT_DIRECTION.FORWARD))); // cube
        // operatorXboxController.yButton.onTrue(new RunCommand(()-> pivot.pivotPID(-126500)));
-       operatorXboxController.bButton.onTrue(armUtils.getMotionCommand(ARM_STATE.MID));
-       operatorXboxController.yButton.onTrue(armUtils.getMotionCommand(ARM_STATE.HIGH));
-       operatorXboxController.aButton.onTrue(armUtils.getMotionCommand(ARM_STATE.LOW));
-       operatorXboxController.xButton.onTrue(armUtils.getMotionCommand(ARM_STATE.STOW));
-
+ /**      operatorXboxController.yButton.onTrue(new MoveToPivotPosition(this, -126500));
+       //operatorXboxController.xButton.onTrue(new MoveToPivotPosition(this, 0));
+       operatorXboxController.xButton.onTrue(new SequentialCommandGroup(
+        new MoveToPivotPosition(this, 0),
+        new MoveToArmPosition(this, 0),
+        new MoveToWristPosition(this, 0)
+        ));
+       operatorXboxController.aButton.onTrue(new MoveToPivotPosition(this, -225000));
+     /**  operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
+        new MoveToPivotPosition(this, Constants.PivotConstants.CUBE_HIGH_GOAL_PIVOT_TICKS),
+        new MoveToArmPosition(this, Constants.ArmConstants.CUBE_HIGH_GOAL_EXT_TICKS)
+        )
+    );
+    operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
+        new MoveToPivotPosition(this, Constants.PivotConstants.CONE_MID_GOAL_PIVOT_TICKS),
+        new MoveToArmPosition(this, Constants.ArmConstants.CONE_MID_GOAL_EXT_TICKS),
+        new MoveToWristPosition(this, Constants.WristConstants.FORWARD_RIGHT_ANGLE)
+        )
+    );
+    operatorXboxController.bButton.onTrue(new SequentialCommandGroup(
+        new MoveToPivotPosition(this, Constants.PivotConstants.CONE_HIGH_GOAL_PIVOT_TICKS),
+        new MoveToArmPosition(this, Constants.ArmConstants.CONE_HIGH_GOAL_EXT_TICKS),
+        new MoveToWristPosition(this, Constants.WristConstants.FORWARD_RIGHT_ANGLE)
+        )
+    );*/
+       // operatorXboxController.xButton.onTrue(new RunCommand(()-> pivot.pivotPID(0)));
+       // operatorXboxController.aButton.onTrue(new RunCommand(()-> pivot.pivotPID(-225000)));
         
       /**  driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
         new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));

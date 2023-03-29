@@ -83,8 +83,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-   // m_robotContainer.drivetrainSubsystem.setCoastMode();
-   m_robotContainer.drivetrainSubsystem.setBreakMode();
+   m_robotContainer.drivetrainSubsystem.setCoastMode();
+   //m_robotContainer.drivetrainSubsystem.setBreakMode();
     //m_robotContainer.telescopingArm.armMotor.setSelectedSensorPosition(0);
   //  m_robotContainer.pivot.pivotMotor.setSelectedSensorPosition(0);
    //m_robotContainer.wrist.wristMotor.setSelectedSensorPosition(0);
