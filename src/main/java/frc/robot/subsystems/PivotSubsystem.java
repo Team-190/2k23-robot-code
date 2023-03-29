@@ -6,10 +6,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.PivotConstants;
@@ -23,11 +25,13 @@ public class PivotSubsystem extends SubsystemBase {
   /** Creates a new Pivot. */
   public PivotSubsystem() {
     talonPIDConfig.initializeTalonPID(pivotMotor, FeedbackDevice.IntegratedSensor);
+    pivotMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Pivot Position", pivotMotor.getSelectedSensorPosition());
   }
 
   public boolean getLimitSwitch() {

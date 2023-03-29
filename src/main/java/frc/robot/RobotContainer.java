@@ -137,8 +137,12 @@ public class RobotContainer {
         new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
         new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.stop()));
 */
-        rightStick.triggerButton.whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
-        leftStick.triggerButton.whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, 0)));
+        leftStick.triggerButton.whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
+        leftStick.middleFaceButton.onTrue(new InstantCommand(()-> drivetrainSubsystem.setCoastMode()));
+
+        rightStick.triggerButton.whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, 0)));
+        rightStick.middleFaceButton.onTrue(new InstantCommand(()-> drivetrainSubsystem.setBreakMode()));
+        
 
         
         driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
@@ -204,8 +208,10 @@ public class RobotContainer {
       //   -1*driverXboxController.getRightStickX()/Math.pow(2,0.5), true), drivetrainSubsystem));
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
+
+        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), true), drivetrainSubsystem));
        // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), false), drivetrainSubsystem));
+        // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), false), drivetrainSubsystem));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));
 
     }

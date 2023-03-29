@@ -143,7 +143,7 @@ public final class Constants {
         public static final int SINGLE_PICKUP_EXT_TICKS = 0;
 
         public static final int CONE_DOUBLE_PICKUP_EXT_TICKS = 90;
-        public static final int CONE_MID_GOAL_EXT_TICKS = 90000;
+        public static final int CONE_MID_GOAL_EXT_TICKS = 53000; // was 90000
         public static final int CONE_HIGH_GOAL_EXT_TICKS = 134900;
 
         public static final int CUBE_DOUBLE_PICKUP_EXT_TICKS = 90;
@@ -194,7 +194,7 @@ public final class Constants {
         public static final int SINGLE_PICKUP_PIVOT_TICKS = -172500; //can and should be the same for cone/cube
 
         public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
-        public static final int CONE_MID_GOAL_PIVOT_TICKS = -80000;
+        public static final int CONE_MID_GOAL_PIVOT_TICKS = -85000; // was 80000
         public static final int CONE_HIGH_GOAL_PIVOT_TICKS = -80000;
 
         public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
@@ -248,7 +248,7 @@ public final class Constants {
         public static final int SINGLE_PICKUP_WRIST_TICKS = 0; //can and should be the same for cone, cube
 
         public static final int CONE_DOUBLE_PICKUP_WRIST_TICKS = 90;
-        public static final int CONE_MID_GOAL_WRIST_TICKS = 90;
+        public static final int CONE_MID_GOAL_WRIST_TICKS = -90000;
         public static final int CONE_HIGH_GOAL_WRIST_TICKS = 90;
 
         public static final int CUBE_DOUBLE_PICKUP_WRIST_TICKS = 90;
