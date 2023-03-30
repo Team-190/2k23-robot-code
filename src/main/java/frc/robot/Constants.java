@@ -274,6 +274,12 @@ public final class Constants {
         public static final int LED_LENGTH = 60;
         public static final int LED_COUNT = 300;
         public static final int CANdleID = 8;
+        public static final int PURPLE_R = 144;
+        public static final int PURPLE_G = 9;
+        public static final int PURPLE_B = 255;
+        public static final int YELLOW_R = 255;
+        public static final int YELLOW_G = 255;
+        public static final int YELLOW_B = 0;      
     }
 
     
