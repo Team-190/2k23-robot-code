@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -38,6 +39,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void intake(){
     clawMotor.set(ControlMode.PercentOutput, IntakeConstants.INTAKE_SPEED);
+  }
+
+  public void hold() {
+    clawMotor.set(ControlMode.PercentOutput, Constants.IntakeConstants.INTAKE_SPEED_PASSIVE);
   }
 
   public void stop(){

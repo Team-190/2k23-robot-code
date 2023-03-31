@@ -25,17 +25,12 @@ public class EjectObject extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    aboveLimit = false;
-    belowLimit = false;
     clawsubsystem.score();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-   
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -46,7 +41,6 @@ public class EjectObject extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   
     return false;
   }
 }

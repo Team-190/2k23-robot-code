@@ -5,11 +5,11 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.claw.EjectObject;
+import frc.robot.utils.ArmUtils;
 import frc.robot.utils.ArmUtils.ARM_STATE;
 import frc.robot.utils.ArmUtils.GAME_PIECE;
 import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
@@ -17,18 +17,19 @@ import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoBalanceSequence extends SequentialCommandGroup {
-  /** Creates a new autoBalanceSequence. */
-
-  public AutoBalanceSequence(RobotContainer robotContainer) {
+public class PlacePieceHigh extends SequentialCommandGroup {
+  /** Creates a new PlaceConeHigh. */
+  ArmUtils armUtils;
+  RobotContainer robotContainer;
+  public PlacePieceHigh(RobotContainer conatiner, GAME_PIECE piece) {
+    robotContainer = conatiner;
+    armUtils = robotContainer.armUtils;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new ParallelDeadlineGroup(new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD)), 
-      (new EjectObject(robotContainer)).withTimeout(1),
-      new ParallelDeadlineGroup(new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.STOW)),
-      new RunCommand(()-> robotContainer.drivetrainSubsystem.westCoastDrive(-.25, -.25, false), robotContainer.drivetrainSubsystem).withTimeout(3),
-      new AutoBalance(robotContainer.drivetrainSubsystem)
+    addCommands(new ParallelDeadlineGroup(new WaitCommand(2), armUtils.getMotionCommand(ARM_STATE.HIGH, piece, PIVOT_DIRECTION.REVERSE)), 
+    (new EjectObject(robotContainer)).withTimeout(1),
+    new ParallelDeadlineGroup(new WaitCommand(2), armUtils.getMotionCommand(ARM_STATE.LOW, piece, PIVOT_DIRECTION.FORWARD))
+
     );
   }
 }
