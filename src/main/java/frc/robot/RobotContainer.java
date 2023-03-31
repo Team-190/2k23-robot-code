@@ -33,6 +33,7 @@ import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoBalanceSequence;
+import frc.robot.commands.auto.PathPlannerFollowCommand;
 import frc.robot.commands.auto.ScoreMidDriveBack;
 import frc.robot.commands.pivot.MoveToPivotPosition;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -107,7 +108,9 @@ public class RobotContainer {
     public final XboxOneController operatorXboxController = 
             new XboxOneController(Constants.InputConstants.XBOX_OP_CHANNEL);
 
-    PathPlannerTrajectory autoPath = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
+    PathPlannerTrajectory autoPath = PathPlanner.loadPath("Test_Path", new PathConstraints(1, 1));
+
+    PathPlannerFollowCommand testTrajectory = new PathPlannerFollowCommand(this, true, "Test_Path");
 
 
     /**
@@ -180,6 +183,7 @@ public class RobotContainer {
         autoModeChooser.addOption("ScoreMidDriveBack", new ScoreMidDriveBack(this));
         autoModeChooser.addOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
         autoModeChooser.addOption("DoNothing", new InstantCommand());
+        autoModeChooser.addOption("TrajectoryTest", testTrajectory);
         autoModeChooser.setDefaultOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
         SmartDashboard.putData("AutoModeChooser", autoModeChooser);
         // SmartDashboard.putData("Set Flywheel RPM", shooterRPMChooser);

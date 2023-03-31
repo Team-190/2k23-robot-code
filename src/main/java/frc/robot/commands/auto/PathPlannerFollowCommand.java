@@ -38,7 +38,7 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
 
   public PathPlannerFollowCommand(RobotContainer robotContainer, boolean isFirstPath, String fileName) {
 
-    autoGroup = PathPlanner.loadPathGroup(fileName, new PathConstraints(4, 3));
+    autoGroup = PathPlanner.loadPathGroup(fileName, new PathConstraints(1, 1));
 
     eventMap = new HashMap<String,Command>();
    // eventMap.put("CollectCommand", new CollectCommand(robotContainer, 0.75));
@@ -58,7 +58,7 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
               DrivetrainConstants.V_VOLT_SECONDS_PER_METER,
               DrivetrainConstants.A_VOLT_SECONDS_SQUARED_PER_METER),
       robotContainer.drivetrainSubsystem::getWheelSpeeds,
-      new PIDConstants(DrivetrainConstants.AUTO_P, 0, 0),
+      new PIDConstants(0, 0, 0),
       robotContainer.drivetrainSubsystem::tankDriveVolts,
       eventMap,
       robotContainer.drivetrainSubsystem);

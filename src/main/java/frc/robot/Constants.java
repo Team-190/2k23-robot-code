@@ -63,13 +63,13 @@ public final class Constants {
         public static final double ACCEL_LIMIT = 0.35;
 
         // Encoder and PID Constants (For Auto)
-        public static final double TRACKWIDTH_METERS = 0.6382; // horizontal distance between wheels
+        public static final double TRACKWIDTH_METERS = 0.635; // 25 in | horizontal distance between wheels
         public static final double COUNTS_PER_MOTOR_REVOLUTION = 2048;
-        public static final double WHEEL_DIAMETER_METERS = 0.1021; // 4 inch diameter in meters // TODO: Change this
+        public static final double WHEEL_DIAMETER_METERS = 0.1524; // 6 inch diameter in meters
         public static final double AUTO_P = 2.1989; // Calculated by SysID
 
-        // (14/58) ratio to (20/28) on the drivetrain gearbox
-        public static final double WHEEL_REVOLUTIONS_PER_MOTOR_REVOLUTIONS = 0.161716; // (0.172)
+        // (12/62) ratio to (24/28) on the drivetrain gearbox
+        public static final double WHEEL_REVOLUTIONS_PER_MOTOR_REVOLUTIONS = 0.165898617512;
         public static final double METERS_PER_COUNT =
                 (1 / COUNTS_PER_MOTOR_REVOLUTION)
                         * // MOTOR ROTATIONS per count
@@ -87,9 +87,9 @@ public final class Constants {
         public final static int MAX_VOLTAGE = 11;
 
         // Constants calculated by System Identification software
-        public static final double S_VOLTS = 0.65089; 
-        public static final double V_VOLT_SECONDS_PER_METER = 1.938;
-        public static final double A_VOLT_SECONDS_SQUARED_PER_METER = 0.14035;
+        public static final double S_VOLTS = 0.16787; 
+        public static final double V_VOLT_SECONDS_PER_METER = 0.88905;
+        public static final double A_VOLT_SECONDS_SQUARED_PER_METER = 2.3113;
 
         public static final SimpleMotorFeedforward DRIVE_FEED_FORWARD =
                 new SimpleMotorFeedforward(
