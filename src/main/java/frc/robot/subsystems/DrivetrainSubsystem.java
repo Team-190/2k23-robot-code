@@ -34,8 +34,8 @@ public class DrivetrainSubsystem extends PIDSubsystem {
     private final WPI_TalonFX rightFollower =
             new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER_CHANNEL);
 
-    private final MotorControllerGroup leftSide = new MotorControllerGroup(leftLeader, leftFollower);
-    private final MotorControllerGroup rightSide = new MotorControllerGroup(rightLeader, rightFollower);
+    public final MotorControllerGroup leftSide = new MotorControllerGroup(leftLeader, leftFollower);
+    public final MotorControllerGroup rightSide = new MotorControllerGroup(rightLeader, rightFollower);
 
     public final DifferentialDrive differentialDrive = new DifferentialDrive(leftSide, rightSide);
 
