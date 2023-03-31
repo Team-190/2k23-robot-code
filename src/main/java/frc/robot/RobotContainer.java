@@ -131,6 +131,10 @@ public class RobotContainer {
        operatorXboxController.startButton.onTrue(new InstantCommand(()-> armUtils.setPivotDirection(PIVOT_DIRECTION.REVERSE))); // cone
        operatorXboxController.selectButton.onTrue(new InstantCommand(()-> armUtils.setPivotDirection(PIVOT_DIRECTION.FORWARD))); // cube
        // operatorXboxController.yButton.onTrue(new RunCommand(()-> pivot.pivotPID(-126500)));
+       operatorXboxController.bButton.onTrue(armUtils.getMotionCommand(ARM_STATE.MID));
+       operatorXboxController.yButton.onTrue(armUtils.getMotionCommand(ARM_STATE.HIGH));
+       operatorXboxController.aButton.onTrue(armUtils.getMotionCommand(ARM_STATE.LOW));
+       operatorXboxController.xButton.onTrue(armUtils.getMotionCommand(ARM_STATE.STOW));
  /**      operatorXboxController.yButton.onTrue(new MoveToPivotPosition(this, -126500));
        //operatorXboxController.xButton.onTrue(new MoveToPivotPosition(this, 0));
        operatorXboxController.xButton.onTrue(new SequentialCommandGroup(

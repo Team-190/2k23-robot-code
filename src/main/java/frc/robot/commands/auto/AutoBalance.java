@@ -41,14 +41,14 @@ public class AutoBalance extends CommandBase {
     if (somewhatBalanced && Math.abs(drivetrain.getPitchDegrees()) < 10) {
       drivetrain.leftLeader.set(ControlMode.PercentOutput, -0.3);
       drivetrain.rightLeader.set(ControlMode.PercentOutput, -0.3);
-      Timer.delay(1);
+      Timer.delay(2);
       drivetrain.leftLeader.set(ControlMode.PercentOutput, 0);
       drivetrain.rightLeader.set(ControlMode.PercentOutput, 0);
       Timer.delay(2);
       balanced = true;
     } else {
       drivetrain.leftLeader.set(ControlMode.PercentOutput, 0.5);
-    drivetrain.rightLeader.set(ControlMode.PercentOutput, 0.5);
+      drivetrain.rightLeader.set(ControlMode.PercentOutput, 0.5);
 
     if (drivetrain.getPitchDegrees() < -15) {
       drivetrain.leftLeader.set(ControlMode.PercentOutput, 0.3);
