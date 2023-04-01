@@ -13,8 +13,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoException;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -83,12 +81,6 @@ public class RobotContainer {
 ; 
 //public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup; 4 = Double Player Pickup; 5 = Floor intake
     
-
-    public final Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
-    public boolean compressorEnabled = compressor.isEnabled();
-    public boolean compressorPressureSwitch = compressor.getPressureSwitchValue();
-    public double compressorCurrent = compressor.getCurrent();
-
     /*
     * Input
     */

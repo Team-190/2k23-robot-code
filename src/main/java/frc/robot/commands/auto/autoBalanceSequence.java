@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.claw.EjectObject;
+import frc.robot.commands.claw.IntakeObject;
 import frc.robot.utils.ArmUtils.ARM_STATE;
 import frc.robot.utils.ArmUtils.GAME_PIECE;
 import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
@@ -24,7 +25,8 @@ public class AutoBalanceSequence extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD)), 
+      new ParallelDeadlineGroup(new IntakeObject(robotContainer),
+        new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD)), 
       (new EjectObject(robotContainer)).withTimeout(1),
       new ParallelDeadlineGroup(new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.STOW)),
       new RunCommand(()-> robotContainer.drivetrainSubsystem.westCoastDrive(-.25, -.25, false), robotContainer.drivetrainSubsystem).withTimeout(3),

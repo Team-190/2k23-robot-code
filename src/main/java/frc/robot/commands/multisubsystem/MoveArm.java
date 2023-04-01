@@ -37,9 +37,10 @@ public class MoveArm extends CommandBase {
   public void end(boolean interrupted) {
     if (utils.elevator.armMotor.getSelectedSensorPosition() <= utils.armSetpoint() + Constants.ArmConstants.TOLERANCE) {
       (new SequentialCommandGroup(
+          new ChangeWristPosition(container, utils),
           new ChangePivotPosition(container, utils),
-          new ChangeArmPosition(container, utils),
-          new ChangeWristPosition(container, utils)
+          new ChangeArmPosition(container, utils)
+          
           )).schedule();
   } else {
       (new SequentialCommandGroup(
