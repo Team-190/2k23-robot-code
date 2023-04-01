@@ -39,6 +39,7 @@ public class ElevatorSubsystem extends PIDSubsystem {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ArmPosition", armMotor.getSelectedSensorPosition());
+    SmartDashboard.putBoolean("Arm Motion Complete", isMotionCompleted());
   }
 
   public boolean getLimitSwitch() {
@@ -80,7 +81,7 @@ public void useOutput(double output, double setpoint) {
 
 public boolean isMotionCompleted() {
   double error = armMotor.getClosedLoopTarget() - armMotor.getSelectedSensorPosition();
-    return Math.abs(error) < Constants.ArmConstants.TOLERANCE;
+    return Math.abs(error) < Constants.ArmConstants.CODE_TOLERANCE;
 }
 
 

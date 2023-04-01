@@ -25,11 +25,11 @@ public class AutoBalanceSequence extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(new IntakeObject(robotContainer),
-        new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD)), 
-      (new EjectObject(robotContainer)).withTimeout(1),
+      new IntakeObject(robotContainer), 
+      new ParallelDeadlineGroup(new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD)), 
+      new EjectObject(robotContainer).withTimeout(1),
       new ParallelDeadlineGroup(new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.STOW)),
-      new RunCommand(()-> robotContainer.drivetrainSubsystem.westCoastDrive(-.25, -.25, false), robotContainer.drivetrainSubsystem).withTimeout(3),
+      new RunCommand(()-> robotContainer.drivetrainSubsystem.westCoastDrive(-.25, -.25, false), robotContainer.drivetrainSubsystem).withTimeout(4),
       new AutoBalance(robotContainer.drivetrainSubsystem)
     );
   }

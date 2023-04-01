@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
+import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoBalanceSequence;
 import frc.robot.commands.auto.PathPlannerFollowCommand;
 import frc.robot.commands.auto.PlacePieceHigh;
@@ -73,6 +75,7 @@ public class RobotContainer {
     public final PivotSubsystem pivot = new PivotSubsystem();
     public final WristSubsystem wrist = new WristSubsystem();
 
+    public boolean moveArmFinished = false;
     public final ArmUtils armUtils = new ArmUtils(this, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD, ARM_STATE.STOW);
 
     //public boolean gamePiece = true; // true = cone & false = cube
@@ -118,23 +121,28 @@ public class RobotContainer {
        operatorXboxController.yButton.onTrue(armUtils.getMotionCommand(ARM_STATE.HIGH));
        operatorXboxController.aButton.onTrue(armUtils.getMotionCommand(ARM_STATE.LOW));
        operatorXboxController.xButton.onTrue(armUtils.getMotionCommand(ARM_STATE.STOW));
+       //new Trigger(operatorXboxController.povRight()).onTrue(armUtils.getMotionCommand(ARM_STATE.STATION_SINGLE));
+       new POVButton(operatorXboxController, 270).onTrue(armUtils.getMotionCommand(ARM_STATE.STATION_SINGLE));
 
         
       /**  driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
         new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
         new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.stop()));
 */
-        rightStick.triggerButton.whileTrue(new IntakeObject(this));
-        leftStick.triggerButton.whileTrue(new EjectObject(this));
+        leftStick.triggerButton.whileTrue(new IntakeObject(this));
+        rightStick.triggerButton.whileTrue(new EjectObject(this));
+
+        leftStick.middleFaceButton.onTrue(new InstantCommand(()-> drivetrainSubsystem.setCoastMode()));
+        rightStick.middleFaceButton.onTrue(new InstantCommand(()-> drivetrainSubsystem.setBreakMode()));
         
-        driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
-        driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
-        driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
-        SmartDashboard.putData("DriveStyleChooser", driveStyleChooser);
-        driveInputChooser.addOption("Joysticks", DRIVE_INPUT.JOYSTICKS);
-        driveInputChooser.addOption("Controller", DRIVE_INPUT.CONTROLLER);
-        SmartDashboard.putData("DriveInputChooser", driveInputChooser);
-        SmartDashboard.putBoolean("Square Inputs?", true);
+        // driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
+        // driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
+        // driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
+        // SmartDashboard.putData("DriveStyleChooser", driveStyleChooser);
+        // driveInputChooser.addOption("Joysticks", DRIVE_INPUT.JOYSTICKS);
+        // driveInputChooser.addOption("Controller", DRIVE_INPUT.CONTROLLER);
+        // SmartDashboard.putData("DriveInputChooser", driveInputChooser);
+        // SmartDashboard.putBoolean("Square Inputs?", true);
 
         autoModeChooser.addOption("ScoreMidDriveBack", new ScoreMidDriveBack(this));
         autoModeChooser.addOption("DriveForward", new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2));
@@ -142,9 +150,20 @@ public class RobotContainer {
         autoModeChooser.setDefaultOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
         autoModeChooser.addOption("ScoringTest", new SequentialCommandGroup(new PlacePieceHigh(this, GAME_PIECE.CONE),
         new PathPlannerFollowCommand(this, true, "ScoringTest")));
-        autoModeChooser.addOption("Balance", new SequentialCommandGroup(new AutoBalanceSequence(this)));
+        autoModeChooser.addOption("ScoreAndBalance", new SequentialCommandGroup(new AutoBalanceSequence(this)));
+        autoModeChooser.addOption("Balance", new SequentialCommandGroup(new AutoBalance(drivetrainSubsystem)));
         SmartDashboard.putData("AutoModeChooser", autoModeChooser);
         // SmartDashboard.putData("Set Flywheel RPM", shooterRPMChooser);
+
+        SmartDashboard.putString("Game Piece", armUtils.getGamePiece().name());
+        SmartDashboard.putString("Pivot Direction", armUtils.getPivotDirection().name());
+
+        SmartDashboard.putBoolean("Wrist Positive", false);
+        SmartDashboard.putBoolean("Wrist Negative", false);
+        SmartDashboard.putBoolean("Pivot Positive", false);
+        SmartDashboard.putBoolean("Pivot Negative", false);
+        SmartDashboard.putBoolean("Pivot Stop", false);
+        SmartDashboard.putBoolean("Wrist Stop", false);
 
         // initializeCamera();
 
@@ -194,7 +213,7 @@ public class RobotContainer {
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
        // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), false), drivetrainSubsystem));
+        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), false), drivetrainSubsystem));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));
 
     }

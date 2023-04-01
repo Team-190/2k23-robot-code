@@ -5,6 +5,7 @@
 package frc.robot.commands.multisubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -37,18 +38,19 @@ public class MoveArm extends CommandBase {
   public void end(boolean interrupted) {
     if (utils.elevator.armMotor.getSelectedSensorPosition() <= utils.armSetpoint() + Constants.ArmConstants.TOLERANCE) {
       (new SequentialCommandGroup(
-          new ChangeWristPosition(container, utils),
           new ChangePivotPosition(container, utils),
-          new ChangeArmPosition(container, utils)
-          
+          new ChangeArmPosition(container, utils),
+          new ChangeWristPosition(container, utils),
+          new InstantCommand(() -> container.moveArmFinished = true)
           )).schedule();
-  } else {
+    } else {
       (new SequentialCommandGroup(
           new ChangeWristPosition(container, utils),
           new ChangeArmPosition(container, utils),
-          new ChangePivotPosition(container, utils)
+          new ChangePivotPosition(container, utils),
+          new InstantCommand(() -> container.moveArmFinished = true)
           )).schedule();
-        }
+      }
   }
 
   // Returns true when the command should end.

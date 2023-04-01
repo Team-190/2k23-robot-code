@@ -26,9 +26,9 @@ public class PlacePieceHigh extends SequentialCommandGroup {
     armUtils = robotContainer.armUtils;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ParallelDeadlineGroup(new WaitCommand(2), armUtils.getMotionCommand(ARM_STATE.HIGH, piece, PIVOT_DIRECTION.REVERSE)), 
+    addCommands(armUtils.getMotionCommand(ARM_STATE.HIGH, piece, PIVOT_DIRECTION.REVERSE).withTimeout(3), 
     (new EjectObject(robotContainer)).withTimeout(1),
-    new ParallelDeadlineGroup(new WaitCommand(2), armUtils.getMotionCommand(ARM_STATE.LOW, piece, PIVOT_DIRECTION.FORWARD))
+    armUtils.getMotionCommand(ARM_STATE.LOW, piece, PIVOT_DIRECTION.FORWARD).withTimeout(3)
 
     );
   }
