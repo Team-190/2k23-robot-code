@@ -47,18 +47,18 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
 
   public PathPlannerFollowCommand(RobotContainer robotContainer, boolean isFirstPath, String fileName) {
 
-    autoGroup = PathPlanner.loadPathGroup(fileName, new PathConstraints(2, 2));
+    autoGroup = PathPlanner.loadPathGroup(fileName, new PathConstraints(3, 2));
 
     armUtils = robotContainer.armUtils;
 
     eventMap = new HashMap<String,Command>();
     eventMap.put("Intake", new IntakeObject(robotContainer));
-    eventMap.put("Score", new EjectObject(robotContainer).withTimeout(1));
+    eventMap.put("Score", new EjectObject(robotContainer).withTimeout(0.5));
     eventMap.put("CubeHigh", armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.REVERSE));
     eventMap.put("ConeHigh", armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CONE, PIVOT_DIRECTION.REVERSE));
     eventMap.put("CubeLow", armUtils.getMotionCommand(ARM_STATE.LOW, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD));
     eventMap.put("Stow", armUtils.getMotionCommand(ARM_STATE.STOW));
-    eventMap.put("Wait", new WaitCommand(2));
+    eventMap.put("Wait", new WaitCommand(0.1));
 
 
     ramsete = new RamseteController();

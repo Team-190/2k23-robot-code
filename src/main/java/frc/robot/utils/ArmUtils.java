@@ -55,14 +55,12 @@ public class ArmUtils {
     }
 
     public void setState(ARM_STATE state) {
-        if (state == this.state) return;
+        this.state = state;
         if (state == ARM_STATE.STOW) {
             pivot.setPIDStow();
-        } else if (this.state == ARM_STATE.STOW) {
+        } else {
             pivot.setPIDDefault();
         }
-        this.state = state;
-        
     }
 
     public void setPivotDirection(PIVOT_DIRECTION side) {

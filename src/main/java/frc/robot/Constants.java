@@ -134,7 +134,7 @@ public final class Constants {
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         public static final int TICKS_PER_INCH = 100; // update
-        public static final int MAX_EXTENSION_TICKS = 141000; 
+        public static final int MAX_EXTENSION_TICKS = 149000; 
         public static final int MIN_EXTENSION_TICKS = 0;
         public static final boolean INVERT_MOTOR = false;
         public static final boolean SENSOR_PHASE = false;
@@ -147,7 +147,7 @@ public final class Constants {
 
         public static final int CONE_DOUBLE_PICKUP_EXT_TICKS = 90;
         public static final int CONE_MID_GOAL_EXT_TICKS = 76000; // was 90000
-        public static final int CONE_HIGH_GOAL_EXT_TICKS = 141000;
+        public static final int CONE_HIGH_GOAL_EXT_TICKS = 148500;
         ;
 
         public static final int CUBE_DOUBLE_PICKUP_EXT_TICKS = 90;
@@ -202,7 +202,7 @@ public final class Constants {
 
         public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CONE_MID_GOAL_PIVOT_TICKS = -84000; // was 80000
-        public static final int CONE_HIGH_GOAL_PIVOT_TICKS = -90000;
+        public static final int CONE_HIGH_GOAL_PIVOT_TICKS = -82000; // 90000
 
         public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 90;
         public static final int CUBE_MID_GOAL_PIVOT_TICKS = -126500;
@@ -257,7 +257,7 @@ public final class Constants {
 
         public static final int CONE_DOUBLE_PICKUP_WRIST_TICKS = 90;
         public static final int CONE_MID_GOAL_WRIST_TICKS = -148000;
-        public static final int CONE_HIGH_GOAL_WRIST_TICKS = -108000;
+        public static final int CONE_HIGH_GOAL_WRIST_TICKS = -125000; // 115000
 
         public static final int CUBE_DOUBLE_PICKUP_WRIST_TICKS = 90;
         public static final int CUBE_MID_GOAL_WRIST_TICKS = -30000;
