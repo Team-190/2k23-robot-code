@@ -6,6 +6,7 @@ package frc.robot.commands.multisubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -13,6 +14,7 @@ import frc.robot.commands.elevator.ChangeArmPosition;
 import frc.robot.commands.pivot.ChangePivotPosition;
 import frc.robot.commands.wrist.ChangeWristPosition;
 import frc.robot.utils.ArmUtils;
+import frc.robot.utils.ArmUtils.ARM_STATE;
 
 public class MoveArm extends CommandBase {
   /** Creates a new MoveArm. */
@@ -43,6 +45,12 @@ public class MoveArm extends CommandBase {
           new ChangeWristPosition(container, utils),
           new InstantCommand(() -> container.moveArmFinished = true)
           )).schedule();
+    }else if (utils.getArmState() == ARM_STATE.STATION_SINGLE) {
+      (new SequentialCommandGroup(
+        new ParallelCommandGroup(new ChangeWristPosition(container, utils),
+        new ChangePivotPosition(container, utils)),
+        new InstantCommand(() -> container.moveArmFinished = true)
+        )).schedule();
     } else {
       (new SequentialCommandGroup(
           new ChangeWristPosition(container, utils),

@@ -71,7 +71,7 @@ public class RobotContainer {
                     this);
 
     public final ElevatorSubsystem telescopingArm = new ElevatorSubsystem(0, 0, 0);
-    public final IntakeSubsystem intake = new IntakeSubsystem();
+    public final IntakeSubsystem intake = new IntakeSubsystem(this);
     public final PivotSubsystem pivot = new PivotSubsystem();
     public final WristSubsystem wrist = new WristSubsystem();
 

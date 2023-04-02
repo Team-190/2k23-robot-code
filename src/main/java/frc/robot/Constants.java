@@ -182,6 +182,8 @@ public final class Constants {
         public static final int SLOT_ID = 0;
         public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/1.25; // update
         public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MAX_RPM*2; // update
+        public static final double PIVOT_MOTOR_VELOCITY_STOW = PIVOT_MAX_RPM*2; // update
+        public static final double PIVOT_MOTOR_ACCELERATION_STOW = PIVOT_MAX_RPM*2; // update
         public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 0; // update
         public static final double TOLERANCE = 1000; // ticks
         public static final double CODE_TOLERANCE = 2000; // ticks
@@ -216,8 +218,6 @@ public final class Constants {
                         P, I, D, F, TOLERANCE, 
                         MIN_ANGLE_TICKS, MAX_ANGLE_TICKS, ENABLE_SOFT_LIMITS,
                         PIVOT_MOTOR_VELOCITY, PIVOT_MOTOR_ACCELERATION, PIVOT_MOTOR_MOTION_SMOOTHING);
-    
-
     }
 
     public static final class WristConstants {

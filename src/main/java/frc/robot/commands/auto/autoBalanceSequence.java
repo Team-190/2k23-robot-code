@@ -30,6 +30,7 @@ public class AutoBalanceSequence extends SequentialCommandGroup {
       new EjectObject(robotContainer).withTimeout(1),
       new ParallelDeadlineGroup(new WaitCommand(2), robotContainer.armUtils.getMotionCommand(ARM_STATE.STOW)),
       new RunCommand(()-> robotContainer.drivetrainSubsystem.westCoastDrive(-.25, -.25, false), robotContainer.drivetrainSubsystem).withTimeout(4),
+      new WaitCommand(1),
       new AutoBalance(robotContainer.drivetrainSubsystem)
     );
   }

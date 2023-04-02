@@ -52,6 +52,12 @@ public class PivotSubsystem extends SubsystemBase {
   public boolean getLimitSwitch() {
     return limitSwitch.get();
   }
+  public void setPIDDefault() {
+    pivotMotor.configMotionCruiseVelocity(talonPIDConfig.rpmToTicksPer100ms(PivotConstants.PIVOT_MOTOR_VELOCITY));
+  }
+  public void setPIDStow() {
+    pivotMotor.configMotionCruiseVelocity(talonPIDConfig.rpmToTicksPer100ms(PivotConstants.PIVOT_MOTOR_VELOCITY_STOW));
+  }
 
   public void tiltForward() {
     pivotMotor.set(ControlMode.PercentOutput, PivotConstants.PIVOT_SPEED);

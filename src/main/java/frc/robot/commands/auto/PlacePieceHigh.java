@@ -21,15 +21,14 @@ public class PlacePieceHigh extends SequentialCommandGroup {
   /** Creates a new PlaceConeHigh. */
   ArmUtils armUtils;
   RobotContainer robotContainer;
-  public PlacePieceHigh(RobotContainer conatiner, GAME_PIECE piece) {
+  public PlacePieceHigh(RobotContainer conatiner, GAME_PIECE piece) { // for pathplanner sequence
     robotContainer = conatiner;
     armUtils = robotContainer.armUtils;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(armUtils.getMotionCommand(ARM_STATE.HIGH, piece, PIVOT_DIRECTION.REVERSE).withTimeout(3), 
+    addCommands(armUtils.getMotionCommand(ARM_STATE.HIGH, piece, PIVOT_DIRECTION.REVERSE), 
     (new EjectObject(robotContainer)).withTimeout(1),
-    armUtils.getMotionCommand(ARM_STATE.LOW, piece, PIVOT_DIRECTION.FORWARD).withTimeout(3)
-
+    armUtils.getMotionCommand(ARM_STATE.LOW, piece, PIVOT_DIRECTION.FORWARD)
     );
   }
 }

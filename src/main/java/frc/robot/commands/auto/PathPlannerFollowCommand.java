@@ -54,10 +54,10 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
     eventMap = new HashMap<String,Command>();
     eventMap.put("Intake", new IntakeObject(robotContainer));
     eventMap.put("Score", new EjectObject(robotContainer).withTimeout(1));
-    eventMap.put("CubeHigh", armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.REVERSE).withTimeout(3));
-    eventMap.put("ConeHigh", armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CONE, PIVOT_DIRECTION.REVERSE).withTimeout(3));
-    eventMap.put("CubeLow", armUtils.getMotionCommand(ARM_STATE.LOW, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD).withTimeout(3));
-    eventMap.put("Stow", armUtils.getMotionCommand(ARM_STATE.STOW).withTimeout(3));
+    eventMap.put("CubeHigh", armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.REVERSE));
+    eventMap.put("ConeHigh", armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CONE, PIVOT_DIRECTION.REVERSE));
+    eventMap.put("CubeLow", armUtils.getMotionCommand(ARM_STATE.LOW, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD));
+    eventMap.put("Stow", armUtils.getMotionCommand(ARM_STATE.STOW));
     eventMap.put("Wait", new WaitCommand(2));
 
 
