@@ -161,7 +161,7 @@ public class TalonPIDConfig {
     talon.enableVoltageCompensation(true);
 
     // Configure MotionMagic values
-    if (m_motionMagic) {  
+    if (m_motionMagic) {
       talon.configMotionCruiseVelocity(rpmToTicksPer100ms(m_velocityRPM));
       talon.configMotionAcceleration(rpmToTicksPer100ms(m_accelerationRPMPerSec));
       talon.configMotionSCurveStrength(m_motionSmoothing);

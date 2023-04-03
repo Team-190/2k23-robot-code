@@ -2,30 +2,23 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.claw;
+package frc.robot.commands.multisubsystem;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.IntakeSubsystem;
 
-public class EjectObject extends CommandBase {
-
-  IntakeSubsystem clawsubsystem;
-  boolean aboveLimit;
-  boolean belowLimit;
-  /** Creates a new intakeCube. */
-  public EjectObject(RobotContainer robotcontainer) {
+public class MoveArmDeadline extends CommandBase {
+  /** Creates a new MoveArmDeadline. */
+  RobotContainer container;
+  public MoveArmDeadline(RobotContainer container) {
     // Use addRequirements() here to declare subsystem dependencies.
-    clawsubsystem = robotcontainer.intake;
-    addRequirements(clawsubsystem);
-    
+    this.container = container;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    clawsubsystem.score();
+    container.moveArmFinished = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,12 +28,12 @@ public class EjectObject extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    clawsubsystem.stop();
+    container.moveArmFinished = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return container.moveArmFinished;
   }
 }

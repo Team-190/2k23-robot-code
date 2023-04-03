@@ -56,7 +56,7 @@ public class OnTheFly extends CommandBase {
     drivetrainSubsystem.setOdometryAprilTag();
 
     traj = PathPlanner.generatePath(constraints, 
-    new PathPoint(drivetrainSubsystem.getPose().getTranslation(), Rotation2d.fromDegrees(drivetrainSubsystem.navx.getAngle())),
+    new PathPoint(drivetrainSubsystem.getPose().getTranslation(), Rotation2d.fromDegrees(drivetrainSubsystem.gyro.getYaw())),
     positions.get(position));
   }
 

@@ -20,9 +20,17 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.claw.EjectObject;
+import frc.robot.commands.claw.IntakeObject;
+import frc.robot.utils.ArmUtils;
+import frc.robot.utils.ArmUtils.ARM_STATE;
+import frc.robot.utils.ArmUtils.GAME_PIECE;
+import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -35,14 +43,22 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
   RamseteAutoBuilder autoBuilder;
   List<PathPlannerTrajectory> autoGroup;
   RamseteController ramsete;
+  ArmUtils armUtils;
 
   public PathPlannerFollowCommand(RobotContainer robotContainer, boolean isFirstPath, String fileName) {
 
-    autoGroup = PathPlanner.loadPathGroup(fileName, new PathConstraints(4, 3));
+    autoGroup = PathPlanner.loadPathGroup(fileName, new PathConstraints(3, 2));
+
+    armUtils = robotContainer.armUtils;
 
     eventMap = new HashMap<String,Command>();
-   // eventMap.put("CollectCommand", new CollectCommand(robotContainer, 0.75));
-    //eventMap.put("BlinkCommand", new BlinkinReadyToShootCommand(robotContainer));
+    eventMap.put("Intake", new IntakeObject(robotContainer));
+    eventMap.put("Score", new EjectObject(robotContainer).withTimeout(0.5));
+    eventMap.put("CubeHigh", armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CUBE, PIVOT_DIRECTION.REVERSE));
+    eventMap.put("ConeHigh", armUtils.getMotionCommand(ARM_STATE.HIGH, GAME_PIECE.CONE, PIVOT_DIRECTION.REVERSE));
+    eventMap.put("CubeLow", armUtils.getMotionCommand(ARM_STATE.LOW, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD));
+    eventMap.put("Stow", armUtils.getMotionCommand(ARM_STATE.STOW));
+    eventMap.put("Wait", new WaitCommand(0.1));
 
 
     ramsete = new RamseteController();
@@ -61,6 +77,7 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
       new PIDConstants(DrivetrainConstants.AUTO_P, 0, 0),
       robotContainer.drivetrainSubsystem::tankDriveVolts,
       eventMap,
+      true,
       robotContainer.drivetrainSubsystem);
   
     addCommands(

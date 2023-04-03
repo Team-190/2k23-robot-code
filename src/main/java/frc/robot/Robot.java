@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -16,6 +18,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  public enum RobotState {
+    IDLE,
+    AUTO,
+    TELEOP
+  }
+  public RobotState state = RobotState.IDLE;
 
   private RobotContainer m_robotContainer;
 
@@ -32,6 +40,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.telescopingArm.armMotor.setSelectedSensorPosition(0);
     m_robotContainer.pivot.pivotMotor.setSelectedSensorPosition(0);
     m_robotContainer.wrist.wristMotor.setSelectedSensorPosition(0);
+    PathPlannerServer.startServer(5811);
   }
 
   /**
@@ -52,7 +61,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    state = RobotState.IDLE;
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -61,6 +72,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     //m_robotContainer.drivetrainSubsystem.setBreakMode();
+    state = RobotState.AUTO;
     m_robotContainer.drivetrainSubsystem.setBreakMode();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -80,11 +92,12 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    state = RobotState.TELEOP;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-   // m_robotContainer.drivetrainSubsystem.setCoastMode();
-   m_robotContainer.drivetrainSubsystem.setBreakMode();
+   m_robotContainer.drivetrainSubsystem.setCoastMode();
+   //m_robotContainer.drivetrainSubsystem.setBreakMode();
     //m_robotContainer.telescopingArm.armMotor.setSelectedSensorPosition(0);
   //  m_robotContainer.pivot.pivotMotor.setSelectedSensorPosition(0);
    //m_robotContainer.wrist.wristMotor.setSelectedSensorPosition(0);
@@ -111,4 +124,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  public RobotState getRobotState() {
+    return state;
+  }
 }

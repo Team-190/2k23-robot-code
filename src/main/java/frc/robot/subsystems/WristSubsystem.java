@@ -29,7 +29,23 @@ public class WristSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    boolean wristup = SmartDashboard.getBoolean("Wrist Positive", false);
+    boolean wristdown = SmartDashboard.getBoolean("Wrist Negative", false);
+    boolean wriststop = SmartDashboard.getBoolean("Wrist Stop", false);
+    if (wristup) {
+      wristUp();
+    }
+    if (wristdown) {
+      wristDown();
+    }
+    if (wriststop) {
+      stopWristMotion();
+      SmartDashboard.putBoolean("Wrist Positive", false);
+      SmartDashboard.putBoolean("Wrist Negative", false);
+    }
     SmartDashboard.putNumber("Wrist Position", wristMotor.getSelectedSensorPosition());
+    SmartDashboard.putBoolean("Wrist Motion Complete", isMotionCompleted());
+    
   }
 
   public void wristDown() {
@@ -46,7 +62,7 @@ public class WristSubsystem extends SubsystemBase {
 
   public boolean isMotionCompleted() {
     double error = wristMotor.getClosedLoopTarget() - wristMotor.getSelectedSensorPosition();
-    return Math.abs(error) < Constants.WristConstants.TOLERANCE;
+    return Math.abs(error) < Constants.WristConstants.CODE_TOLERANCE;
   }
 
 

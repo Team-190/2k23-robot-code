@@ -7,45 +7,40 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.sensors.PigeonIMU_ControlFrame;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoException;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.DrivetrainConstants;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoBalanceSequence;
+import frc.robot.commands.auto.PathPlannerFollowCommand;
+import frc.robot.commands.auto.PlacePieceHigh;
 import frc.robot.commands.auto.ScoreMidDriveBack;
-import frc.robot.commands.pivot.MoveToPivotPosition;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.commands.claw.EjectObject;
+import frc.robot.commands.claw.IntakeObject;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.utils.ArmUtils;
 import frc.robot.utils.ArmUtils.ARM_STATE;
 import frc.robot.utils.ArmUtils.GAME_PIECE;
 import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
 import frc.robot.utils.input.AttackThree;
 import frc.robot.utils.input.XboxOneController;
-import frc.robot.subsystems.LimeLightSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 
 /**
 * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -76,10 +71,11 @@ public class RobotContainer {
                     this);
 
     public final ElevatorSubsystem telescopingArm = new ElevatorSubsystem(0, 0, 0);
-    public final IntakeSubsystem intake = new IntakeSubsystem();
+    public final IntakeSubsystem intake = new IntakeSubsystem(this);
     public final PivotSubsystem pivot = new PivotSubsystem();
     public final WristSubsystem wrist = new WristSubsystem();
 
+    public boolean moveArmFinished = false;
     public final ArmUtils armUtils = new ArmUtils(this, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD, ARM_STATE.STOW);
 
     //public boolean gamePiece = true; // true = cone & false = cube
@@ -88,12 +84,6 @@ public class RobotContainer {
 ; 
 //public int goalHeight = 0; // 0 = Low; 1 = Mid; 2 = High; 3 = Single Player Pickup; 4 = Double Player Pickup; 5 = Floor intake
     
-
-    public final Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
-    public boolean compressorEnabled = compressor.isEnabled();
-    public boolean compressorPressureSwitch = compressor.getPressureSwitchValue();
-    public double compressorCurrent = compressor.getCurrent();
-
     /*
     * Input
     */
@@ -106,7 +96,7 @@ public class RobotContainer {
     public final XboxOneController operatorXboxController = 
             new XboxOneController(Constants.InputConstants.XBOX_OP_CHANNEL);
 
-    PathPlannerTrajectory autoPath = PathPlanner.loadPath("New Path", new PathConstraints(1, 1));
+    PathPlannerTrajectory autoPath = PathPlanner.loadPath("TrajectoryTest", new PathConstraints(1, 1));
 
 
     /**
@@ -131,35 +121,49 @@ public class RobotContainer {
        operatorXboxController.yButton.onTrue(armUtils.getMotionCommand(ARM_STATE.HIGH));
        operatorXboxController.aButton.onTrue(armUtils.getMotionCommand(ARM_STATE.LOW));
        operatorXboxController.xButton.onTrue(armUtils.getMotionCommand(ARM_STATE.STOW));
+       //new Trigger(operatorXboxController.povRight()).onTrue(armUtils.getMotionCommand(ARM_STATE.STATION_SINGLE));
+       new POVButton(operatorXboxController, 270).onTrue(armUtils.getMotionCommand(ARM_STATE.STATION_SINGLE));
 
         
       /**  driverXboxController.yButton.onTrue(new InstantCommand(() -> drivetrainSubsystem.setBreakMode()));
         new Trigger(()-> driverXboxController.getRightTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
         new Trigger(()-> driverXboxController.getLeftTrigger() > 0.5).whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.stop()));
 */
-        leftStick.triggerButton.whileTrue(new RunCommand(()-> intake.intake()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, .1)));
-        leftStick.middleFaceButton.onTrue(new InstantCommand(()-> drivetrainSubsystem.setCoastMode()));
+        leftStick.triggerButton.whileTrue(new IntakeObject(this));
+        rightStick.triggerButton.whileTrue(new EjectObject(this));
 
-        rightStick.triggerButton.whileTrue(new RunCommand(()-> intake.score()){}).onFalse(new InstantCommand(()-> intake.clawMotor.set(ControlMode.PercentOutput, 0)));
+        leftStick.middleFaceButton.onTrue(new InstantCommand(()-> drivetrainSubsystem.setCoastMode()));
         rightStick.middleFaceButton.onTrue(new InstantCommand(()-> drivetrainSubsystem.setBreakMode()));
         
-
-        
-        driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
-        driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
-        driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
-        SmartDashboard.putData("DriveStyleChooser", driveStyleChooser);
-        driveInputChooser.addOption("Joysticks", DRIVE_INPUT.JOYSTICKS);
-        driveInputChooser.addOption("Controller", DRIVE_INPUT.CONTROLLER);
-        SmartDashboard.putData("DriveInputChooser", driveInputChooser);
-        SmartDashboard.putBoolean("Square Inputs?", true);
+        // driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
+        // driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
+        // driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
+        // SmartDashboard.putData("DriveStyleChooser", driveStyleChooser);
+        // driveInputChooser.addOption("Joysticks", DRIVE_INPUT.JOYSTICKS);
+        // driveInputChooser.addOption("Controller", DRIVE_INPUT.CONTROLLER);
+        // SmartDashboard.putData("DriveInputChooser", driveInputChooser);
+        // SmartDashboard.putBoolean("Square Inputs?", true);
 
         autoModeChooser.addOption("ScoreMidDriveBack", new ScoreMidDriveBack(this));
-        autoModeChooser.addOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
+        autoModeChooser.addOption("DriveForward", new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2));
         autoModeChooser.addOption("DoNothing", new InstantCommand());
         autoModeChooser.setDefaultOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
+        autoModeChooser.addOption("ScoringTest", new SequentialCommandGroup(new PlacePieceHigh(this, GAME_PIECE.CONE),
+        new PathPlannerFollowCommand(this, true, "ScoringTest")));
+        autoModeChooser.addOption("ScoreAndBalance", new SequentialCommandGroup(new AutoBalanceSequence(this)));
+        autoModeChooser.addOption("Balance", new SequentialCommandGroup(new AutoBalance(drivetrainSubsystem)));
         SmartDashboard.putData("AutoModeChooser", autoModeChooser);
         // SmartDashboard.putData("Set Flywheel RPM", shooterRPMChooser);
+
+        SmartDashboard.putString("Game Piece", armUtils.getGamePiece().name());
+        SmartDashboard.putString("Pivot Direction", armUtils.getPivotDirection().name());
+
+        SmartDashboard.putBoolean("Wrist Positive", false);
+        SmartDashboard.putBoolean("Wrist Negative", false);
+        SmartDashboard.putBoolean("Pivot Positive", false);
+        SmartDashboard.putBoolean("Pivot Negative", false);
+        SmartDashboard.putBoolean("Pivot Stop", false);
+        SmartDashboard.putBoolean("Wrist Stop", false);
 
         // initializeCamera();
 
@@ -208,10 +212,8 @@ public class RobotContainer {
       //   -1*driverXboxController.getRightStickX()/Math.pow(2,0.5), true), drivetrainSubsystem));
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
-
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), true), drivetrainSubsystem));
        // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
-        // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), false), drivetrainSubsystem));
+        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), false), drivetrainSubsystem));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));
 
     }

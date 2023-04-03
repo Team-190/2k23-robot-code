@@ -34,8 +34,8 @@ public class DrivetrainSubsystem extends PIDSubsystem {
     private final WPI_TalonFX rightFollower =
             new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER_CHANNEL);
 
-    private final MotorControllerGroup leftSide = new MotorControllerGroup(leftLeader, leftFollower);
-    private final MotorControllerGroup rightSide = new MotorControllerGroup(rightLeader, rightFollower);
+    public final MotorControllerGroup leftSide = new MotorControllerGroup(leftLeader, leftFollower);
+    public final MotorControllerGroup rightSide = new MotorControllerGroup(rightLeader, rightFollower);
 
     public final DifferentialDrive differentialDrive = new DifferentialDrive(leftSide, rightSide);
 
@@ -48,7 +48,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
     private LimeLightSubsystem limeLight;
     private RobotContainer robotContainer;
-    public final AHRS navx = new AHRS(SPI.Port.kMXP);
+    // public final AHRS navx = new AHRS(SPI.Port.kMXP);
 
 
 
@@ -107,7 +107,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
         odometry =
          new DifferentialDriveOdometry(
-             Rotation2d.fromDegrees(navx.getAngle()), getDistanceMeters(leftLeader),
+             Rotation2d.fromDegrees(gyro.getYaw()), getDistanceMeters(leftLeader),
              getDistanceMeters(rightLeader));
          setSetpoint(0);
 
@@ -124,7 +124,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         // SmartDashboard.putNumber("Difference Meters", Math.abs(getDistanceMeters(leftLeader)-getDistanceMeters(rightLeader)));
         // SmartDashboard.putNumber("Get left wheel speed", leftLeader.getSelectedSensorVelocity());
         // SmartDashboard.putNumber("Get right wheel speed", rightLeader.getSelectedSensorVelocity());
-        // SmartDashboard.putNumber("gyro raw yaw", gyro.getAngle());
+        SmartDashboard.putNumber("gyro raw yaw", gyro.getYaw());
         // SmartDashboard.putNumber("gyro yaw", getYawDegrees());
         // SmartDashboard.putNumber("Meters Left Side Traveled", getDistanceMeters(leftLeader));
         // SmartDashboard.putNumber("Meters Right Side Traveled", getDistanceMeters(rightLeader));
@@ -134,7 +134,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
         // Update the Odometry
         odometry.update(
-            Rotation2d.fromDegrees(getYawDegrees()),
+            Rotation2d.fromDegrees(gyro.getYaw()),
             getDistanceMeters(leftLeader),
             getDistanceMeters(rightLeader)
         );
@@ -229,16 +229,16 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      */
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
-        odometry.resetPosition(Rotation2d.fromDegrees(getYawDegrees()), 0 , 0, pose);
+        odometry.resetPosition(Rotation2d.fromDegrees(gyro.getYaw()), 0 , 0, pose);
     }
 
     public void setOdometryAprilTag() {
         double[] xyYaw = limeLight.getAprilTagPose();
         if (xyYaw == null) return;
         xyYaw = limeLight.translateBlue(xyYaw);
-        odometry.resetPosition(Rotation2d.fromDegrees(navx.getAngle()), 
+        odometry.resetPosition(Rotation2d.fromDegrees(gyro.getYaw()), 
         getDistanceMeters(leftLeader), getDistanceMeters(rightLeader), 
-        new Pose2d(new Translation2d(xyYaw[0], xyYaw[1]), Rotation2d.fromDegrees(navx.getAngle())));
+        new Pose2d(new Translation2d(xyYaw[0], xyYaw[1]), Rotation2d.fromDegrees(gyro.getYaw())));
         
     }
 
@@ -247,7 +247,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      */
     public void resetAll() {
         resetGyro(true);
-        resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(getYawDegrees())));
+        resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(gyro.getYaw())));
     }
 
     /**

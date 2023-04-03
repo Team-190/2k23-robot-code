@@ -11,16 +11,22 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.utils.ArmUtils.ARM_STATE;
+import frc.robot.utils.ArmUtils.GAME_PIECE;
 
 public class IntakeSubsystem extends SubsystemBase {
 
   public final TalonFX clawMotor = new TalonFX(IntakeConstants.INTAKE_MOTOR_CHANNEL);
   public final DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH_CHANNEL);
+  RobotContainer container;
 
   /** Creates a new Claw. */
-  public IntakeSubsystem() {
+  public IntakeSubsystem(RobotContainer container) {
+    this.container = container;
     //clawMotor.configPeakCurrentLimit(35);
     //clawMotor.configContinuousCurrentLimit(35);
     // clawMotor.enableCurrentLimit(false);
@@ -40,12 +46,18 @@ public class IntakeSubsystem extends SubsystemBase {
     clawMotor.set(ControlMode.PercentOutput, IntakeConstants.INTAKE_SPEED);
   }
 
+  public void hold() {
+    clawMotor.set(ControlMode.PercentOutput, Constants.IntakeConstants.INTAKE_SPEED_PASSIVE);
+  }
+
   public void stop(){
     clawMotor.set(ControlMode.PercentOutput, 0);
   }
 
   public void score(){
-    clawMotor.set(ControlMode.PercentOutput, -1*IntakeConstants.INTAKE_SPEED);
+    if (container.armUtils.getGamePiece() == GAME_PIECE.CUBE)
+    clawMotor.set(ControlMode.PercentOutput, -1*0.7);
+    else clawMotor.set(ControlMode.PercentOutput, -1*IntakeConstants.INTAKE_SPEED);
   }
 
   public boolean getLimitSwitch() {

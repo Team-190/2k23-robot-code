@@ -31,11 +31,32 @@ public class PivotSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    boolean pivotup = SmartDashboard.getBoolean("Pivot Positive", false);
+    boolean pivotdown = SmartDashboard.getBoolean("Pivot Negative", false);
+    boolean pivotstop = SmartDashboard.getBoolean("Pivot Stop", false);
+    if (pivotup) {
+      tiltForward();
+    }
+    if (pivotdown) {
+      tiltBackward();
+    }
+    if (pivotstop) {
+      stopPivotMotion();
+      SmartDashboard.putBoolean("Pivot Positive", false);
+      SmartDashboard.putBoolean("Pivot Negative", false);
+    }
     SmartDashboard.putNumber("Pivot Position", pivotMotor.getSelectedSensorPosition());
+    SmartDashboard.putBoolean("Pivot Motion Complete", isMotionCompleted());
   }
 
   public boolean getLimitSwitch() {
     return limitSwitch.get();
+  }
+  public void setPIDDefault() {
+    pivotMotor.configMotionCruiseVelocity(talonPIDConfig.rpmToTicksPer100ms(PivotConstants.PIVOT_MOTOR_VELOCITY));
+  }
+  public void setPIDStow() {
+    pivotMotor.configMotionCruiseVelocity(talonPIDConfig.rpmToTicksPer100ms(PivotConstants.PIVOT_MOTOR_VELOCITY_STOW));
   }
 
   public void tiltForward() {
@@ -52,7 +73,7 @@ public class PivotSubsystem extends SubsystemBase {
 
   public boolean isMotionCompleted() {
     double error = pivotMotor.getClosedLoopTarget() - pivotMotor.getSelectedSensorPosition();
-    return Math.abs(error) < Constants.PivotConstants.TOLERANCE;
+    return Math.abs(error) < Constants.PivotConstants.CODE_TOLERANCE;
   }
 
     public void pivotPID(double setpoint) {

@@ -4,15 +4,19 @@
 
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.multisubsystem.MoveArm;
+import frc.robot.commands.multisubsystem.MoveArmDeadline;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.PivotSubsystem;
 
 /** Add your docs here. */
 
@@ -22,12 +26,14 @@ public class ArmUtils {
     private ARM_STATE state;
     private RobotContainer robotContainer;
     public ElevatorSubsystem elevator;
+    public PivotSubsystem pivot;
     public ArmUtils(RobotContainer container, GAME_PIECE defaultPiece, PIVOT_DIRECTION defaultSide, ARM_STATE defaultState) {
         piece = defaultPiece;
         side = defaultSide;
         state = defaultState;
         robotContainer = container;
         elevator = container.telescopingArm;
+        pivot = container.pivot;
     }
     public enum GAME_PIECE{
         CONE,
@@ -50,13 +56,20 @@ public class ArmUtils {
 
     public void setState(ARM_STATE state) {
         this.state = state;
+        if (state == ARM_STATE.STOW) {
+            pivot.setPIDStow();
+        } else {
+            pivot.setPIDDefault();
+        }
     }
 
     public void setPivotDirection(PIVOT_DIRECTION side) {
+        SmartDashboard.putString("Pivot Direction", side.name());
         this.side = side;
     }
 
     public void setGamePiece(GAME_PIECE piece) {
+        SmartDashboard.putString("Game Piece", piece.name());
         this.piece = piece;
     }
 
@@ -147,7 +160,7 @@ public class ArmUtils {
     }
 
     public Command getMotionCommand() {
-        return new MoveArm(robotContainer, this);
+        return new ParallelDeadlineGroup(new MoveArmDeadline(robotContainer), new MoveArm(robotContainer, this));
     }
 
     public SequentialCommandGroup getMotionCommand(ARM_STATE armState) { //suited best for arm position buttons
