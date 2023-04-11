@@ -84,5 +84,13 @@ public class PivotSubsystem extends SubsystemBase {
     pivotMotor.set(ControlMode.MotionMagic, setpoint);
   }
 
+  public double ticksToDegrees(double ticks) {
+    return ticks/Constants.PivotConstants.PIVOT_TICKS_PER_DEGREE;
+  }
+
+  public double degreesToTicks(double degrees) {
+    return degrees*Constants.PivotConstants.PIVOT_TICKS_PER_DEGREE;
+  }
+
 
 }
