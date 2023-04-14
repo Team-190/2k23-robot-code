@@ -38,19 +38,14 @@ public class MoveArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (utils.elevator.armMotor.getSelectedSensorPosition() <= utils.armSetpoint() + Constants.ArmConstants.TOLERANCE) {
+    if (utils.elevator.armMotor.getSelectedSensorPosition() <= utils.armSetpoint() + Constants.ArmConstants.TOLERANCE
+        && utils.getArmState() != ARM_STATE.STATION_SINGLE && utils.getArmState() != ARM_STATE.LOW) {
       (new SequentialCommandGroup(
           new ChangePivotPosition(container, utils),
           new ChangeArmPosition(container, utils),
           new ChangeWristPosition(container, utils),
           new InstantCommand(() -> container.moveArmFinished = true)
           )).schedule();
-    }else if (utils.getArmState() == ARM_STATE.STATION_SINGLE) {
-      (new SequentialCommandGroup(
-        new ParallelCommandGroup(new ChangeWristPosition(container, utils),
-        new ChangePivotPosition(container, utils)),
-        new InstantCommand(() -> container.moveArmFinished = true)
-        )).schedule();
     } else {
       (new SequentialCommandGroup(
           new ChangeWristPosition(container, utils),

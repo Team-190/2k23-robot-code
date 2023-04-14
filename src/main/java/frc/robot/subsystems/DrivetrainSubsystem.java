@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -12,12 +11,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.InputConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.auto.AutoBalance;
@@ -26,13 +25,13 @@ import frc.robot.commands.auto.SimpleAuto;
 
 public class DrivetrainSubsystem extends PIDSubsystem {
 
-    public final WPI_TalonFX leftLeader = new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER_CHANNEL);
+    public final WPI_TalonFX leftLeader = new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
     private final WPI_TalonFX leftFollower =
-            new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER_CHANNEL);
+            new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
 
-    public final WPI_TalonFX rightLeader = new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER_CHANNEL);
+    public final WPI_TalonFX rightLeader = new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
     private final WPI_TalonFX rightFollower =
-            new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER_CHANNEL);
+            new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
 
     public final MotorControllerGroup leftSide = new MotorControllerGroup(leftLeader, leftFollower);
     public final MotorControllerGroup rightSide = new MotorControllerGroup(rightLeader, rightFollower);
@@ -41,7 +40,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
     // Objects for PID tracking
     // private final AHRS navx = new AHRS(SPI.Port.kMXP);
-    public final Pigeon2 gyro = new Pigeon2(SensorConstants.GYRO_CHANNEL);
+    public final Pigeon2 gyro = new Pigeon2(SensorConstants.GYRO_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
     private DifferentialDriveOdometry odometry =
             new DifferentialDriveOdometry(Rotation2d.fromDegrees(0), 0 , 0);
     private double angleOffset = 0;

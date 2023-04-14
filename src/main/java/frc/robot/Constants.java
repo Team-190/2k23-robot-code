@@ -17,6 +17,8 @@ public final class Constants {
             BUTTON_BOX
         }
 
+        public static final String CANIVORE_BUS_NAME = "2023CANivore";
+
         // USB Ids
         public static final int LEFT_JOYSTICK_CHANNEL = 2;
         public static final int RIGHT_JOYSTICK_CHANNEL = 3;
@@ -174,7 +176,7 @@ public final class Constants {
         
         public static final double PIVOT_MAX_RPM = 6380; // update
         public static final int PIVOT_TICKS_PER_ROTATION = 2048;
-        public static final int PIVOT_GEARING = 150;
+        public static final int PIVOT_GEARING = 250;
         public static final double PIVOT_TICKS_PER_DEGREE = ((double)PIVOT_GEARING)*PIVOT_TICKS_PER_ROTATION/360;
         public static final double P = 0.02;
         public static final double I = 0;
@@ -191,7 +193,7 @@ public final class Constants {
         public static final double CODE_TOLERANCE = 2000; // ticks
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
-        public static final int TICKS_PER_DEGREE = 100; // update
+        //public static final int TICKS_PER_DEGREE = 100; // update
         public static final int MAX_ANGLE_TICKS = 240000; // update?
         public static final int MIN_ANGLE_TICKS = -240000;
         public static final boolean INVERT_MOTOR = false;
@@ -199,24 +201,25 @@ public final class Constants {
         public static final boolean ENABLE_SOFT_LIMITS = true;
 
         //pivot
-        public static final int LOW_PIVOT_TICKS = -96000; //new // likely the same for scoring, pickup, and cone/cube
-        public static final int LOW_PIVOT_DEGREES = LOW_PIVOT_TICKS/TICKS_PER_DEGREE;
-        public static final int SINGLE_PICKUP_PIVOT_TICKS = -70000; // new //can and should be the same for cone/cube
-        public static final int SINGLE_PICKUP_PIVOT_DEGREES = SINGLE_PICKUP_PIVOT_TICKS/TICKS_PER_DEGREE;
+       
+        public static final double LOW_PIVOT_DEGREES = -112.5;//LOW_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final int LOW_PIVOT_TICKS = (int) (LOW_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE); //-96000; //new // likely the same for scoring, pickup, and cone/cube
+        public static final double SINGLE_PICKUP_PIVOT_DEGREES = -82.031;//SINGLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final int SINGLE_PICKUP_PIVOT_TICKS = (int) (SINGLE_PICKUP_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-70000; // new //can and should be the same for cone/cube
 
-        public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = 36; // new
-        public static final int CONE_DOUBLE_PICKUP_PIVOT_DEGREES = CONE_DOUBLE_PICKUP_PIVOT_TICKS/TICKS_PER_DEGREE;
-        public static final int CONE_MID_GOAL_PIVOT_TICKS = -33600; // new // was 80000
-        public static final int CONE_MID_GOAL_PIVOT_DEGREES = CONE_MID_GOAL_PIVOT_TICKS/TICKS_PER_DEGREE;
-        public static final int CONE_HIGH_GOAL_PIVOT_TICKS = -32800; // new // 90000
-        public static final int CONE_HIGH_GOAL_PIVOT_DEGREES = CONE_HIGH_GOAL_PIVOT_TICKS/TICKS_PER_DEGREE;
+        public static final double CONE_DOUBLE_PICKUP_PIVOT_DEGREES = 0.042;//CONE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = (int) (CONE_DOUBLE_PICKUP_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//36; // new
+        public static final double CONE_MID_GOAL_PIVOT_DEGREES = -39.375;//CONE_MID_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final int CONE_MID_GOAL_PIVOT_TICKS = (int) (CONE_MID_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-33600; // new // was 80000
+        public static final double CONE_HIGH_GOAL_PIVOT_DEGREES = -38.438;//CONE_HIGH_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final int CONE_HIGH_GOAL_PIVOT_TICKS = (int) (CONE_HIGH_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-32800; // new // 90000
 
-        public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = 36; // new
-        public static final int CUBE_DOUBLE_PICKUP_PIVOT_DEGREES = CUBE_DOUBLE_PICKUP_PIVOT_TICKS/TICKS_PER_DEGREE;
-        public static final int CUBE_MID_GOAL_PIVOT_TICKS = -50600; // new
-        public static final int CUBE_MID_GOAL_PIVOT_DEGREES = CUBE_MID_GOAL_PIVOT_TICKS/TICKS_PER_DEGREE;
-        public static final int CUBE_HIGH_GOAL_PIVOT_TICKS = -48000; // new
-        public static final int CUBE_HIGH_GOAL_PIVOT_DEGREES = CUBE_DOUBLE_PICKUP_PIVOT_TICKS/TICKS_PER_DEGREE;
+        public static final double CUBE_DOUBLE_PICKUP_PIVOT_DEGREES = 0.042;//CUBE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = (int) (CUBE_DOUBLE_PICKUP_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//36; // new
+        public static final double CUBE_MID_GOAL_PIVOT_DEGREES = -59.297;//CUBE_MID_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final int CUBE_MID_GOAL_PIVOT_TICKS = (int) (CUBE_MID_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-50600; // new
+        public static final double CUBE_HIGH_GOAL_PIVOT_DEGREES = -56.25;//CUBE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final int CUBE_HIGH_GOAL_PIVOT_TICKS = (int) (CUBE_HIGH_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-48000; // new
 
 
   
