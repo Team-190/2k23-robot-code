@@ -24,6 +24,7 @@ import frc.robot.Constants.DrivetrainConstants.DRIVE_INPUT;
 import frc.robot.Constants.DrivetrainConstants.DRIVE_STYLE;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoBalanceSequence;
+import frc.robot.commands.auto.AutoBalanceV2;
 import frc.robot.commands.auto.PathPlannerFollowCommand;
 import frc.robot.commands.auto.PlacePieceHigh;
 import frc.robot.commands.auto.ScoreMidDriveBack;
@@ -152,6 +153,7 @@ public class RobotContainer {
         new PathPlannerFollowCommand(this, true, "ScoringTest")));
         autoModeChooser.addOption("ScoreAndBalance", new SequentialCommandGroup(new AutoBalanceSequence(this)));
         autoModeChooser.addOption("Balance", new SequentialCommandGroup(new AutoBalance(drivetrainSubsystem)));
+        autoModeChooser.addOption("BalanceV2", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem)));
         SmartDashboard.putData("AutoModeChooser", autoModeChooser);
         // SmartDashboard.putData("Set Flywheel RPM", shooterRPMChooser);
 
@@ -195,6 +197,7 @@ public class RobotContainer {
         // return null;
         //return armUtils.getMotionCommand(ARM_STATE.MID, GAME_PIECE.CUBE, ROBOT_SIDE.FORWARD);
         return autoModeChooser.getSelected();
+        //return new PathPlannerFollowCommand(this, true, "TrajectoryTest");
         //return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2);
         //return new autoBalanceSequence(this);
         //return new ScoreMidDriveBack(this);

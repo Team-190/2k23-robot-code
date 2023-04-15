@@ -68,7 +68,7 @@ public final class Constants {
         public static final double TRACKWIDTH_METERS = 0.635; // 25 in | horizontal distance between wheels
         public static final double COUNTS_PER_MOTOR_REVOLUTION = 2048;
         public static final double WHEEL_DIAMETER_METERS = 0.1524; // 6 inch diameter in meters
-        public static final double AUTO_P = 1.7918; // Calculated by SysID
+        public static final double AUTO_P = 0.39176;//0.4143;//1.7918; // Calculated by SysID
 
         // (12/62) ratio to (24/28) on the drivetrain gearbox
         public static final double WHEEL_REVOLUTIONS_PER_MOTOR_REVOLUTIONS = 0.165898617512;
@@ -89,9 +89,9 @@ public final class Constants {
         public final static int MAX_VOLTAGE = 11;
 
         // Constants calculated by System Identification software
-        public static final double S_VOLTS = 0.1946; 
-        public static final double V_VOLT_SECONDS_PER_METER = 1.2955;
-        public static final double A_VOLT_SECONDS_SQUARED_PER_METER = 0.6474;
+        public static final double S_VOLTS = 0.39415;//0.28344;//0.1946; 
+        public static final double V_VOLT_SECONDS_PER_METER = 0.9691;//1.0574;//1.2955;
+        public static final double A_VOLT_SECONDS_SQUARED_PER_METER = 1.2631;//1.1559;//0.6474;
 
         public static final SimpleMotorFeedforward DRIVE_FEED_FORWARD =
                 new SimpleMotorFeedforward(
