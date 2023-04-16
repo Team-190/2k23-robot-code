@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -124,6 +125,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         // SmartDashboard.putNumber("Get left wheel speed", leftLeader.getSelectedSensorVelocity());
         // SmartDashboard.putNumber("Get right wheel speed", rightLeader.getSelectedSensorVelocity());
         SmartDashboard.putNumber("gyro raw yaw", gyro.getYaw());
+        SmartDashboard.putNumber("Get Average Distance Meters", getAverageDistanceMeters());
         // SmartDashboard.putNumber("gyro yaw", getYawDegrees());
         // SmartDashboard.putNumber("Meters Left Side Traveled", getDistanceMeters(leftLeader));
         // SmartDashboard.putNumber("Meters Right Side Traveled", getDistanceMeters(rightLeader));
@@ -148,6 +150,14 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      */
     public double getDistanceMeters(TalonFX talon) {
         return talon.getSelectedSensorPosition() * DrivetrainConstants.METERS_PER_COUNT;
+    }
+
+    /**
+     * Gets the average distance of the motors
+     * @return
+     */
+    public double getAverageDistanceMeters() {
+        return ((leftLeader.getSelectedSensorPosition() + rightLeader.getSelectedSensorPosition()) * DrivetrainConstants.METERS_PER_COUNT)/2;
     }
 
     /**
@@ -284,8 +294,9 @@ public class DrivetrainSubsystem extends PIDSubsystem {
     * @param square Whether to square the inputs
     */
     public void westCoastDrive(double leftStick, double rightStick, boolean square) {
-        //differentialDrive.tankDrive(Math.copySign(Math.pow(leftStick, power), leftStick), Math.copySign(Math.pow(leftStick, power), leftStick));
-       differentialDrive.tankDrive(leftStick, rightStick, square);
+        // differentialDrive.tankDrive(Math.copySign(Math.pow(leftStick, power), leftStick), Math.copySign(Math.pow(leftStick, power), leftStick));
+
+        differentialDrive.tankDrive(leftStick, rightStick, square);
     }
 
     /**
@@ -362,26 +373,56 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
     }
 
-    public void seekTarget(LimeLightSubsystem limeLightSubsystem, double threshold){
-        double tx = limeLightSubsystem.degreesAskew();
-        double kp = 0.05;
+    public void driveWithVision(double leftInput, double rightInput, boolean squared){
+        double tx = limeLight.degreesAskew();
+        double kp = 0.015; // 0.05;
         double minTurn = 0.08;
         double steering_adjust = 0.0;
-        boolean targetFound = limeLightSubsystem.targetFound();
+        boolean targetFound = limeLight.targetFound();
         if(!targetFound)
-            steering_adjust=0.5;
+            steering_adjust=0;
         else{
-            if(Math.abs(tx)>threshold){
+            if(Math.abs(tx)>1){
                 if(tx < 0){
-                    steering_adjust = kp * tx - minTurn;
+                    steering_adjust = kp * tx;
                 } else {
-                    steering_adjust = kp * tx + minTurn;
+                    steering_adjust = kp * tx;
+                }
+            }
+        }
+        if (squared) {
+            leftInput = Math.copySign(Math.pow(leftInput, 2), leftInput);
+            rightInput = Math.copySign(Math.pow(rightInput, 2), rightInput);
+        }
+        
+        this.westCoastDrive(leftInput + minThresholdSignedValue(steering_adjust, .5), rightInput + -minThresholdSignedValue(steering_adjust, .5), false);
+    }
+
+    public void seekTarget(){
+        double tx = limeLight.degreesAskew();
+        double kp = 0.01; // 0.05;
+        double minTurn = 0.08;
+        double steering_adjust = 0.0;
+        boolean targetFound = limeLight.targetFound();
+        if(!targetFound)
+            steering_adjust=0;
+        else{
+            if(Math.abs(tx)>1){
+                if(tx < 0){
+                    // steering_adjust = kp * tx - minTurn;
+                    steering_adjust = kp * tx;
+                } else {
+                    // steering_adjust = kp * tx + minTurn;
+                    steering_adjust = kp * tx;
                 }
             }
         }
         // leftLeader.set(ControlMode.PercentOutput, minThresholdSignedValue(steering_adjust, .5));
         // rightLeader.set(ControlMode.PercentOutput, -minThresholdSignedValue(steering_adjust, .5));
+        // this.westCoastDrive(steering_adjust, -steering_adjust, false);
+        this.westCoastDrive(minThresholdSignedValue(steering_adjust, .5), -minThresholdSignedValue(steering_adjust, .5), false);
     }
+
 
     public void goToDistance(double distance, LimeLightSubsystem limeLightSubsystem) {
         double kDist = 0.01;

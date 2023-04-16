@@ -124,6 +124,7 @@ public class LimeLightSubsystem extends SubsystemBase {
     x = targetX.getDouble(0.0);
     y = targetY.getDouble(0.0);
     area = targetArea.getDouble(0.0);
+    v = targetV.getDouble(0.0);
     double[] pose = botpose.getDoubleArray(new double[6]);
 
     //post to smart dashboard periodically
@@ -134,8 +135,8 @@ public class LimeLightSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("targetExists", foundTarget());
     SmartDashboard.putNumberArray("botpose", pose);
     if (getAprilTagPose() == null) return;
-    SmartDashboard.putNumberArray("botpose_blue", translateBlue(getAprilTagPose()));
-    SmartDashboard.putNumberArray("botpose_red", translateRed(getAprilTagPose()));
+    // SmartDashboard.putNumberArray("botpose_blue", translateBlue(getAprilTagPose()));
+    // SmartDashboard.putNumberArray("botpose_red", translateRed(getAprilTagPose()));
     
     
   }

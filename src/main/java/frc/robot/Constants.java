@@ -89,9 +89,9 @@ public final class Constants {
         public final static int MAX_VOLTAGE = 11;
 
         // Constants calculated by System Identification software
-        public static final double S_VOLTS = 0.39415;//0.28344;//0.1946; 
-        public static final double V_VOLT_SECONDS_PER_METER = 0.9691;//1.0574;//1.2955;
-        public static final double A_VOLT_SECONDS_SQUARED_PER_METER = 1.2631;//1.1559;//0.6474;
+        public static final double S_VOLTS = /*0.39415;//0.28344*/0.1946; 
+        public static final double V_VOLT_SECONDS_PER_METER = /*0.9691;//1.0574;*/1.2955;
+        public static final double A_VOLT_SECONDS_SQUARED_PER_METER = /*1.2631;//1.1559;*/0.6474;
 
         public static final SimpleMotorFeedforward DRIVE_FEED_FORWARD =
                 new SimpleMotorFeedforward(
@@ -185,10 +185,10 @@ public final class Constants {
         //1023 / rpmToTicksPer100ms(m_maxRPM);
         public static final int SLOT_ID = 0;
         public static final double PIVOT_MOTOR_VELOCITY = PIVOT_MAX_RPM/1.25; // update
-        public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MAX_RPM*2; // update
+        public static final double PIVOT_MOTOR_ACCELERATION = PIVOT_MAX_RPM; //2 // update
         public static final double PIVOT_MOTOR_VELOCITY_STOW = PIVOT_MAX_RPM*2; // update
         public static final double PIVOT_MOTOR_ACCELERATION_STOW = PIVOT_MAX_RPM*2; // update
-        public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 0; // update
+        public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 3; // update
         public static final double TOLERANCE = 1000; // ticks
         public static final double CODE_TOLERANCE = 2000; // ticks
         public static final int PID_LOOPTYPE = 0;
@@ -201,24 +201,23 @@ public final class Constants {
         public static final boolean ENABLE_SOFT_LIMITS = true;
 
         //pivot
-       
-        public static final double LOW_PIVOT_DEGREES = -112.5;//LOW_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double LOW_PIVOT_DEGREES = -111; //-112.5;//LOW_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int LOW_PIVOT_TICKS = (int) (LOW_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE); //-96000; //new // likely the same for scoring, pickup, and cone/cube
-        public static final double SINGLE_PICKUP_PIVOT_DEGREES = -82.031;//SINGLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double SINGLE_PICKUP_PIVOT_DEGREES = -61;//SINGLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int SINGLE_PICKUP_PIVOT_TICKS = (int) (SINGLE_PICKUP_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-70000; // new //can and should be the same for cone/cube
 
         public static final double CONE_DOUBLE_PICKUP_PIVOT_DEGREES = 0.042;//CONE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CONE_DOUBLE_PICKUP_PIVOT_TICKS = (int) (CONE_DOUBLE_PICKUP_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//36; // new
-        public static final double CONE_MID_GOAL_PIVOT_DEGREES = -39.375;//CONE_MID_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double CONE_MID_GOAL_PIVOT_DEGREES = -37;//CONE_MID_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CONE_MID_GOAL_PIVOT_TICKS = (int) (CONE_MID_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-33600; // new // was 80000
-        public static final double CONE_HIGH_GOAL_PIVOT_DEGREES = -38.438;//CONE_HIGH_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double CONE_HIGH_GOAL_PIVOT_DEGREES = -36;//CONE_HIGH_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CONE_HIGH_GOAL_PIVOT_TICKS = (int) (CONE_HIGH_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-32800; // new // 90000
 
         public static final double CUBE_DOUBLE_PICKUP_PIVOT_DEGREES = 0.042;//CUBE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = (int) (CUBE_DOUBLE_PICKUP_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//36; // new
-        public static final double CUBE_MID_GOAL_PIVOT_DEGREES = -59.297;//CUBE_MID_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double CUBE_MID_GOAL_PIVOT_DEGREES = -57;//CUBE_MID_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CUBE_MID_GOAL_PIVOT_TICKS = (int) (CUBE_MID_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-50600; // new
-        public static final double CUBE_HIGH_GOAL_PIVOT_DEGREES = -56.25;//CUBE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double CUBE_HIGH_GOAL_PIVOT_DEGREES = -55;//CUBE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CUBE_HIGH_GOAL_PIVOT_TICKS = (int) (CUBE_HIGH_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-48000; // new
 
 
@@ -264,8 +263,8 @@ public final class Constants {
         public static final int FORWARD_RIGHT_ANGLE = -140000;
         public static final int BACKWARD_RIGHT_ANGLE = 145000;
 
-        public static final int LOW_WRIST_TICKS = 0; // likely the same for scoring, pickup, and cone/cube
-        public static final int SINGLE_PICKUP_WRIST_TICKS = 60000;
+        public static final int LOW_WRIST_TICKS = 30000; // likely the same for scoring, pickup, and cone/cube
+        public static final int SINGLE_PICKUP_WRIST_TICKS = 0; // 60000
          //can and should be the same for cone, cube
 
         public static final int CONE_DOUBLE_PICKUP_WRIST_TICKS = 90;

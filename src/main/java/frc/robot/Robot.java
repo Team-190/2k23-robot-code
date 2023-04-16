@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.telescopingArm.armMotor.setSelectedSensorPosition(0);
     m_robotContainer.pivot.pivotMotor.setSelectedSensorPosition(0);
     m_robotContainer.wrist.wristMotor.setSelectedSensorPosition(0);
+    m_robotContainer.limeLightSubsystem.setVision(false);
     PathPlannerServer.startServer(5811);
   }
 
