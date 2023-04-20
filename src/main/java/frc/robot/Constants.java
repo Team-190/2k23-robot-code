@@ -189,8 +189,8 @@ public final class Constants {
         public static final double PIVOT_MOTOR_VELOCITY_STOW = PIVOT_MAX_RPM*2; // update
         public static final double PIVOT_MOTOR_ACCELERATION_STOW = PIVOT_MAX_RPM*2; // update
         public static final int PIVOT_MOTOR_MOTION_SMOOTHING = 3; // update
-        public static final double TOLERANCE = 1000; // ticks
-        public static final double CODE_TOLERANCE = 2000; // ticks
+        public static final double TOLERANCE = 2000; // ticks
+        public static final double CODE_TOLERANCE = 3000; // ticks
         public static final int PID_LOOPTYPE = 0;
         public static final int TIMEOUT_MS = 20;
         //public static final int TICKS_PER_DEGREE = 100; // update
@@ -215,9 +215,9 @@ public final class Constants {
 
         public static final double CUBE_DOUBLE_PICKUP_PIVOT_DEGREES = 0.042;//CUBE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CUBE_DOUBLE_PICKUP_PIVOT_TICKS = (int) (CUBE_DOUBLE_PICKUP_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//36; // new
-        public static final double CUBE_MID_GOAL_PIVOT_DEGREES = -57;//CUBE_MID_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double CUBE_MID_GOAL_PIVOT_DEGREES = -52; //57 //CUBE_MID_GOAL_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CUBE_MID_GOAL_PIVOT_TICKS = (int) (CUBE_MID_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-50600; // new
-        public static final double CUBE_HIGH_GOAL_PIVOT_DEGREES = -55;//CUBE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double CUBE_HIGH_GOAL_PIVOT_DEGREES = -50; //55 //CUBE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int CUBE_HIGH_GOAL_PIVOT_TICKS = (int) (CUBE_HIGH_GOAL_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-48000; // new
 
 

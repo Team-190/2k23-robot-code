@@ -48,6 +48,9 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
     private LimeLightSubsystem limeLight;
     private RobotContainer robotContainer;
+
+    NeutralMode currenNeutralMode = NeutralMode.Brake;
+    
     // public final AHRS navx = new AHRS(SPI.Port.kMXP);
 
 
@@ -130,6 +133,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         // SmartDashboard.putNumber("Meters Left Side Traveled", getDistanceMeters(leftLeader));
         // SmartDashboard.putNumber("Meters Right Side Traveled", getDistanceMeters(rightLeader));
         SmartDashboard.putNumber("Pitch", getPitchDegrees());
+        SmartDashboard.putString("NeutralMode", getNeutralMode().name());
         
         
 
@@ -190,6 +194,10 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         return gyro.getPitch();
     }
 
+    public NeutralMode getNeutralMode() {
+        return currenNeutralMode;
+    }
+
     /**
      * Sets drive motors to brake
      */
@@ -198,6 +206,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         rightLeader.setNeutralMode(NeutralMode.Brake);
         leftFollower.setNeutralMode(NeutralMode.Brake);
         rightFollower.setNeutralMode(NeutralMode.Brake);
+        currenNeutralMode = NeutralMode.Brake;
     }
 
     /**
@@ -208,6 +217,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         rightLeader.setNeutralMode(NeutralMode.Coast);
         leftFollower.setNeutralMode(NeutralMode.Coast);
         rightFollower.setNeutralMode(NeutralMode.Coast);
+        currenNeutralMode = NeutralMode.Coast;
     }
 
     /**

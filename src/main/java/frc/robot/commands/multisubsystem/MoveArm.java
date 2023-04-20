@@ -24,6 +24,7 @@ public class MoveArm extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.container = container;
     this.utils = utils;
+    //addRequirements(container.pivot, container.wrist, container.telescopingArm);
   }
 
   // Called when the command is initially scheduled.

@@ -29,8 +29,11 @@ import frc.robot.commands.auto.AutoBalanceSequence;
 import frc.robot.commands.auto.AutoBalanceSequenceV2;
 import frc.robot.commands.auto.AutoBalanceV2;
 import frc.robot.commands.auto.DriveOverChargeStation;
+import frc.robot.commands.auto.HighConeBalance;
 import frc.robot.commands.auto.PathPlannerFollowCommand;
 import frc.robot.commands.auto.PlacePieceHigh;
+import frc.robot.commands.auto.ScoreHighConeDriveBack;
+import frc.robot.commands.auto.ScoreHighCubeDriveBack;
 import frc.robot.commands.auto.ScoreMidDriveBack;
 import frc.robot.commands.claw.EjectObject;
 import frc.robot.commands.claw.IntakeObject;
@@ -168,18 +171,21 @@ public class RobotContainer {
         // SmartDashboard.putData("DriveInputChooser", driveInputChooser);
         // SmartDashboard.putBoolean("Square Inputs?", true);
 
-        autoModeChooser.addOption("ScoreMidDriveBack", new ScoreMidDriveBack(this));
-        autoModeChooser.addOption("DriveForward", new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2));
+        autoModeChooser.addOption("ScoreMidDriveBackDriver", new ScoreMidDriveBack(this));
+        autoModeChooser.addOption("DriveForwardField", new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2));
         autoModeChooser.addOption("DoNothing", new InstantCommand());
         // autoModeChooser.setDefaultOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
         // autoModeChooser.addOption("ConeHighThenCubeFar", new SequentialCommandGroup(new PlacePieceHigh(this, GAME_PIECE.CONE),
         // new PathPlannerFollowCommand(this, true, "ScoringTest")));
-        autoModeChooser.addOption("ScoreCubeHighAndBalance", new SequentialCommandGroup(new AutoBalanceSequence(this)));
+        autoModeChooser.addOption("ScoreCubeHighAndBalanceField", new SequentialCommandGroup(new AutoBalanceSequence(this)));
         // autoModeChooser.addOption("Balance", new SequentialCommandGroup(new AutoBalance(drivetrainSubsystem)));
-        autoModeChooser.addOption("Balance", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, false)));
+        autoModeChooser.addOption("BalanceField", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, false)));
         // autoModeChooser.addOption("BalanceV2Rev", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, true)));
         // autoModeChooser.addOption("DriveOverChargeStation", new SequentialCommandGroup(new DriveOverChargeStation(this, false)));
-        autoModeChooser.addOption("ScoreMobilityThenBalance", new SequentialCommandGroup(new AutoBalanceSequenceV2(this)));
+        autoModeChooser.addOption("ScoreCubeHighMobilityThenBalanceField", new SequentialCommandGroup(new AutoBalanceSequenceV2(this)));
+        autoModeChooser.addOption("ScoreHighCubeDriveBackDriver", new SequentialCommandGroup(new ScoreHighCubeDriveBack(this)));
+        autoModeChooser.addOption("ScoreHighConeDriveBackDriver", new SequentialCommandGroup(new ScoreHighConeDriveBack(this)));
+        autoModeChooser.addOption("ScoreHighConeBalanceField", new SequentialCommandGroup(new HighConeBalance(this)));
         SmartDashboard.putData("AutoModeChooser", autoModeChooser);
         // SmartDashboard.putData("Set Flywheel RPM", shooterRPMChooser);
 
