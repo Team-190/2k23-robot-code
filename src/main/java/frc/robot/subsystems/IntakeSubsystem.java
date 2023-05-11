@@ -55,9 +55,9 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void score(){
-    if (container.armUtils.getGamePiece() == GAME_PIECE.CUBE)
+    /*if (container.armUtils.getGamePiece() == GAME_PIECE.CUBE)
     clawMotor.set(ControlMode.PercentOutput, -1*0.7);
-    else clawMotor.set(ControlMode.PercentOutput, -1*IntakeConstants.INTAKE_SPEED);
+    else*/ clawMotor.set(ControlMode.PercentOutput, -1*IntakeConstants.INTAKE_SPEED);
   }
 
   public boolean getLimitSwitch() {

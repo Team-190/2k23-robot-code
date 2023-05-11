@@ -4,20 +4,20 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.InputConstants;
 import frc.robot.Constants.SensorConstants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.auto.AutoBalance;
@@ -26,13 +26,13 @@ import frc.robot.commands.auto.SimpleAuto;
 
 public class DrivetrainSubsystem extends PIDSubsystem {
 
-    public final WPI_TalonFX leftLeader = new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER_CHANNEL);
+    public final WPI_TalonFX leftLeader = new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
     private final WPI_TalonFX leftFollower =
-            new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER_CHANNEL);
+            new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
 
-    public final WPI_TalonFX rightLeader = new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER_CHANNEL);
+    public final WPI_TalonFX rightLeader = new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
     private final WPI_TalonFX rightFollower =
-            new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER_CHANNEL);
+            new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
 
     public final MotorControllerGroup leftSide = new MotorControllerGroup(leftLeader, leftFollower);
     public final MotorControllerGroup rightSide = new MotorControllerGroup(rightLeader, rightFollower);
@@ -41,13 +41,16 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
     // Objects for PID tracking
     // private final AHRS navx = new AHRS(SPI.Port.kMXP);
-    public final Pigeon2 gyro = new Pigeon2(SensorConstants.GYRO_CHANNEL);
+    public final Pigeon2 gyro = new Pigeon2(SensorConstants.GYRO_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
     private DifferentialDriveOdometry odometry =
             new DifferentialDriveOdometry(Rotation2d.fromDegrees(0), 0 , 0);
     private double angleOffset = 0;
 
     private LimeLightSubsystem limeLight;
     private RobotContainer robotContainer;
+
+    NeutralMode currenNeutralMode = NeutralMode.Brake;
+    
     // public final AHRS navx = new AHRS(SPI.Port.kMXP);
 
 
@@ -125,10 +128,12 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         // SmartDashboard.putNumber("Get left wheel speed", leftLeader.getSelectedSensorVelocity());
         // SmartDashboard.putNumber("Get right wheel speed", rightLeader.getSelectedSensorVelocity());
         SmartDashboard.putNumber("gyro raw yaw", gyro.getYaw());
+        SmartDashboard.putNumber("Get Average Distance Meters", getAverageDistanceMeters());
         // SmartDashboard.putNumber("gyro yaw", getYawDegrees());
         // SmartDashboard.putNumber("Meters Left Side Traveled", getDistanceMeters(leftLeader));
         // SmartDashboard.putNumber("Meters Right Side Traveled", getDistanceMeters(rightLeader));
         SmartDashboard.putNumber("Pitch", getPitchDegrees());
+        SmartDashboard.putString("NeutralMode", getNeutralMode().name());
         
         
 
@@ -149,6 +154,14 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      */
     public double getDistanceMeters(TalonFX talon) {
         return talon.getSelectedSensorPosition() * DrivetrainConstants.METERS_PER_COUNT;
+    }
+
+    /**
+     * Gets the average distance of the motors
+     * @return
+     */
+    public double getAverageDistanceMeters() {
+        return ((leftLeader.getSelectedSensorPosition() + rightLeader.getSelectedSensorPosition()) * DrivetrainConstants.METERS_PER_COUNT)/2;
     }
 
     /**
@@ -181,6 +194,10 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         return gyro.getPitch();
     }
 
+    public NeutralMode getNeutralMode() {
+        return currenNeutralMode;
+    }
+
     /**
      * Sets drive motors to brake
      */
@@ -189,6 +206,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         rightLeader.setNeutralMode(NeutralMode.Brake);
         leftFollower.setNeutralMode(NeutralMode.Brake);
         rightFollower.setNeutralMode(NeutralMode.Brake);
+        currenNeutralMode = NeutralMode.Brake;
     }
 
     /**
@@ -199,6 +217,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         rightLeader.setNeutralMode(NeutralMode.Coast);
         leftFollower.setNeutralMode(NeutralMode.Coast);
         rightFollower.setNeutralMode(NeutralMode.Coast);
+        currenNeutralMode = NeutralMode.Coast;
     }
 
     /**
@@ -285,8 +304,9 @@ public class DrivetrainSubsystem extends PIDSubsystem {
     * @param square Whether to square the inputs
     */
     public void westCoastDrive(double leftStick, double rightStick, boolean square) {
-        //differentialDrive.tankDrive(Math.copySign(Math.pow(leftStick, power), leftStick), Math.copySign(Math.pow(leftStick, power), leftStick));
-       differentialDrive.tankDrive(leftStick, rightStick, square);
+        // differentialDrive.tankDrive(Math.copySign(Math.pow(leftStick, power), leftStick), Math.copySign(Math.pow(leftStick, power), leftStick));
+
+        differentialDrive.tankDrive(leftStick, rightStick, square);
     }
 
     /**
@@ -363,26 +383,56 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
     }
 
-    public void seekTarget(LimeLightSubsystem limeLightSubsystem, double threshold){
-        double tx = limeLightSubsystem.degreesAskew();
-        double kp = 0.05;
+    public void driveWithVision(double leftInput, double rightInput, boolean squared){
+        double tx = limeLight.degreesAskew();
+        double kp = 0.015; // 0.05;
         double minTurn = 0.08;
         double steering_adjust = 0.0;
-        boolean targetFound = limeLightSubsystem.targetFound();
+        boolean targetFound = limeLight.targetFound();
         if(!targetFound)
-            steering_adjust=0.5;
+            steering_adjust=0;
         else{
-            if(Math.abs(tx)>threshold){
+            if(Math.abs(tx)>1){
                 if(tx < 0){
-                    steering_adjust = kp * tx - minTurn;
+                    steering_adjust = kp * tx;
                 } else {
-                    steering_adjust = kp * tx + minTurn;
+                    steering_adjust = kp * tx;
+                }
+            }
+        }
+        if (squared) {
+            leftInput = Math.copySign(Math.pow(leftInput, 2), leftInput);
+            rightInput = Math.copySign(Math.pow(rightInput, 2), rightInput);
+        }
+        
+        this.westCoastDrive(leftInput + minThresholdSignedValue(steering_adjust, .5), rightInput + -minThresholdSignedValue(steering_adjust, .5), false);
+    }
+
+    public void seekTarget(){
+        double tx = limeLight.degreesAskew();
+        double kp = 0.01; // 0.05;
+        double minTurn = 0.08;
+        double steering_adjust = 0.0;
+        boolean targetFound = limeLight.targetFound();
+        if(!targetFound)
+            steering_adjust=0;
+        else{
+            if(Math.abs(tx)>1){
+                if(tx < 0){
+                    // steering_adjust = kp * tx - minTurn;
+                    steering_adjust = kp * tx;
+                } else {
+                    // steering_adjust = kp * tx + minTurn;
+                    steering_adjust = kp * tx;
                 }
             }
         }
         // leftLeader.set(ControlMode.PercentOutput, minThresholdSignedValue(steering_adjust, .5));
         // rightLeader.set(ControlMode.PercentOutput, -minThresholdSignedValue(steering_adjust, .5));
+        // this.westCoastDrive(steering_adjust, -steering_adjust, false);
+        this.westCoastDrive(minThresholdSignedValue(steering_adjust, .5), -minThresholdSignedValue(steering_adjust, .5), false);
     }
+
 
     public void goToDistance(double distance, LimeLightSubsystem limeLightSubsystem) {
         double kDist = 0.01;

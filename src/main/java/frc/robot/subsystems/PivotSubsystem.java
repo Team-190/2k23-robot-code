@@ -76,12 +76,29 @@ public class PivotSubsystem extends SubsystemBase {
     return Math.abs(error) < Constants.PivotConstants.CODE_TOLERANCE;
   }
 
-    public void pivotPID(double setpoint) {
+  public void pivotPID(double setpoint) {
     // Normalise setpoint
     setpoint = MathUtil.clamp(setpoint, talonPIDConfig.getLowerLimit(), talonPIDConfig.getUpperLimit());
 
     // Move arm toward setpoint
     pivotMotor.set(ControlMode.MotionMagic, setpoint);
+  }
+
+  public void pivotRelativePID(double setpoint) {
+    double target = pivotMotor.getClosedLoopTarget() + setpoint;
+
+    target = MathUtil.clamp(target, talonPIDConfig.getLowerLimit(), talonPIDConfig.getUpperLimit());
+
+    // Move arm toward setpoint
+    pivotMotor.set(ControlMode.MotionMagic, target);
+  }
+
+  public double ticksToDegrees(double ticks) {
+    return ticks/Constants.PivotConstants.PIVOT_TICKS_PER_DEGREE;
+  }
+
+  public double degreesToTicks(double degrees) {
+    return degrees*Constants.PivotConstants.PIVOT_TICKS_PER_DEGREE;
   }
 
 

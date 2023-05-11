@@ -6,18 +6,18 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.led.CANdle;
 
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.InputConstants;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.Robot.RobotState;
+import frc.robot.RobotContainer;
 import frc.robot.utils.ArmUtils;
 import frc.robot.utils.ArmUtils.GAME_PIECE;
 import frc.robot.utils.ArmUtils.PIVOT_DIRECTION;
 
 public class CANdleSubsystem extends SubsystemBase {
-  public final CANdle candle = new CANdle(Constants.LEDConstants.LED_PORT);
+  public final CANdle candle = new CANdle(Constants.LEDConstants.LED_PORT, InputConstants.CANIVORE_BUS_NAME);
   public static int numLights = Constants.LEDConstants.LED_COUNT;
   RobotContainer robotContainer;
   Robot robot;
