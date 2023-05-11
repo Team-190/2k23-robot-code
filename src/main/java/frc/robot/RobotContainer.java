@@ -30,6 +30,7 @@ import frc.robot.commands.auto.AutoBalanceSequenceV2;
 import frc.robot.commands.auto.AutoBalanceV2;
 import frc.robot.commands.auto.DriveOverChargeStation;
 import frc.robot.commands.auto.HighConeBalance;
+import frc.robot.commands.auto.MidCubeBalance;
 import frc.robot.commands.auto.PathPlannerFollowCommand;
 import frc.robot.commands.auto.PlacePieceHigh;
 import frc.robot.commands.auto.ScoreHighConeDriveBack;
@@ -178,6 +179,7 @@ public class RobotContainer {
         // autoModeChooser.addOption("ConeHighThenCubeFar", new SequentialCommandGroup(new PlacePieceHigh(this, GAME_PIECE.CONE),
         // new PathPlannerFollowCommand(this, true, "ScoringTest")));
         autoModeChooser.addOption("ScoreCubeHighAndBalanceField", new SequentialCommandGroup(new AutoBalanceSequence(this)));
+        autoModeChooser.addOption("MidCubeBalanceField", new SequentialCommandGroup(new MidCubeBalance(this)));
         // autoModeChooser.addOption("Balance", new SequentialCommandGroup(new AutoBalance(drivetrainSubsystem)));
         autoModeChooser.addOption("BalanceField", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, false)));
         // autoModeChooser.addOption("BalanceV2Rev", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, true)));
