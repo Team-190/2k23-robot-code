@@ -61,7 +61,7 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
     eventMap.put("Wait", new WaitCommand(0.1));
 
 
-    ramsete = new RamseteController();
+    ramsete = new RamseteController(2.5, 0.1);
     ramsete.setEnabled(true);
     
     autoBuilder = new RamseteAutoBuilder(
@@ -74,7 +74,7 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
               DrivetrainConstants.V_VOLT_SECONDS_PER_METER,
               DrivetrainConstants.A_VOLT_SECONDS_SQUARED_PER_METER),
       robotContainer.drivetrainSubsystem::getWheelSpeeds,
-      new PIDConstants(0/*DrivetrainConstants.AUTO_P*/, 0, 0),
+      new PIDConstants(1.5/*DrivetrainConstants.AUTO_P*/, 0, 0),
       robotContainer.drivetrainSubsystem::tankDriveVolts,
       eventMap,
       true,

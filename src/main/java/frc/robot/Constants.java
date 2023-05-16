@@ -89,9 +89,9 @@ public final class Constants {
         public final static int MAX_VOLTAGE = 11;
 
         // Constants calculated by System Identification software
-        public static final double S_VOLTS = /*0.39415;//0.28344*/0.1946; 
-        public static final double V_VOLT_SECONDS_PER_METER = /*0.9691;//1.0574;*/1.2955;
-        public static final double A_VOLT_SECONDS_SQUARED_PER_METER = /*1.2631;//1.1559;*/0.6474;
+        public static final double S_VOLTS = /*0.39415;//0.28344*/0.22611; 
+        public static final double V_VOLT_SECONDS_PER_METER = /*0.9691;//1.0574;*/1.2415;
+        public static final double A_VOLT_SECONDS_SQUARED_PER_METER = /*1.2631;//1.1559;*/0.93033;
 
         public static final SimpleMotorFeedforward DRIVE_FEED_FORWARD =
                 new SimpleMotorFeedforward(

@@ -171,23 +171,22 @@ public class RobotContainer {
         // SmartDashboard.putData("DriveInputChooser", driveInputChooser);
         // SmartDashboard.putBoolean("Square Inputs?", true);
 
-        autoModeChooser.addOption("ScoreMidDriveBackDriver", new ScoreMidDriveBack(this));
-        autoModeChooser.addOption("DriveForwardField", new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2));
+        // autoModeChooser.addOption("ScoreMidDriveBackDriver", new ScoreMidDriveBack(this));
+        // autoModeChooser.addOption("DriveForwardField", new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2));
         autoModeChooser.addOption("DoNothing", new InstantCommand());
-        // autoModeChooser.setDefaultOption("DriveForward", new RunCommand(()-> new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2)));
-        // autoModeChooser.addOption("ConeHighThenCubeFar", new SequentialCommandGroup(new PlacePieceHigh(this, GAME_PIECE.CONE),
-        // new PathPlannerFollowCommand(this, true, "ScoringTest")));
-        autoModeChooser.addOption("ScoreCubeHighAndBalanceField", new SequentialCommandGroup(new AutoBalanceSequence(this)));
-        // autoModeChooser.addOption("Balance", new SequentialCommandGroup(new AutoBalance(drivetrainSubsystem)));
-        autoModeChooser.addOption("BalanceField", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, false)));
-        // autoModeChooser.addOption("BalanceV2Rev", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, true)));
-        // autoModeChooser.addOption("DriveOverChargeStation", new SequentialCommandGroup(new DriveOverChargeStation(this, false)));
-        autoModeChooser.addOption("ScoreCubeHighMobilityThenBalanceField", new SequentialCommandGroup(new AutoBalanceSequenceV2(this)));
-        autoModeChooser.addOption("ScoreHighCubeDriveBackDriver", new SequentialCommandGroup(new ScoreHighCubeDriveBack(this)));
-        autoModeChooser.addOption("ScoreHighConeDriveBackDriver", new SequentialCommandGroup(new ScoreHighConeDriveBack(this)));
-        autoModeChooser.addOption("ScoreHighConeBalanceField", new SequentialCommandGroup(new HighConeBalance(this)));
+        autoModeChooser.addOption("Turn Right", new PathPlannerFollowCommand(this, true, "TrajectoryTest"));
+        autoModeChooser.addOption("ConeThenCube", new PathPlannerFollowCommand(this, true, "ScoringTest Copy"));
+        autoModeChooser.addOption("ScorePickup1", new PathPlannerFollowCommand(this, true, "ScorePickup1"));
+        // autoModeChooser.addOption("ScoreCubeHighAndBalanceField", new SequentialCommandGroup(new AutoBalanceSequence(this)));
+        // autoModeChooser.addOption("BalanceField", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, false)));
+        // autoModeChooser.addOption("ScoreCubeHighMobilityThenBalanceField", new SequentialCommandGroup(new AutoBalanceSequenceV2(this)));
+        // autoModeChooser.addOption("ScoreHighCubeDriveBackDriver", new SequentialCommandGroup(new ScoreHighCubeDriveBack(this)));
+        // autoModeChooser.addOption("ScoreHighConeDriveBackDriver", new SequentialCommandGroup(new ScoreHighConeDriveBack(this)));
+        // autoModeChooser.addOption("ScoreHighConeBalanceField", new SequentialCommandGroup(new HighConeBalance(this)));
+
+
         SmartDashboard.putData("AutoModeChooser", autoModeChooser);
-        // SmartDashboard.putData("Set Flywheel RPM", shooterRPMChooser);
+        
 
         SmartDashboard.putString("Game Piece", armUtils.getGamePiece().name());
         SmartDashboard.putString("Pivot Direction", armUtils.getPivotDirection().name());
