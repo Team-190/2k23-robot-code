@@ -75,6 +75,9 @@ public class Robot extends TimedRobot {
     //m_robotContainer.drivetrainSubsystem.setBreakMode();
     state = RobotState.AUTO;
     m_robotContainer.drivetrainSubsystem.setBreakMode();
+    m_robotContainer.telescopingArm.armMotor.setSelectedSensorPosition(0);
+    m_robotContainer.pivot.pivotMotor.setSelectedSensorPosition(0);
+    m_robotContainer.wrist.wristMotor.setSelectedSensorPosition(0);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)

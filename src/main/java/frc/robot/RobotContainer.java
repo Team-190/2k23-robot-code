@@ -30,6 +30,7 @@ import frc.robot.commands.auto.AutoBalanceSequenceV2;
 import frc.robot.commands.auto.AutoBalanceV2;
 import frc.robot.commands.auto.DriveOverChargeStation;
 import frc.robot.commands.auto.HighConeBalance;
+import frc.robot.commands.auto.MidCubeBalance;
 import frc.robot.commands.auto.PathPlannerFollowCommand;
 import frc.robot.commands.auto.PlacePieceHigh;
 import frc.robot.commands.auto.ScoreHighConeDriveBack;
