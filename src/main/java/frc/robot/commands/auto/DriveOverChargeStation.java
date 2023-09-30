@@ -34,13 +34,13 @@ public class DriveOverChargeStation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!reverse) {
-      drivetrain.westCoastDrive(speed,speed, false);
-      if (drivetrain.gyro.getPitch() > pitchTolerance) declined = true;
-    } else {
-      drivetrain.westCoastDrive(-speed,-speed, false);
-      if (drivetrain.gyro.getPitch() < -pitchTolerance) declined = true;
-    }
+  //   if (!reverse) {
+  //     drivetrain.westCoastDrive(speed,speed, false);
+  //     if (drivetrain.gyro.getPitch() > pitchTolerance) declined = true;
+  //   } else {
+  //     drivetrain.westCoastDrive(-speed,-speed, false);
+  //     if (drivetrain.gyro.getPitch() < -pitchTolerance) declined = true;
+  //   }
   }
 
   // Called once the command ends or is interrupted.
@@ -52,6 +52,7 @@ public class DriveOverChargeStation extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (declined && Math.abs(container.drivetrainSubsystem.gyro.getPitch()) < pitchTolerance);
+    // return (declined && Math.abs(container.drivetrainSubsystem.gyro.getPitch()) < pitchTolerance);
+    return true;
   }
 }

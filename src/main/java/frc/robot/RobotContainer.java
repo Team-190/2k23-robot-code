@@ -138,7 +138,7 @@ public class RobotContainer {
         new POVButton(operatorXboxController, 180).onTrue(new InstantCommand(()-> armUtils.setPivotDirection(PIVOT_DIRECTION.REVERSE)));
 
         new Trigger(()-> Math.abs(operatorXboxController.getLeftStickY()) > 0.2)
-            .whileTrue(new RelativePivotPIDCommand(this, ()-> 0.5 * operatorXboxController.getLeftStickY()));
+            .whileTrue(new RelativePivotPIDCommand(this, ()-> 1.5 * operatorXboxController.getLeftStickY()));
 
         new Trigger(()-> Math.abs(operatorXboxController.getRightTrigger()) > 0.25).whileTrue(new IntakeObject(this));
     
@@ -174,10 +174,10 @@ public class RobotContainer {
 
         // autoModeChooser.addOption("ScoreMidDriveBackDriver", new ScoreMidDriveBack(this));
         // autoModeChooser.addOption("DriveForwardField", new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2));
-        autoModeChooser.addOption("DoNothing", new InstantCommand());
-        autoModeChooser.addOption("Turn Right", new PathPlannerFollowCommand(this, true, "TrajectoryTest"));
-        autoModeChooser.addOption("ConeThenCube", new PathPlannerFollowCommand(this, true, "ScoringTest Copy"));
-        autoModeChooser.addOption("ScorePickup1", new PathPlannerFollowCommand(this, true, "ScorePickup1"));
+        // autoModeChooser.addOption("DoNothing", new InstantCommand());
+        // autoModeChooser.addOption("Turn Right", new PathPlannerFollowCommand(this, true, "TrajectoryTest"));
+        // autoModeChooser.addOption("ConeThenCube", new PathPlannerFollowCommand(this, true, "ScoringTest Copy"));
+        // autoModeChooser.addOption("ScorePickup1", new PathPlannerFollowCommand(this, true, "ScorePickup1"));
         // autoModeChooser.addOption("ScoreCubeHighAndBalanceField", new SequentialCommandGroup(new AutoBalanceSequence(this)));
         // autoModeChooser.addOption("BalanceField", new SequentialCommandGroup(new AutoBalanceV2(drivetrainSubsystem, false)));
         // autoModeChooser.addOption("ScoreCubeHighMobilityThenBalanceField", new SequentialCommandGroup(new AutoBalanceSequenceV2(this)));
@@ -228,7 +228,8 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // return null;
         //return armUtils.getMotionCommand(ARM_STATE.MID, GAME_PIECE.CUBE, ROBOT_SIDE.FORWARD);
-        return autoModeChooser.getSelected();
+        // return autoModeChooser.getSelected();
+        return null;
         //return new PathPlannerFollowCommand(this, true, "TrajectoryTest");
         //return new RunCommand(()-> this.drivetrainSubsystem.westCoastDrive(.25, .25, false), drivetrainSubsystem).withTimeout(2);
         //return new autoBalanceSequence(this);
@@ -248,8 +249,9 @@ public class RobotContainer {
          //drivetrainSubsystem.setDefaultCommand(new AutoBalance(drivetrainSubsystem));
 
         // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
-        drivetrainSubsystem.setDefaultCommand(new DriveWithVision(this, ()-> -MathUtil.clamp(leftStick.getY(), -0.8, 0.8),  ()-> -MathUtil.clamp(rightStick.getY(), -0.8, 0.8), true, ()-> false/*rightStick.getBottomFaceButton()*/));
-        //drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), false), drivetrainSubsystem));
+        // drivetrainSubsystem.setDefaultCommand(new DriveWithVision(this, ()-> -MathUtil.clamp(leftStick.getY(), -0.8, 0.8),  ()-> -MathUtil.clamp(rightStick.getY(), -0.8, 0.8), true, ()-> false/*rightStick.getBottomFaceButton()*/));
+        // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(0, 0, moveArmFinished);), null));
+        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), true), drivetrainSubsystem));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));
 
     }

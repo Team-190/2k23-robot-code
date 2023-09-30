@@ -49,23 +49,23 @@ public class AutoBalance extends CommandBase {
       // drivetrain.rightSide.set( -0.3);
       drivetrain.westCoastDrive(0.27, 0.27, false);
     }
-    if (drivetrain.getPitchDegrees() < -20 && !onChargeStation){
-        drivetrain.westCoastDrive(0.2, 0.2, false);
-        onChargeStation = true;
+    // if (drivetrain.getPitchDegrees() < -20 && !onChargeStation){
+    //     drivetrain.westCoastDrive(0.2, 0.2, false);
+    //     onChargeStation = true;
 
-    } else if (drivetrain.getPitchDegrees() > -13 && !somewhatBalanced && onChargeStation) {
-      drivetrain.westCoastDrive(-0.3, -0.3, false);
-      Timer.delay(0.15);
-      somewhatBalanced = true;
-    } else if (somewhatBalanced) {
-      if (drivetrain.getPitchDegrees() < -1*TOLERANCE) {
-        drivetrain.westCoastDrive(0.14, 0.14, false);
-      } else if (drivetrain.getPitchDegrees() > TOLERANCE) {
-        drivetrain.westCoastDrive(-0.15, -0.15, false);
-      } else {
-        drivetrain.westCoastDrive(0.0, 0.0, false);
-      }
-    }
+    // } else if (drivetrain.getPitchDegrees() > -13 && !somewhatBalanced && onChargeStation) {
+    //   drivetrain.westCoastDrive(-0.3, -0.3, false);
+    //   Timer.delay(0.15);
+    //   somewhatBalanced = true;
+    // } else if (somewhatBalanced) {
+    //   if (drivetrain.getPitchDegrees() < -1*TOLERANCE) {
+    //     drivetrain.westCoastDrive(0.14, 0.14, false);
+    //   } else if (drivetrain.getPitchDegrees() > TOLERANCE) {
+    //     drivetrain.westCoastDrive(-0.15, -0.15, false);
+    //   } else {
+    //     drivetrain.westCoastDrive(0.0, 0.0, false);
+    //   }
+    // }
 
     // if (somewhatBalanced && Math.abs(drivetrain.getPitchDegrees()) < 5) {
       // drivetrain.leftSide.set( -0.3);

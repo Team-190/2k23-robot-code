@@ -41,7 +41,9 @@ public class DrivetrainSubsystem extends PIDSubsystem {
 
     // Objects for PID tracking
     // private final AHRS navx = new AHRS(SPI.Port.kMXP);
-    public final Pigeon2 gyro = new Pigeon2(SensorConstants.GYRO_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
+    // public final Pigeon2 gyro = null;
+    // public final Pigeon2 gyro = new Pigeon2(SensorConstants.GYRO_CHANNEL, InputConstants.CANIVORE_BUS_NAME);
+    
     private DifferentialDriveOdometry odometry =
             new DifferentialDriveOdometry(Rotation2d.fromDegrees(0), 0 , 0);
     private double angleOffset = 0;
@@ -98,7 +100,7 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         }
 
         // Reset Drive Odometry, Encoders, and Gyro
-        resetAll();
+        // resetAll();
         setSetpoint(0);
 
         SmartDashboard.putData("AutoBalance", new AutoBalance(this));
@@ -108,11 +110,11 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         robotContainer = container;
         limeLight = robotContainer.limeLightSubsystem;
 
-        odometry =
-         new DifferentialDriveOdometry(
-             Rotation2d.fromDegrees(gyro.getYaw()), getDistanceMeters(leftLeader),
-             getDistanceMeters(rightLeader));
-         setSetpoint(0);
+        // odometry =
+        //  new DifferentialDriveOdometry(
+        //      Rotation2d.fromDegrees(gyro.getYaw()), getDistanceMeters(leftLeader),
+        //      getDistanceMeters(rightLeader));
+        //  setSetpoint(0);
 
 
     }
@@ -127,22 +129,22 @@ public class DrivetrainSubsystem extends PIDSubsystem {
         // SmartDashboard.putNumber("Difference Meters", Math.abs(getDistanceMeters(leftLeader)-getDistanceMeters(rightLeader)));
         // SmartDashboard.putNumber("Get left wheel speed", leftLeader.getSelectedSensorVelocity());
         // SmartDashboard.putNumber("Get right wheel speed", rightLeader.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("gyro raw yaw", gyro.getYaw());
+        // SmartDashboard.putNumber("gyro raw yaw", gyro.getYaw());
         SmartDashboard.putNumber("Get Average Distance Meters", getAverageDistanceMeters());
         // SmartDashboard.putNumber("gyro yaw", getYawDegrees());
         // SmartDashboard.putNumber("Meters Left Side Traveled", getDistanceMeters(leftLeader));
         // SmartDashboard.putNumber("Meters Right Side Traveled", getDistanceMeters(rightLeader));
-        SmartDashboard.putNumber("Pitch", getPitchDegrees());
+        // SmartDashboard.putNumber("Pitch", getPitchDegrees());
         SmartDashboard.putString("NeutralMode", getNeutralMode().name());
         
         
 
         // Update the Odometry
-        odometry.update(
-            Rotation2d.fromDegrees(gyro.getYaw()),
-            getDistanceMeters(leftLeader),
-            getDistanceMeters(rightLeader)
-        );
+        // odometry.update(
+        //     Rotation2d.fromDegrees(gyro.getYaw()),
+        //     getDistanceMeters(leftLeader),
+        //     getDistanceMeters(rightLeader)
+        // );
         
         
     }
@@ -183,16 +185,16 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      *
      * @return yaw in degrees (-180 to 180 degrees)
      */
-    public double getYawDegrees() {
-        double angle = ((Math.abs(gyro.getYaw())) + angleOffset) % 360;
-        if (angle <= 180.0)
-            return -angle;
-        return -(angle - 360);
-    }
+    // public double getYawDegrees() {
+    //     double angle = ((Math.abs(gyro.getYaw())) + angleOffset) % 360;
+    //     if (angle <= 180.0)
+    //         return -angle;
+    //     return -(angle - 360);
+    // }
 
-    public double getPitchDegrees() {
-        return gyro.getPitch();
-    }
+    // public double getPitchDegrees() {
+    //     return gyro.getPitch();
+    // }
 
     public NeutralMode getNeutralMode() {
         return currenNeutralMode;
@@ -235,10 +237,10 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      * Resets the Yaw position of the gyro and sets an offset
      * @param forwards True if robot is going forwards, false if backwards
      */
-    public void resetGyro(boolean forwards) {
-        gyro.setYaw(0);
-        angleOffset = forwards ? 0 : 180; // No offset if true, 180 offset if false
-    }
+    // public void resetGyro(boolean forwards) {
+    //     gyro.setYaw(0);
+    //     angleOffset = forwards ? 0 : 180; // No offset if true, 180 offset if false
+    // }
 
 
     /**
@@ -246,28 +248,28 @@ public class DrivetrainSubsystem extends PIDSubsystem {
      *
      * @param pose pose to reset to
      */
-    public void resetOdometry(Pose2d pose) {
-        resetEncoders();
-        odometry.resetPosition(Rotation2d.fromDegrees(gyro.getYaw()), 0 , 0, pose);
-    }
+    // public void resetOdometry(Pose2d pose) {
+    //     resetEncoders();
+    //     odometry.resetPosition(Rotation2d.fromDegrees(gyro.getYaw()), 0 , 0, pose);
+    // }
 
-    public void setOdometryAprilTag() {
-        double[] xyYaw = limeLight.getAprilTagPose();
-        if (xyYaw == null) return;
-        xyYaw = limeLight.translateBlue(xyYaw);
-        odometry.resetPosition(Rotation2d.fromDegrees(gyro.getYaw()), 
-        getDistanceMeters(leftLeader), getDistanceMeters(rightLeader), 
-        new Pose2d(new Translation2d(xyYaw[0], xyYaw[1]), Rotation2d.fromDegrees(gyro.getYaw())));
+    // public void setOdometryAprilTag() {
+    //     double[] xyYaw = limeLight.getAprilTagPose();
+    //     if (xyYaw == null) return;
+    //     xyYaw = limeLight.translateBlue(xyYaw);
+    //     odometry.resetPosition(Rotation2d.fromDegrees(gyro.getYaw()), 
+    //     getDistanceMeters(leftLeader), getDistanceMeters(rightLeader), 
+    //     new Pose2d(new Translation2d(xyYaw[0], xyYaw[1]), Rotation2d.fromDegrees(gyro.getYaw())));
         
-    }
+    // }
 
     /**
      * Resets gyro, Encoders, odometry
      */
-    public void resetAll() {
-        resetGyro(true);
-        resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(gyro.getYaw())));
-    }
+    // public void resetAll() {
+    //     resetGyro(true);
+    //     resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(gyro.getYaw())));
+    // }
 
     /**
     * Configures PIDF, not used by Trajectories

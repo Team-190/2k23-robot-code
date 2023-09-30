@@ -64,27 +64,27 @@ public class PathPlannerFollowCommand extends SequentialCommandGroup {
     ramsete = new RamseteController(2.5, 0.1);
     ramsete.setEnabled(true);
     
-    autoBuilder = new RamseteAutoBuilder(
-      robotContainer.drivetrainSubsystem::getPose,
-      robotContainer.drivetrainSubsystem::resetOdometry,
-      ramsete,
-      new DifferentialDriveKinematics(DrivetrainConstants.TRACKWIDTH_METERS),
-      new SimpleMotorFeedforward(
-              DrivetrainConstants.S_VOLTS,
-              DrivetrainConstants.V_VOLT_SECONDS_PER_METER,
-              DrivetrainConstants.A_VOLT_SECONDS_SQUARED_PER_METER),
-      robotContainer.drivetrainSubsystem::getWheelSpeeds,
-      new PIDConstants(1.5/*DrivetrainConstants.AUTO_P*/, 0, 0),
-      robotContainer.drivetrainSubsystem::tankDriveVolts,
-      eventMap,
-      true,
-      robotContainer.drivetrainSubsystem);
+    // autoBuilder = new RamseteAutoBuilder(
+    //   robotContainer.drivetrainSubsystem::getPose,
+    //   robotContainer.drivetrainSubsystem::resetOdometry,
+    //   ramsete,
+    //   new DifferentialDriveKinematics(DrivetrainConstants.TRACKWIDTH_METERS),
+    //   new SimpleMotorFeedforward(
+    //           DrivetrainConstants.S_VOLTS,
+    //           DrivetrainConstants.V_VOLT_SECONDS_PER_METER,
+    //           DrivetrainConstants.A_VOLT_SECONDS_SQUARED_PER_METER),
+    //   robotContainer.drivetrainSubsystem::getWheelSpeeds,
+    //   new PIDConstants(1.5/*DrivetrainConstants.AUTO_P*/, 0, 0),
+    //   robotContainer.drivetrainSubsystem::tankDriveVolts,
+    //   eventMap,
+    //   true,
+    //   robotContainer.drivetrainSubsystem);
   
     addCommands(
       new InstantCommand(() -> {
       //Reset odometry for the first path
          if (isFirstPath) {
-             robotContainer.drivetrainSubsystem.resetOdometry(autoGroup.get(0).getInitialPose());
+            //  robotContainer.drivetrainSubsystem.resetOdometry(autoGroup.get(0).getInitialPose());
            }}
       ),
       Commands.sequence(autoBuilder.fullAuto(autoGroup))

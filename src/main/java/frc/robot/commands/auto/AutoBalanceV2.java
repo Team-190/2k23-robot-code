@@ -45,7 +45,7 @@ public class AutoBalanceV2 extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double pitch = drivetrain.getPitchDegrees();
+    // double pitch = drivetrain.getPitchDegrees();
     double distance = drivetrain.getAverageDistanceMeters();
 
       if (!inclined) {
@@ -53,15 +53,15 @@ public class AutoBalanceV2 extends CommandBase {
         drivetrain.westCoastDrive(maxSpeed, maxSpeed, false);
         else 
         drivetrain.westCoastDrive(-maxSpeed, -maxSpeed, false);
-        if (Math.abs(pitch)> TOLERANCE) {
-        inclined = true;
-        }
-      } else {
-        double effort = -(kP * pitch);
-        MathUtil.clamp(effort, -maxSpeed, maxSpeed);
-        drivetrain.westCoastDrive(effort, effort, false);
-        // double pitchPercent = -drivetrain.gyro.getPitch()/maxPitch;
-        // drivetrain.westCoastDrive(maxSpeed*pitchPercent*Math.abs(pitchPercent), maxSpeed*pitchPercent*Math.abs(pitchPercent), false);
+      //   if (Math.abs(pitch)> TOLERANCE) {
+      //   inclined = true;
+      //   }
+      // } else {
+      //   double effort = -(kP * pitch);
+      //   MathUtil.clamp(effort, -maxSpeed, maxSpeed);
+      //   drivetrain.westCoastDrive(effort, effort, false);
+      //   // double pitchPercent = -drivetrain.gyro.getPitch()/maxPitch;
+      //   // drivetrain.westCoastDrive(maxSpeed*pitchPercent*Math.abs(pitchPercent), maxSpeed*pitchPercent*Math.abs(pitchPercent), false);
 
       }
 

@@ -53,11 +53,11 @@ public class OnTheFly extends CommandBase {
   @Override
   public void initialize() {
     SmartDashboard.putString("goTo", "Run");
-    drivetrainSubsystem.setOdometryAprilTag();
+    // drivetrainSubsystem.setOdometryAprilTag();
 
-    traj = PathPlanner.generatePath(constraints, 
-    new PathPoint(drivetrainSubsystem.getPose().getTranslation(), Rotation2d.fromDegrees(drivetrainSubsystem.gyro.getYaw())),
-    positions.get(position));
+    // traj = PathPlanner.generatePath(constraints, 
+    // new PathPoint(drivetrainSubsystem.getPose().getTranslation(), Rotation2d.fromDegrees(drivetrainSubsystem.gyro.getYaw())),
+    // positions.get(position));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
