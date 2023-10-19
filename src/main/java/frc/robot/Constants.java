@@ -203,7 +203,7 @@ public final class Constants {
         //pivot
         public static final double LOW_PIVOT_DEGREES = -115; //-112.5;//LOW_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int LOW_PIVOT_TICKS = (int) (LOW_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE); //-96000; //new // likely the same for scoring, pickup, and cone/cube
-        public static final double SINGLE_PICKUP_PIVOT_DEGREES = -61;//SINGLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
+        public static final double SINGLE_PICKUP_PIVOT_DEGREES = -56;//SINGLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;
         public static final int SINGLE_PICKUP_PIVOT_TICKS = (int) (SINGLE_PICKUP_PIVOT_DEGREES*PIVOT_TICKS_PER_DEGREE);//-70000; // new //can and should be the same for cone/cube
 
         public static final double CONE_DOUBLE_PICKUP_PIVOT_DEGREES = 0.042;//CONE_DOUBLE_PICKUP_PIVOT_TICKS/PIVOT_TICKS_PER_DEGREE;

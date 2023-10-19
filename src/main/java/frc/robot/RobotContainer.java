@@ -38,10 +38,10 @@ import frc.robot.commands.auto.ScoreHighCubeDriveBack;
 import frc.robot.commands.auto.ScoreMidDriveBack;
 import frc.robot.commands.claw.EjectObject;
 import frc.robot.commands.claw.IntakeObject;
+import frc.robot.commands.drivetrain.DefaultDriveCommand;
 import frc.robot.commands.drivetrain.DriveWithVision;
 import frc.robot.commands.pivot.RelativePivotPIDCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
@@ -81,12 +81,11 @@ public class RobotContainer {
                     Constants.DrivetrainConstants.D,
                     this);
 
-    public final ElevatorSubsystem telescopingArm = new ElevatorSubsystem(0, 0, 0);
     public final IntakeSubsystem intake = new IntakeSubsystem(this);
     public final PivotSubsystem pivot = new PivotSubsystem();
     public final WristSubsystem wrist = new WristSubsystem();
 
-    public boolean moveArmFinished = false;
+    // public boolean moveArmFinished = false;
     public final ArmUtils armUtils = new ArmUtils(this, GAME_PIECE.CUBE, PIVOT_DIRECTION.FORWARD, ARM_STATE.STOW);
 
     //public boolean gamePiece = true; // true = cone & false = cube
@@ -163,13 +162,13 @@ public class RobotContainer {
         leftStick.bottomFaceButton.whileTrue(new EjectObject(this));
         // rightStick.bottomFaceButton.whileTrue(new RunCommand(()-> drivetrainSubsystem.seekTarget()));
         
-        // driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
-        // driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
-        // driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
-        // SmartDashboard.putData("DriveStyleChooser", driveStyleChooser);
-        // driveInputChooser.addOption("Joysticks", DRIVE_INPUT.JOYSTICKS);
-        // driveInputChooser.addOption("Controller", DRIVE_INPUT.CONTROLLER);
-        // SmartDashboard.putData("DriveInputChooser", driveInputChooser);
+        driveStyleChooser.addOption("Tank", DRIVE_STYLE.TANK);
+        driveStyleChooser.addOption("Arcade", DRIVE_STYLE.ARCADE);
+        driveStyleChooser.addOption("Curvature", DRIVE_STYLE.MCFLY);
+        SmartDashboard.putData("DriveStyleChooser", driveStyleChooser);
+        driveInputChooser.addOption("Joysticks", DRIVE_INPUT.JOYSTICKS);
+        driveInputChooser.addOption("Controller", DRIVE_INPUT.CONTROLLER);
+        SmartDashboard.putData("DriveInputChooser", driveInputChooser);
         // SmartDashboard.putBoolean("Square Inputs?", true);
 
         // autoModeChooser.addOption("ScoreMidDriveBackDriver", new ScoreMidDriveBack(this));
@@ -184,10 +183,6 @@ public class RobotContainer {
         // autoModeChooser.addOption("ScoreHighCubeDriveBackDriver", new SequentialCommandGroup(new ScoreHighCubeDriveBack(this)));
         // autoModeChooser.addOption("ScoreHighConeDriveBackDriver", new SequentialCommandGroup(new ScoreHighConeDriveBack(this)));
         // autoModeChooser.addOption("ScoreHighConeBalanceField", new SequentialCommandGroup(new HighConeBalance(this)));
-
-
-        SmartDashboard.putData("AutoModeChooser", autoModeChooser);
-        
 
         SmartDashboard.putString("Game Piece", armUtils.getGamePiece().name());
         SmartDashboard.putString("Pivot Direction", armUtils.getPivotDirection().name());
@@ -251,14 +246,13 @@ public class RobotContainer {
         // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.westCoastDrive(-leftStick.getY(), -rightStick.getY(), true), drivetrainSubsystem));
         // drivetrainSubsystem.setDefaultCommand(new DriveWithVision(this, ()-> -MathUtil.clamp(leftStick.getY(), -0.8, 0.8),  ()-> -MathUtil.clamp(rightStick.getY(), -0.8, 0.8), true, ()-> false/*rightStick.getBottomFaceButton()*/));
         // drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(0, 0, moveArmFinished);), null));
-        drivetrainSubsystem.setDefaultCommand(new RunCommand(()-> drivetrainSubsystem.arcadeDrive(-leftStick.getY(), -rightStick.getX(), true), drivetrainSubsystem));
+        drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(this));
         //climberSubsystem.setDefaultCommand(new ClimberJumpGrabCommand(this));
 
     }
 
     public void periodic() {
         SmartDashboard.putNumber("Wrist Setpoint", armUtils.wristSetpoint());
-        SmartDashboard.putNumber("Arm Setpoint", armUtils.armSetpoint());
         SmartDashboard.putNumber("Pivot Setpoint", armUtils.pivotSetpoint());
     }
 

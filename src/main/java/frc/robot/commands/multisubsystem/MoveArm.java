@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.elevator.ChangeArmPosition;
 import frc.robot.commands.pivot.ChangePivotPosition;
 import frc.robot.commands.wrist.ChangeWristPosition;
 import frc.robot.utils.ArmUtils;
@@ -39,20 +38,17 @@ public class MoveArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (utils.elevator.armMotor.getSelectedSensorPosition() <= utils.armSetpoint() + Constants.ArmConstants.TOLERANCE
-        && utils.getArmState() != ARM_STATE.STATION_SINGLE && utils.getArmState() != ARM_STATE.LOW) {
-      (new SequentialCommandGroup(
+    if (utils.getArmState() != ARM_STATE.STATION_SINGLE && utils.getArmState() != ARM_STATE.LOW) {
+      (new ParallelCommandGroup(
           new ChangePivotPosition(container, utils),
-          new ChangeArmPosition(container, utils),
-          new ChangeWristPosition(container, utils),
-          new InstantCommand(() -> container.moveArmFinished = true)
+          new ChangeWristPosition(container, utils)
+          // new InstantCommand(() -> container.moveArmFinished = true)
           )).schedule();
     } else {
-      (new SequentialCommandGroup(
+      (new ParallelCommandGroup(
           new ChangeWristPosition(container, utils),
-          new ChangeArmPosition(container, utils),
-          new ChangePivotPosition(container, utils),
-          new InstantCommand(() -> container.moveArmFinished = true)
+          new ChangePivotPosition(container, utils)
+          // new InstantCommand(() -> container.moveArmFinished = true)
           )).schedule();
       }
   }
